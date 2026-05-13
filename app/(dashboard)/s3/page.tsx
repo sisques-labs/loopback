@@ -1,6 +1,6 @@
-import { listBuckets } from "@/features/s3/services";
-import { BucketTable } from "@/features/s3/components/bucket-table";
-import { CreateBucketDialog } from "@/features/s3/components/create-bucket-dialog";
+import { listBuckets } from "@/features/s3/services/s3";
+import { BucketTable } from "@/features/s3/components/bucket-table/bucket-table";
+import { CreateBucketDialog } from "@/features/s3/components/create-bucket-dialog/create-bucket-dialog";
 
 export default async function S3Page() {
   const buckets = await listBuckets();

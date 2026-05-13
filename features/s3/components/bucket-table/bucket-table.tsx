@@ -8,7 +8,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import type { Bucket } from "@/types/aws";
-import { BucketRowActions } from "@/features/s3/components/bucket-row-actions";
+import { BucketRowActions } from "@/features/s3/components/bucket-row-actions/bucket-row-actions";
 
 type Props = {
   buckets: Bucket[];

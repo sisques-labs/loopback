@@ -1,6 +1,6 @@
-import { listObjects } from "@/features/s3/services";
-import { ObjectTable } from "@/features/s3/components/object-table";
-import { UploadDialog } from "@/features/s3/components/upload-dialog";
+import { listObjects } from "@/features/s3/services/s3";
+import { ObjectTable } from "@/features/s3/components/object-table/object-table";
+import { UploadDialog } from "@/features/s3/components/upload-dialog/upload-dialog";
 
 type Props = {
   params: Promise<{ bucket: string }>;

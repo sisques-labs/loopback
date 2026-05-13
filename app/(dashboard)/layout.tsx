@@ -1,5 +1,5 @@
-import { Sidebar } from "@/features/shared/components/sidebar";
-import { Header } from "@/features/shared/components/header";
+import { Sidebar } from "@/features/shared/components/sidebar/sidebar";
+import { Header } from "@/features/shared/components/header/header";
 
 export default function DashboardLayout({
   children,
