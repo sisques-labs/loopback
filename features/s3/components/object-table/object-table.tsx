@@ -31,25 +31,29 @@ export function ObjectTable({
 }: Props) {
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
         <h2 className="text-lg font-semibold">{dict.title}</h2>
         <UploadDialog bucket={bucket} dict={uploadDict} />
       </div>
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>{dict.key}</TableHead>
+            <TableHead className="min-w-0 max-w-[min(100%,12rem)] sm:max-w-none">
+              {dict.key}
+            </TableHead>
             <TableHead>{dict.size}</TableHead>
-            <TableHead>{dict.lastModified}</TableHead>
+            <TableHead className="hidden sm:table-cell">{dict.lastModified}</TableHead>
             <TableHead className="w-12" />
           </TableRow>
         </TableHeader>
         <TableBody>
           {objects.map((obj) => (
             <TableRow key={obj.key}>
-              <TableCell className="font-mono text-xs">{obj.key}</TableCell>
+              <TableCell className="max-w-[min(100%,12rem)] min-w-0 truncate font-mono text-xs sm:max-w-none">
+                {obj.key}
+              </TableCell>
               <TableCell className="text-muted-foreground">{formatBytes(obj.size)}</TableCell>
-              <TableCell className="text-muted-foreground">
+              <TableCell className="hidden text-muted-foreground sm:table-cell">
                 {new Date(obj.lastModified).toLocaleString()}
               </TableCell>
               <TableCell>

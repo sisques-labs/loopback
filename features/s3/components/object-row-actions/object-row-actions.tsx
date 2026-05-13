@@ -30,7 +30,14 @@ export function ObjectRowActions({ bucket, objectKey, dict, confirmDict }: Props
     <>
       <DropdownMenu>
         <DropdownMenuTrigger
-          render={<Button variant="ghost" size="icon-sm" aria-label={dict.actions} />}
+          render={
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              className="min-h-11 min-w-11 shrink-0 md:min-h-9 md:min-w-9"
+              aria-label={dict.actions}
+            />
+          }
         >
           <MoreHorizontalIcon />
         </DropdownMenuTrigger>

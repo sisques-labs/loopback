@@ -23,9 +23,9 @@ export default async function S3Page({ params }: Props) {
   if (buckets.length === 0) {
     return (
       <div className="flex flex-col items-start gap-4">
-        <div className="flex w-full items-center justify-between">
-          <div>
-            <h1 className="text-xl font-semibold">{s3.page.title}</h1>
+        <div className="flex w-full min-w-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+          <div className="min-w-0">
+            <h1 className="text-xl font-semibold break-words">{s3.page.title}</h1>
             <p className="mt-1 text-sm text-muted-foreground">{s3.page.empty}</p>
           </div>
           <CreateBucketDialog dict={s3.createBucketDialog} />
@@ -36,8 +36,8 @@ export default async function S3Page({ params }: Props) {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex items-center justify-between">
-        <h1 className="text-xl font-semibold">{s3.page.title}</h1>
+      <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+        <h1 className="text-xl font-semibold break-words">{s3.page.title}</h1>
         <CreateBucketDialog dict={s3.createBucketDialog} />
       </div>
       <BucketTable

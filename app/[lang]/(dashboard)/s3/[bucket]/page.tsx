@@ -22,9 +22,9 @@ export default async function BucketPage({ params }: Props) {
   if (objects.length === 0) {
     return (
       <div className="flex flex-col items-start gap-4">
-        <div className="flex w-full items-center justify-between">
-          <div>
-            <h1 className="text-xl font-semibold">{bucket}</h1>
+        <div className="flex w-full min-w-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+          <div className="min-w-0">
+            <h1 className="text-xl font-semibold break-words">{bucket}</h1>
             <p className="mt-1 text-sm text-muted-foreground">{s3.bucketDetail.empty}</p>
           </div>
           <UploadDialog bucket={bucket} dict={s3.uploadDialog} />
@@ -35,7 +35,7 @@ export default async function BucketPage({ params }: Props) {
 
   return (
     <div className="flex flex-col gap-4">
-      <h1 className="text-xl font-semibold">{bucket}</h1>
+      <h1 className="min-w-0 text-xl font-semibold break-words">{bucket}</h1>
       <ObjectTable
         bucket={bucket}
         objects={objects}

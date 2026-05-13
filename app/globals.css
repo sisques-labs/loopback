@@ -2,6 +2,12 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
+/*
+ * Responsive layout: prefer stock Tailwind breakpoints (`sm`, `md`, …) for dashboard
+ * and feature UIs. Add new breakpoint tokens only via `@theme` in this file — do not
+ * add a legacy tailwind.config. Agent/human conventions: see AGENTS.md (Responsive UI).
+ */
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
