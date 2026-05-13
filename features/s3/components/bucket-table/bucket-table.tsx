@@ -24,23 +24,23 @@ export function BucketTable({ buckets, dict, localePrefix, rowActionsDict, confi
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>{dict.name}</TableHead>
-          <TableHead>{dict.created}</TableHead>
+          <TableHead className="min-w-0">{dict.name}</TableHead>
+          <TableHead className="hidden sm:table-cell">{dict.created}</TableHead>
           <TableHead className="w-12" />
         </TableRow>
       </TableHeader>
       <TableBody>
         {buckets.map((bucket) => (
           <TableRow key={bucket.name}>
-            <TableCell>
+            <TableCell className="min-w-0 max-w-[min(100%,12rem)] sm:max-w-none">
               <Link
                 href={`${localePrefix}/s3/${bucket.name}`}
-                className="font-medium text-foreground underline-offset-4 hover:underline"
+                className="block truncate font-medium text-foreground underline-offset-4 hover:underline sm:overflow-visible sm:whitespace-normal"
               >
                 {bucket.name}
               </Link>
             </TableCell>
-            <TableCell className="text-muted-foreground">
+            <TableCell className="hidden text-muted-foreground sm:table-cell">
               {new Date(bucket.createdAt).toLocaleString()}
             </TableCell>
             <TableCell>

@@ -2,6 +2,8 @@ const dict = {
   header: {
     endpoint: "Endpoint",
     endpointNotSet: "AWS_ENDPOINT_URL not set",
+    openMenu: "Open navigation menu",
+    closeMenu: "Close navigation menu",
   },
   sidebar: {
     services: "Services",
