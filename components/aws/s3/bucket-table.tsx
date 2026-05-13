@@ -8,6 +8,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import type { Bucket } from "@/types/aws";
+import { BucketRowActions } from "@/components/aws/s3/bucket-row-actions";
 
 type Props = {
   buckets: Bucket[];
@@ -38,8 +39,7 @@ export function BucketTable({ buckets }: Props) {
               {new Date(bucket.createdAt).toLocaleString()}
             </TableCell>
             <TableCell>
-              {/* BucketRowActions — wired in Slice 3 */}
-              <div />
+              <BucketRowActions bucket={bucket.name} />
             </TableCell>
           </TableRow>
         ))}
