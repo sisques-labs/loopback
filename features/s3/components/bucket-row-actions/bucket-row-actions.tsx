@@ -10,7 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ConfirmDialog } from "@/features/shared/components/confirm-dialog/confirm-dialog";
-import { deleteBucketAction } from "@/features/s3/actions/delete-bucket/delete-bucket";
+import { deleteBucketAction } from "@/features/s3/use-cases/delete-bucket/delete-bucket";
 
 type Props = {
   bucket: string;

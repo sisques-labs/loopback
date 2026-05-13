@@ -11,7 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ConfirmDialog } from "@/features/shared/components/confirm-dialog/confirm-dialog";
-import { deleteObjectAction } from "@/features/s3/actions/delete-object/delete-object";
+import { deleteObjectAction } from "@/features/s3/use-cases/delete-object/delete-object";
 
 type Props = {
   bucket: string;
