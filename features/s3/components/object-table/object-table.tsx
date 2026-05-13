@@ -7,16 +7,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import type { S3Object } from "@/types/aws";
-import { UploadDialog } from "@/components/aws/s3/upload-dialog";
-import { ObjectRowActions } from "@/components/aws/s3/object-row-actions";
-
-function formatBytes(bytes: number): string {
-  if (bytes === 0) return "0 B";
-  if (bytes < 1024) return `${bytes} B`;
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-  if (bytes < 1024 * 1024 * 1024) return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
-  return `${(bytes / (1024 * 1024 * 1024)).toFixed(2)} GB`;
-}
+import { UploadDialog } from "@/features/s3/components/upload-dialog";
+import { ObjectRowActions } from "@/features/s3/components/object-row-actions";
+import { formatBytes } from "@/features/shared/utils/format";
 
 type Props = {
   bucket: string;

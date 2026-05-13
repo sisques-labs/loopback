@@ -6,8 +6,8 @@ import {
   ListObjectsV2Command,
 } from "@aws-sdk/client-s3";
 import type { Bucket, S3Object } from "@/types/aws";
-import { getS3Client } from "./client-factory";
-import { toFriendlyError } from "./errors";
+import { getS3Client } from "@/lib/aws/client-factory";
+import { toFriendlyError } from "@/lib/aws/errors";
 
 export async function listBuckets(): Promise<Bucket[]> {
   try {

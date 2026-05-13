@@ -19,7 +19,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { deleteBucketAction } from "@/lib/actions/s3";
+import { deleteBucketAction } from "@/features/s3/actions/s3";
 import type { ActionState } from "@/types/aws";
 
 type Props = {
