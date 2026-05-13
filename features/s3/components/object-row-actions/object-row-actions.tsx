@@ -1,18 +1,8 @@
 "use client";
 
-import { useActionState, useEffect, useState } from "react";
-import { toast } from "sonner";
+import { useState } from "react";
 import { MoreHorizontalIcon, DownloadIcon, Trash2Icon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-  DialogClose,
-} from "@/components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,29 +10,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { deleteObjectAction } from "@/features/s3/actions/delete-object";
-import type { ActionState } from "@/types/aws";
+import { ConfirmDialog } from "@/features/shared/components/confirm-dialog/confirm-dialog";
+import { deleteObjectAction } from "@/features/s3/actions/delete-object/delete-object";
 
 type Props = {
   bucket: string;
   objectKey: string;
 };
 
-const INITIAL_STATE: ActionState = { status: "idle" };
-
 export function ObjectRowActions({ bucket, objectKey }: Props) {
-  const [state, formAction, pending] = useActionState(deleteObjectAction, INITIAL_STATE);
   const [open, setOpen] = useState(false);
-
-  useEffect(() => {
-    if (state.status === "success") {
-      setOpen(false);
-    }
-    if (state.status === "error") {
-      toast.error(state.message);
-    }
-  }, [state]);
-
   const downloadHref = `/api/aws/s3/${encodeURIComponent(bucket)}/objects/${encodeURIComponent(objectKey)}?download=1`;
 
   return (
@@ -64,30 +41,23 @@ export function ObjectRowActions({ bucket, objectKey }: Props) {
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger className="hidden" />
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Delete object</DialogTitle>
-          </DialogHeader>
-          <p className="text-sm text-muted-foreground">
+      <ConfirmDialog
+        open={open}
+        onOpenChange={setOpen}
+        title="Delete object"
+        description={
+          <>
             Are you sure you want to delete{" "}
             <span className="font-mono text-xs text-foreground">{objectKey}</span>? This action cannot be undone.
-          </p>
-          <form action={formAction}>
-            <input type="hidden" name="bucket" value={bucket} />
-            <input type="hidden" name="key" value={objectKey} />
-            <DialogFooter>
-              <DialogClose render={<Button variant="outline" type="button" />}>
-                Cancel
-              </DialogClose>
-              <Button variant="destructive" type="submit" disabled={pending}>
-                {pending ? "Deleting…" : "Delete"}
-              </Button>
-            </DialogFooter>
-          </form>
-        </DialogContent>
-      </Dialog>
+          </>
+        }
+        action={deleteObjectAction}
+        hiddenFields={[
+          { name: "bucket", value: bucket },
+          { name: "key", value: objectKey },
+        ]}
+        confirmLabel="Delete"
+      />
     </>
   );
 }
