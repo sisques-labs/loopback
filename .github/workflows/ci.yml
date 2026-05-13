@@ -1,0 +1,14 @@
+name: CI
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+
+jobs:
+  build:
+    uses: sisques-labs/workflows/.github/workflows/web-build.yml@main
+    with:
+      app_path: "."
+      app_name: "aws-local-ui"
+      run_test: false
