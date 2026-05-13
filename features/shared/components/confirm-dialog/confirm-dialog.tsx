@@ -12,7 +12,7 @@ import {
   DialogClose,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import type { ActionState } from "@/types/aws";
+import type { ActionState } from "@/features/shared/types/action-state";
 
 type HiddenField = { name: string; value: string };
 

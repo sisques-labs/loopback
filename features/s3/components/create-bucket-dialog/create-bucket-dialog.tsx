@@ -16,7 +16,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { createBucketAction } from "@/features/s3/actions/create-bucket/create-bucket";
-import type { ActionState } from "@/types/aws";
+import type { ActionState } from "@/features/shared/types/action-state";
 
 const INITIAL_STATE: ActionState = { status: "idle" };
 

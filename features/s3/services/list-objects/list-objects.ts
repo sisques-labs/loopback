@@ -1,7 +1,7 @@
 import "server-only";
 
 import { ListObjectsV2Command } from "@aws-sdk/client-s3";
-import type { S3Object } from "@/types/aws";
+import type { S3Object } from "@/features/s3/types/s3";
 import { getS3Client } from "@/lib/aws/client-factory";
 import { toFriendlyError } from "@/lib/aws/errors";
 

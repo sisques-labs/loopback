@@ -4,7 +4,7 @@ import { DeleteObjectCommand } from "@aws-sdk/client-s3";
 import { revalidatePath } from "next/cache";
 import { getS3Client } from "@/lib/aws/client-factory";
 import { toFriendlyError } from "@/lib/aws/errors";
-import type { ActionState } from "@/types/aws";
+import type { ActionState } from "@/features/shared/types/action-state";
 
 export async function deleteObjectAction(
   _prev: ActionState,

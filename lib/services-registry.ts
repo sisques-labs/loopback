@@ -1,5 +1,5 @@
 import { Database, FunctionSquare, MessageSquare, Rss, Server } from "lucide-react";
-import type { ServiceEntry } from "@/types/aws";
+import type { ServiceEntry } from "@/features/shared/types/service-entry";
 
 export const services: ServiceEntry[] = [
   {

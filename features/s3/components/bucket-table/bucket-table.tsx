@@ -7,7 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import type { Bucket } from "@/types/aws";
+import type { Bucket } from "@/features/s3/types/s3";
 import { BucketRowActions } from "@/features/s3/components/bucket-row-actions/bucket-row-actions";
 
 type Props = {

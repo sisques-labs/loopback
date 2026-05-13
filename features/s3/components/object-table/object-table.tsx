@@ -6,7 +6,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import type { S3Object } from "@/types/aws";
+import type { S3Object } from "@/features/s3/types/s3";
 import { UploadDialog } from "@/features/s3/components/upload-dialog/upload-dialog";
 import { ObjectRowActions } from "@/features/s3/components/object-row-actions/object-row-actions";
 import { formatBytes } from "@/features/shared/utils/format";
