@@ -12,31 +12,37 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ConfirmDialog } from "@/features/shared/components/confirm-dialog/confirm-dialog";
 import { deleteObjectAction } from "@/features/s3/use-cases/delete-object/delete-object";
+import type { AppDict } from "@/features/shared/i18n/get-dictionary";
+import { t } from "@/features/shared/i18n/interpolate";
 
 type Props = {
   bucket: string;
   objectKey: string;
+  dict: AppDict["s3"]["objectRowActions"];
+  confirmDict: AppDict["shared"]["confirmDialog"];
 };
 
-export function ObjectRowActions({ bucket, objectKey }: Props) {
+export function ObjectRowActions({ bucket, objectKey, dict, confirmDict }: Props) {
   const [open, setOpen] = useState(false);
   const downloadHref = `/api/aws/s3/${encodeURIComponent(bucket)}/objects/${encodeURIComponent(objectKey)}?download=1`;
 
   return (
     <>
       <DropdownMenu>
-        <DropdownMenuTrigger render={<Button variant="ghost" size="icon-sm" aria-label="Object actions" />}>
+        <DropdownMenuTrigger
+          render={<Button variant="ghost" size="icon-sm" aria-label={dict.actions} />}
+        >
           <MoreHorizontalIcon />
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuItem onSelect={() => window.location.assign(downloadHref)}>
             <DownloadIcon />
-            Download
+            {dict.download}
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem variant="destructive" onSelect={() => setOpen(true)}>
             <Trash2Icon />
-            Delete
+            {dict.delete}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -44,19 +50,16 @@ export function ObjectRowActions({ bucket, objectKey }: Props) {
       <ConfirmDialog
         open={open}
         onOpenChange={setOpen}
-        title="Delete object"
-        description={
-          <>
-            Are you sure you want to delete{" "}
-            <span className="font-mono text-xs text-foreground">{objectKey}</span>? This action cannot be undone.
-          </>
-        }
+        title={dict.deleteTitle}
+        description={t(dict.deleteConfirm, { key: objectKey })}
         action={deleteObjectAction}
         hiddenFields={[
           { name: "bucket", value: bucket },
           { name: "key", value: objectKey },
         ]}
-        confirmLabel="Delete"
+        confirmLabel={dict.delete}
+        cancelLabel={confirmDict.cancel}
+        confirmingTemplate={confirmDict.confirming}
       />
     </>
   );

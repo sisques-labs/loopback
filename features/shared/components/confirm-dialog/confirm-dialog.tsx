@@ -13,6 +13,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import type { ActionState } from "@/features/shared/types/action-state";
+import type { AppDict } from "@/features/shared/i18n/get-dictionary";
+import { t } from "@/features/shared/i18n/interpolate";
 
 type HiddenField = { name: string; value: string };
 
@@ -23,7 +25,9 @@ type Props = {
   description: React.ReactNode;
   action: (prev: ActionState, formData: FormData) => Promise<ActionState>;
   hiddenFields?: HiddenField[];
-  confirmLabel?: string;
+  confirmLabel: string;
+  cancelLabel: string;
+  confirmingTemplate: AppDict["shared"]["confirmDialog"]["confirming"];
 };
 
 const INITIAL_STATE: ActionState = { status: "idle" };
@@ -35,7 +39,9 @@ export function ConfirmDialog({
   description,
   action,
   hiddenFields = [],
-  confirmLabel = "Confirm",
+  confirmLabel,
+  cancelLabel,
+  confirmingTemplate,
 }: Props) {
   const [state, formAction, pending] = useActionState(action, INITIAL_STATE);
 
@@ -58,10 +64,10 @@ export function ConfirmDialog({
           ))}
           <DialogFooter>
             <DialogClose render={<Button variant="outline" type="button" />}>
-              Cancel
+              {cancelLabel}
             </DialogClose>
             <Button variant="destructive" type="submit" disabled={pending}>
-              {pending ? `${confirmLabel}…` : confirmLabel}
+              {pending ? t(confirmingTemplate, { confirmLabel }) : confirmLabel}
             </Button>
           </DialogFooter>
         </form>
