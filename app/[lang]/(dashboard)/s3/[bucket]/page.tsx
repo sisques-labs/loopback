@@ -1,8 +1,11 @@
-import { listObjects } from "@/features/s3/services/list-objects/list-objects";
 import { ObjectTable } from "@/features/s3/components/object-table/object-table";
 import { UploadDialog } from "@/features/s3/components/upload-dialog/upload-dialog";
+import { listObjects } from "@/features/s3/services/list-objects/list-objects";
 import { getDictionary } from "@/features/shared/i18n/get-dictionary";
 import { DEFAULT_LOCALE, isLocale, type Locale } from "@/features/shared/i18n/locale";
+
+/** Same as s3/page — listObjects needs a live S3-compatible endpoint at request time. */
+export const dynamic = "force-dynamic";
 
 type Props = {
   params: Promise<{ lang: string; bucket: string }>;

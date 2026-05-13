@@ -1,8 +1,11 @@
-import { listBuckets } from "@/features/s3/services/list-buckets/list-buckets";
 import { BucketTable } from "@/features/s3/components/bucket-table/bucket-table";
 import { CreateBucketDialog } from "@/features/s3/components/create-bucket-dialog/create-bucket-dialog";
+import { listBuckets } from "@/features/s3/services/list-buckets/list-buckets";
 import { getDictionary } from "@/features/shared/i18n/get-dictionary";
 import { DEFAULT_LOCALE, isLocale, type Locale } from "@/features/shared/i18n/locale";
+
+/** S3 is only available at runtime; prerender would call AWS during `next build` (e.g. Docker). */
+export const dynamic = "force-dynamic";
 
 type Props = {
   params: Promise<{ lang: string }>;
