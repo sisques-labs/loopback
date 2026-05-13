@@ -20,7 +20,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { deleteObjectAction } from "@/features/s3/actions/s3";
+import { deleteObjectAction } from "@/features/s3/actions/delete-object";
 import type { ActionState } from "@/types/aws";
 
 type Props = {

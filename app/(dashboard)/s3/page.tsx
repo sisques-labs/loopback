@@ -1,4 +1,4 @@
-import { listBuckets } from "@/features/s3/services/s3";
+import { listBuckets } from "@/features/s3/services/list-buckets";
 import { BucketTable } from "@/features/s3/components/bucket-table/bucket-table";
 import { CreateBucketDialog } from "@/features/s3/components/create-bucket-dialog/create-bucket-dialog";
 

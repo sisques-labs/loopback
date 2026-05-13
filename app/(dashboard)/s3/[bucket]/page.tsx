@@ -1,4 +1,4 @@
-import { listObjects } from "@/features/s3/services/s3";
+import { listObjects } from "@/features/s3/services/list-objects";
 import { ObjectTable } from "@/features/s3/components/object-table/object-table";
 import { UploadDialog } from "@/features/s3/components/upload-dialog/upload-dialog";
 
