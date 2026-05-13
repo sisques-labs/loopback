@@ -11,24 +11,30 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ConfirmDialog } from "@/features/shared/components/confirm-dialog/confirm-dialog";
 import { deleteBucketAction } from "@/features/s3/use-cases/delete-bucket/delete-bucket";
+import type { AppDict } from "@/features/shared/i18n/get-dictionary";
+import { t } from "@/features/shared/i18n/interpolate";
 
 type Props = {
   bucket: string;
+  dict: AppDict["s3"]["bucketRowActions"];
+  confirmDict: AppDict["shared"]["confirmDialog"];
 };
 
-export function BucketRowActions({ bucket }: Props) {
+export function BucketRowActions({ bucket, dict, confirmDict }: Props) {
   const [open, setOpen] = useState(false);
 
   return (
     <>
       <DropdownMenu>
-        <DropdownMenuTrigger render={<Button variant="ghost" size="icon-sm" aria-label="Bucket actions" />}>
+        <DropdownMenuTrigger
+          render={<Button variant="ghost" size="icon-sm" aria-label={dict.actions} />}
+        >
           <MoreHorizontalIcon />
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuItem variant="destructive" onSelect={() => setOpen(true)}>
             <Trash2Icon />
-            Delete
+            {dict.delete}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -36,16 +42,13 @@ export function BucketRowActions({ bucket }: Props) {
       <ConfirmDialog
         open={open}
         onOpenChange={setOpen}
-        title="Delete bucket"
-        description={
-          <>
-            Are you sure you want to delete{" "}
-            <span className="font-medium text-foreground">{bucket}</span>? This action cannot be undone.
-          </>
-        }
+        title={dict.deleteTitle}
+        description={t(dict.deleteConfirm, { bucket })}
         action={deleteBucketAction}
         hiddenFields={[{ name: "bucket", value: bucket }]}
-        confirmLabel="Delete"
+        confirmLabel={dict.delete}
+        cancelLabel={confirmDict.cancel}
+        confirmingTemplate={confirmDict.confirming}
       />
     </>
   );

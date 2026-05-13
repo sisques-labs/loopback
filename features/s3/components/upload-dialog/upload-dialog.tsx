@@ -16,12 +16,15 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import type { AppDict } from "@/features/shared/i18n/get-dictionary";
+import { t } from "@/features/shared/i18n/interpolate";
 
 type Props = {
   bucket: string;
+  dict: AppDict["s3"]["uploadDialog"];
 };
 
-export function UploadDialog({ bucket }: Props) {
+export function UploadDialog({ bucket, dict }: Props) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [pending, setPending] = useState(false);
@@ -32,7 +35,7 @@ export function UploadDialog({ bucket }: Props) {
     e.preventDefault();
     const file = fileRef.current?.files?.[0];
     if (!file) {
-      setError("Please select a file.");
+      setError(dict.selectFile);
       return;
     }
     setError(null);
@@ -48,14 +51,14 @@ export function UploadDialog({ bucket }: Props) {
       });
       const json = await res.json();
       if (!res.ok || !json.ok) {
-        setError(json.error ?? "Upload failed.");
+        setError((json.error as string) ?? dict.failed);
       } else {
-        toast.success(`Uploaded ${json.key}`);
+        toast.success(t(dict.success, { key: json.key as string }));
         setOpen(false);
         router.refresh();
       }
     } catch {
-      setError("Upload failed. Check your connection.");
+      setError(dict.failedNetwork);
     } finally {
       setPending(false);
     }
@@ -65,15 +68,15 @@ export function UploadDialog({ bucket }: Props) {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger render={<Button size="sm" variant="outline" />}>
         <UploadIcon />
-        Upload
+        {dict.trigger}
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Upload file</DialogTitle>
+          <DialogTitle>{dict.title}</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4" encType="multipart/form-data">
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="upload-file">File</Label>
+            <Label htmlFor="upload-file">{dict.fileLabel}</Label>
             <Input
               id="upload-file"
               type="file"
@@ -85,10 +88,10 @@ export function UploadDialog({ bucket }: Props) {
           </div>
           <DialogFooter>
             <DialogClose render={<Button variant="outline" type="button" />}>
-              Cancel
+              {dict.cancel}
             </DialogClose>
             <Button type="submit" disabled={pending}>
-              {pending ? "Uploading…" : "Upload"}
+              {pending ? dict.uploading : dict.submit}
             </Button>
           </DialogFooter>
         </form>

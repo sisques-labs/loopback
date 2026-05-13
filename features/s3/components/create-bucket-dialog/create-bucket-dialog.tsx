@@ -17,33 +17,38 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { createBucketAction } from "@/features/s3/use-cases/create-bucket/create-bucket";
 import type { ActionState } from "@/features/shared/types/action-state";
+import type { AppDict } from "@/features/shared/i18n/get-dictionary";
 
 const INITIAL_STATE: ActionState = { status: "idle" };
 
-export function CreateBucketDialog() {
+type Props = {
+  dict: AppDict["s3"]["createBucketDialog"];
+};
+
+export function CreateBucketDialog({ dict }: Props) {
   const [state, formAction, pending] = useActionState(createBucketAction, INITIAL_STATE);
   const closeRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (state.status === "success") {
-      toast.success("Bucket created successfully.");
+      toast.success(dict.success);
       closeRef.current?.click();
     }
-  }, [state]);
+  }, [state, dict.success]);
 
   return (
     <Dialog>
       <DialogTrigger render={<Button size="sm" />}>
         <PlusIcon />
-        New bucket
+        {dict.trigger}
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Create bucket</DialogTitle>
+          <DialogTitle>{dict.title}</DialogTitle>
         </DialogHeader>
         <form action={formAction} className="flex flex-col gap-4">
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="bucket-name">Bucket name</Label>
+            <Label htmlFor="bucket-name">{dict.nameLabel}</Label>
             <Input
               id="bucket-name"
               name="name"
@@ -58,10 +63,10 @@ export function CreateBucketDialog() {
           </div>
           <DialogFooter>
             <DialogClose ref={closeRef} render={<Button variant="outline" type="button" />}>
-              Cancel
+              {dict.cancel}
             </DialogClose>
             <Button type="submit" disabled={pending}>
-              {pending ? "Creating…" : "Create"}
+              {pending ? dict.creating : dict.submit}
             </Button>
           </DialogFooter>
         </form>

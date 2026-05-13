@@ -1,13 +1,19 @@
 import { listObjects } from "@/features/s3/services/list-objects/list-objects";
 import { ObjectTable } from "@/features/s3/components/object-table/object-table";
 import { UploadDialog } from "@/features/s3/components/upload-dialog/upload-dialog";
+import { getDictionary } from "@/features/shared/i18n/get-dictionary";
+import { DEFAULT_LOCALE, isLocale, type Locale } from "@/features/shared/i18n/locale";
 
 type Props = {
-  params: Promise<{ bucket: string }>;
+  params: Promise<{ lang: string; bucket: string }>;
 };
 
 export default async function BucketPage({ params }: Props) {
-  const { bucket } = await params;
+  const { lang, bucket } = await params;
+  const locale: Locale = isLocale(lang) ? lang : DEFAULT_LOCALE;
+  const dict = getDictionary(locale);
+  const s3 = dict.s3;
+  const shared = dict.shared;
   const objects = await listObjects(bucket);
 
   if (objects.length === 0) {
@@ -16,9 +22,9 @@ export default async function BucketPage({ params }: Props) {
         <div className="flex w-full items-center justify-between">
           <div>
             <h1 className="text-xl font-semibold">{bucket}</h1>
-            <p className="mt-1 text-sm text-muted-foreground">This bucket is empty.</p>
+            <p className="mt-1 text-sm text-muted-foreground">{s3.bucketDetail.empty}</p>
           </div>
-          <UploadDialog bucket={bucket} />
+          <UploadDialog bucket={bucket} dict={s3.uploadDialog} />
         </div>
       </div>
     );
@@ -27,7 +33,14 @@ export default async function BucketPage({ params }: Props) {
   return (
     <div className="flex flex-col gap-4">
       <h1 className="text-xl font-semibold">{bucket}</h1>
-      <ObjectTable bucket={bucket} objects={objects} />
+      <ObjectTable
+        bucket={bucket}
+        objects={objects}
+        dict={s3.objectTable}
+        uploadDict={s3.uploadDialog}
+        rowActionsDict={s3.objectRowActions}
+        confirmDict={shared.confirmDialog}
+      />
     </div>
   );
 }
