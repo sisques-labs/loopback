@@ -25,10 +25,7 @@ export function MobileNavDrawer({ sidebarDict, headerDict, localePrefix }: Props
           id="mobile-nav-drawer"
           className="fixed inset-y-0 left-0 z-50 flex w-64 flex-col bg-sidebar px-4 py-6 shadow-xl duration-200 data-open:animate-in data-open:slide-in-from-left data-closed:animate-out data-closed:slide-out-to-left outline-none"
         >
-          <div className="mb-4 flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
-              {sidebarDict.services}
-            </span>
+          <div className="mb-4 flex items-center justify-end">
             <DialogPrimitive.Close
               render={
                 <Button
@@ -44,6 +41,9 @@ export function MobileNavDrawer({ sidebarDict, headerDict, localePrefix }: Props
           </div>
           <NavLinks
             localePrefix={localePrefix}
+            servicesLabel={sidebarDict.services}
+            settingsSectionLabel={sidebarDict.settingsSection}
+            settingsLinkLabel={sidebarDict.settings}
             onNavigate={() => setOpen(false)}
           />
         </DialogPrimitive.Popup>

@@ -5,13 +5,19 @@ type SharedDictTranslated = WidenStringLiterals<SharedDict>;
 
 const dict = {
   header: {
-    endpoint: "Endpoint",
-    endpointNotSet: "AWS_ENDPOINT_URL no está configurado",
     openMenu: "Abrir menú de navegación",
     closeMenu: "Cerrar menú de navegación",
   },
   sidebar: {
     services: "Servicios",
+    settingsSection: "Configuración",
+    settings: "Ajustes",
+  },
+  settings: {
+    title: "Ajustes",
+    languageTitle: "Idioma",
+    endpointTitle: "Endpoint",
+    notSet: "Sin definir",
   },
   confirmDialog: {
     cancel: "Cancelar",
