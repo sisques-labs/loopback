@@ -12,9 +12,11 @@ type Dict = AppDict["shared"]["localeSwitcher"];
 type Props = {
   currentLocale: Locale;
   dict: Dict;
+  /** Hide the visible label (e.g. when the parent already provides a section title). */
+  hideLabel?: boolean;
 };
 
-export function LocaleSwitcher({ currentLocale, dict }: Props) {
+export function LocaleSwitcher({ currentLocale, dict, hideLabel }: Props) {
   const router = useRouter();
   const pathname = usePathname();
 
@@ -37,13 +39,13 @@ export function LocaleSwitcher({ currentLocale, dict }: Props) {
   }
 
   return (
-    <label className="flex items-center gap-2">
-      <span className="text-xs text-muted-foreground">{dict.label}</span>
+    <label className={cn("flex items-center gap-2", hideLabel && "gap-0")}>
+      {!hideLabel && <span className="text-xs text-muted-foreground">{dict.label}</span>}
       <select
         value={currentLocale}
         onChange={onChange}
         className={cn(
-          "h-7 rounded-md border border-border bg-background px-2 text-xs",
+          "min-h-11 rounded-md border border-border bg-background px-2 text-xs md:h-7 md:min-h-7",
           "text-foreground outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50",
         )}
         aria-label={dict.label}

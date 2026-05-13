@@ -9,7 +9,12 @@ type Props = {
 export function Sidebar({ dict, localePrefix }: Props) {
   return (
     <aside className="hidden h-full w-56 flex-col border-r bg-sidebar px-4 py-6 md:flex">
-      <NavLinks localePrefix={localePrefix} servicesLabel={dict.services} />
+      <NavLinks
+        localePrefix={localePrefix}
+        servicesLabel={dict.services}
+        settingsSectionLabel={dict.settingsSection}
+        settingsLinkLabel={dict.settings}
+      />
     </aside>
   );
 }
