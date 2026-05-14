@@ -35,6 +35,6 @@ export const services: ServiceEntry[] = [
     label: "SNS",
     icon: Rss,
     href: "/sns",
-    status: "coming-soon",
+    status: "enabled",
   },
 ];
