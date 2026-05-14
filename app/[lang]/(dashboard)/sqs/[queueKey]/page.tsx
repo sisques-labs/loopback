@@ -42,7 +42,7 @@ export default async function QueueDetailStubPage({ params }: Props) {
         </Link>
       </div>
       <div className="flex flex-col gap-2">
-        <h1 className="text-xl font-semibold break-words">{d.title}: {displayName}</h1>
+        <h1 className="text-xl font-semibold wrap-break-word">{d.title}: {displayName}</h1>
         <p className="max-w-prose text-sm text-muted-foreground">{d.description}</p>
         <div className="mt-2 rounded-md border bg-muted/30 p-3">
           <p className="text-xs font-medium text-muted-foreground">{d.urlLabel}</p>

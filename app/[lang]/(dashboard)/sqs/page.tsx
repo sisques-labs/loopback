@@ -23,7 +23,7 @@ export default async function SQSPage({ params }: Props) {
       <div className="flex flex-col items-start gap-4">
         <div className="flex w-full min-w-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
           <div className="min-w-0">
-            <h1 className="text-xl font-semibold break-words">{sqs.page.title}</h1>
+            <h1 className="text-xl font-semibold wrap-break-word">{sqs.page.title}</h1>
             <p className="mt-1 text-sm text-muted-foreground">{sqs.page.empty}</p>
           </div>
         </div>
@@ -34,7 +34,7 @@ export default async function SQSPage({ params }: Props) {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
-        <h1 className="text-xl font-semibold break-words">{sqs.page.title}</h1>
+        <h1 className="text-xl font-semibold wrap-break-word">{sqs.page.title}</h1>
       </div>
       <QueueTable queues={queues} dict={sqs.queueTable} localePrefix={localePrefix} />
     </div>
