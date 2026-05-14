@@ -71,6 +71,19 @@ const dict = {
     failedNetwork: "Error al subir. Comprueba tu conexión.",
     success: "Subido {key}",
   },
+  uploadProgress: {
+    title: "Subidas",
+    minimize: "Minimizar",
+    expand: "Ver subidas",
+    dismiss: "Descartar",
+    finalizing: "Finalizando…",
+    uploading: "Subiendo",
+    completed: "Completado",
+    failed: "Falló",
+    clearCompleted: "Limpiar completados",
+    ariaLiveLabel: "Progreso de subidas",
+    fileCount: "{count} archivo(s)",
+  },
   errors: {
     connectFailed: "No se pudo conectar a S3",
     connectFailedDetail:
