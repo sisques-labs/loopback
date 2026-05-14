@@ -2,6 +2,7 @@ import { Sidebar } from "@/features/shared/components/sidebar/sidebar";
 import { Header } from "@/features/shared/components/header/header";
 import { MobileNavTrigger } from "@/features/shared/components/mobile-nav/mobile-nav-trigger";
 import { MobileNavDrawer } from "@/features/shared/components/mobile-nav/mobile-nav-drawer";
+import { UploadProgressModalMount } from "@/features/s3/components/upload-progress-modal/upload-progress-modal-mount";
 import { getDictionary } from "@/features/shared/i18n/get-dictionary";
 import { DEFAULT_LOCALE, isLocale, type Locale } from "@/features/shared/i18n/locale";
 
@@ -35,6 +36,7 @@ export default async function DashboardLayout({
         headerDict={dict.shared.header}
         localePrefix={localePrefix}
       />
+      <UploadProgressModalMount dict={dict.s3.uploadProgress} />
     </>
   );
 }

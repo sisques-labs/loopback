@@ -18,6 +18,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import type { AppDict } from "@/features/shared/i18n/get-dictionary";
 import { t } from "@/features/shared/i18n/interpolate";
+import { uploadFile } from "@/features/s3/lib/upload";
+import { useUploadProgressStore } from "@/features/shared/stores/upload-progress-store";
 
 type Props = {
   bucket: string;
@@ -27,7 +29,6 @@ type Props = {
 export function UploadDialog({ bucket, dict }: Props) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
-  const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
@@ -39,28 +40,25 @@ export function UploadDialog({ bucket, dict }: Props) {
       return;
     }
     setError(null);
-    setPending(true);
 
-    const formData = new FormData();
-    formData.append("file", file);
+    // Register the upload in the store and close the dialog immediately
+    const id = useUploadProgressStore.getState().addItem({ bucket, filename: file.name });
+    setOpen(false);
 
-    try {
-      const res = await fetch(`/api/aws/s3/${encodeURIComponent(bucket)}/objects`, {
-        method: "POST",
-        body: formData,
-      });
-      const json = await res.json();
-      if (!res.ok || !json.ok) {
-        setError((json.error as string) ?? dict.failed);
-      } else {
-        toast.success(t(dict.success, { key: json.key as string }));
-        setOpen(false);
-        router.refresh();
-      }
-    } catch {
-      setError(dict.failedNetwork);
-    } finally {
-      setPending(false);
+    const result = await uploadFile({
+      bucket,
+      file,
+      onProgress: (p) => useUploadProgressStore.getState().updateProgress(id, p),
+      onFinalizing: () => useUploadProgressStore.getState().setStatus(id, "finalizing"),
+    });
+
+    if (result.ok) {
+      useUploadProgressStore.getState().setStatus(id, "done");
+      toast.success(t(dict.success, { key: result.key }));
+      router.refresh();
+    } else {
+      useUploadProgressStore.getState().setStatus(id, "error", result.error);
+      toast.error(result.error);
     }
   }
 
@@ -90,8 +88,8 @@ export function UploadDialog({ bucket, dict }: Props) {
             <DialogClose render={<Button variant="outline" type="button" />}>
               {dict.cancel}
             </DialogClose>
-            <Button type="submit" disabled={pending}>
-              {pending ? dict.uploading : dict.submit}
+            <Button type="submit">
+              {dict.submit}
             </Button>
           </DialogFooter>
         </form>
