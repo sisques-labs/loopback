@@ -34,6 +34,18 @@ const dict = {
     deleteTitle: "Eliminar topic",
     deleteConfirm:
       "¿Seguro que querés eliminar {topic}? Esta acción no se puede deshacer.",
+    viewDetail: "Ver detalle",
+  },
+  topicDetail: {
+    title: "Detalle del topic",
+    arnLabel: "ARN",
+    typeLabel: "Tipo",
+    typeStandard: "Estándar",
+    typeFifo: "FIFO",
+    subscriptionsConfirmed: "Suscripciones confirmadas",
+    subscriptionsPending: "Suscripciones pendientes",
+    back: "Volver a los topics",
+    empty: "No se encontraron suscripciones",
   },
   errors: {
     connectFailed: "No se pudo conectar a SNS",
