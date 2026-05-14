@@ -75,6 +75,18 @@ const dict = {
       confirmLabel: "Purge messages",
     },
   },
+  validation: {
+    queueUrlRequired: "Queue URL is required.",
+    messageRequired: "Message body cannot be empty.",
+  },
+  sdkErrors: {
+    invalidParam: "Invalid queue parameter.",
+    notFound: "The specified queue does not exist.",
+    limitExceeded: "Queue limit exceeded for this account.",
+    notAuthorized: "Not authorized to perform this SQS action.",
+    endpointUnreachable: "Cannot connect to LocalStack at {endpoint}. Make sure it is running.",
+    unknown: "An unexpected error occurred.",
+  },
   errors: {
     connectFailed: "Failed to connect to SQS",
     connectFailedDetail:

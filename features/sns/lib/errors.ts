@@ -3,34 +3,50 @@ type FriendlyError = {
   message: string;
 };
 
-export function toFriendlyError(err: unknown): FriendlyError {
+type SnsErrorsDict = {
+  notFound: string;
+  invalidParam: string;
+  limitExceeded: string;
+  kmsError: string;
+  notAuthorized: string;
+  endpointUnreachable: string;
+  unknown: string;
+};
+
+const DEFAULT_DICT: SnsErrorsDict = {
+  notFound: "The specified topic does not exist.",
+  invalidParam: "Invalid topic parameter.",
+  limitExceeded: "Topic limit exceeded for this account.",
+  kmsError: "The KMS key associated with this topic is not accessible.",
+  notAuthorized: "Not authorized to perform this SNS action.",
+  endpointUnreachable: "Cannot connect to LocalStack at {endpoint}. Make sure it is running.",
+  unknown: "An unexpected error occurred.",
+};
+
+export function toFriendlyError(err: unknown, dict?: SnsErrorsDict): FriendlyError {
+  const d = dict ?? DEFAULT_DICT;
+
   if (err instanceof Error) {
     const name = err.name;
 
     if (name === "NotFoundException") {
-      return { code: "NotFoundException", message: "The specified topic does not exist." };
+      return { code: name, message: d.notFound };
     }
 
     if (name === "InvalidParameterException" || name === "InvalidParameter") {
-      return { code: "InvalidParameterException", message: "Invalid topic parameter." };
+      return { code: name, message: d.invalidParam };
     }
 
     if (name === "TopicLimitExceeded" || name === "TopicLimitExceededException") {
-      return { code: "TopicLimitExceeded", message: "Topic limit exceeded for this account." };
+      return { code: name, message: d.limitExceeded };
     }
 
     if (name === "KMSDisabledException" || name === "KMSAccessDeniedException") {
-      return {
-        code: name,
-        message: "The KMS key associated with this topic is not accessible.",
-      };
+      return { code: name, message: d.kmsError };
     }
 
     if (name === "AuthorizationErrorException") {
-      return {
-        code: "AuthorizationErrorException",
-        message: "Not authorized to perform this SNS action.",
-      };
+      return { code: name, message: d.notAuthorized };
     }
 
     const cause = (err as NodeJS.ErrnoException).code;
@@ -38,7 +54,7 @@ export function toFriendlyError(err: unknown): FriendlyError {
       const endpoint = process.env.AWS_ENDPOINT_URL ?? "unknown";
       return {
         code: "EndpointUnreachable",
-        message: `Cannot connect to LocalStack at ${endpoint}. Make sure it is running.`,
+        message: d.endpointUnreachable.replace("{endpoint}", endpoint),
       };
     }
 

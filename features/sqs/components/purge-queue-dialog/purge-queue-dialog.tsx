@@ -16,6 +16,7 @@ import { purgeQueueAction } from "@/features/sqs/use-cases/purge-queue/purge-que
 import { t } from "@/features/shared/i18n/interpolate";
 import type { ActionState } from "@/features/shared/types/action-state";
 import type { AppDict } from "@/features/shared/i18n/get-dictionary";
+import type { Locale } from "@/features/shared/i18n/locale";
 
 const INITIAL: ActionState = { status: "idle" };
 
@@ -24,9 +25,10 @@ type Props = {
   queueName: string;
   dict: AppDict["sqs"]["queueDetail"]["purge"];
   confirmDict: AppDict["shared"]["confirmDialog"];
+  locale: Locale;
 };
 
-export function PurgeQueueDialog({ queueUrl, queueName, dict, confirmDict }: Props) {
+export function PurgeQueueDialog({ queueUrl, queueName, dict, confirmDict, locale }: Props) {
   const [open, setOpen] = useState(false);
   const [state, formAction, pending] = useActionState(purgeQueueAction, INITIAL);
 
@@ -57,6 +59,7 @@ export function PurgeQueueDialog({ queueUrl, queueName, dict, confirmDict }: Pro
           <p className="text-sm text-muted-foreground">{t(dict.description, { queue: queueName })}</p>
           <form action={formAction}>
             <input type="hidden" name="queueUrl" value={queueUrl} />
+            <input type="hidden" name="locale" value={locale} />
             <DialogFooter>
               <DialogClose render={<Button variant="outline" type="button" />}>
                 {confirmDict.cancel}

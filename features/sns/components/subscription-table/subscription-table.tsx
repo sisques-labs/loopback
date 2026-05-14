@@ -16,6 +16,7 @@ import { ConfirmDialog } from "@/features/shared/components/confirm-dialog/confi
 import { unsubscribeAction } from "@/features/sns/use-cases/unsubscribe/unsubscribe";
 import type { Subscription } from "@/features/sns/types/sns";
 import type { AppDict } from "@/features/shared/i18n/get-dictionary";
+import type { Locale } from "@/features/shared/i18n/locale";
 import { t } from "@/features/shared/i18n/interpolate";
 
 type Props = {
@@ -23,6 +24,7 @@ type Props = {
   topicName: string;
   dict: AppDict["sns"]["subscriptionTable"];
   confirmDict: AppDict["shared"]["confirmDialog"];
+  locale: Locale;
 };
 
 function SubscriptionRow({
@@ -30,11 +32,13 @@ function SubscriptionRow({
   topicName,
   dict,
   confirmDict,
+  locale,
 }: {
   subscription: Subscription;
   topicName: string;
   dict: Props["dict"];
   confirmDict: Props["confirmDict"];
+  locale: Locale;
 }) {
   const [open, setOpen] = useState(false);
   const isPending = subscription.subscriptionArn === "PendingConfirmation";
@@ -76,7 +80,7 @@ function SubscriptionRow({
           topic: topicName,
         })}
         action={unsubscribeAction}
-        hiddenFields={[{ name: "subscriptionArn", value: subscription.subscriptionArn }]}
+        hiddenFields={[{ name: "subscriptionArn", value: subscription.subscriptionArn }, { name: "locale", value: locale }]}
         confirmLabel={dict.unsubscribe}
         cancelLabel={confirmDict.cancel}
         confirmingTemplate={confirmDict.confirming}
@@ -85,7 +89,7 @@ function SubscriptionRow({
   );
 }
 
-export function SubscriptionTable({ subscriptions, topicName, dict, confirmDict }: Props) {
+export function SubscriptionTable({ subscriptions, topicName, dict, confirmDict, locale }: Props) {
   return (
     <Table>
       <TableHeader>
@@ -104,6 +108,7 @@ export function SubscriptionTable({ subscriptions, topicName, dict, confirmDict 
             topicName={topicName}
             dict={dict}
             confirmDict={confirmDict}
+            locale={locale}
           />
         ))}
       </TableBody>

@@ -4,6 +4,8 @@ import "server-only";
 
 import { SubscribeCommand } from "@aws-sdk/client-sns";
 import { revalidatePath } from "next/cache";
+import { getDictionary } from "@/features/shared/i18n/get-dictionary";
+import { DEFAULT_LOCALE, isLocale, type Locale } from "@/features/shared/i18n/locale";
 import { getSNSClient } from "@/features/sns/lib/client";
 import { toFriendlyError } from "@/features/sns/lib/errors";
 import type { ActionState } from "@/features/shared/types/action-state";
@@ -16,13 +18,16 @@ export async function subscribeAction(
   const protocol = (formData.get("protocol") as string | null) ?? "";
   const endpoint = (formData.get("endpoint") as string | null) ?? "";
   const isFifo = formData.get("isFifo") === "true";
+  const localeRaw = (formData.get("locale") as string | null) ?? "";
+  const locale: Locale = isLocale(localeRaw) ? localeRaw : DEFAULT_LOCALE;
+  const dict = getDictionary(locale);
 
-  if (!topicArn) return { status: "error", message: "Topic ARN is required." };
-  if (!protocol) return { status: "error", message: "Protocol is required." };
-  if (!endpoint) return { status: "error", message: "Endpoint is required." };
+  if (!topicArn) return { status: "error", message: dict.sns.validation.topicArnRequired };
+  if (!protocol) return { status: "error", message: dict.sns.validation.protocolRequired };
+  if (!endpoint) return { status: "error", message: dict.sns.validation.endpointRequired };
 
   if (isFifo && protocol !== "sqs") {
-    return { status: "error", message: "FIFO topics only support SQS subscriptions." };
+    return { status: "error", message: dict.sns.validation.fifoSqsOnly };
   }
 
   try {
@@ -33,7 +38,7 @@ export async function subscribeAction(
     revalidatePath("/sns", "layout");
     return { status: "success", data: undefined };
   } catch (err) {
-    const { message } = toFriendlyError(err);
+    const { message } = toFriendlyError(err, dict.sns.sdkErrors);
     return { status: "error", message };
   }
 }

@@ -18,6 +18,7 @@ import { publishMessageAction } from "@/features/sns/use-cases/publish-message/p
 import { t } from "@/features/shared/i18n/interpolate";
 import type { ActionState } from "@/features/shared/types/action-state";
 import type { AppDict } from "@/features/shared/i18n/get-dictionary";
+import type { Locale } from "@/features/shared/i18n/locale";
 
 const INITIAL_STATE: ActionState = { status: "idle" };
 
@@ -25,11 +26,12 @@ type Props = {
   topicArn: string;
   topicName: string;
   dict: AppDict["sns"]["publishDialog"];
+  locale: Locale;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
 };
 
-export function PublishDialog({ topicArn, topicName, dict, open, onOpenChange }: Props) {
+export function PublishDialog({ topicArn, topicName, dict, locale, open, onOpenChange }: Props) {
   const [state, formAction, pending] = useActionState(publishMessageAction, INITIAL_STATE);
   const closeRef = useRef<HTMLButtonElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
@@ -61,6 +63,7 @@ export function PublishDialog({ topicArn, topicName, dict, open, onOpenChange }:
         </DialogHeader>
         <form ref={formRef} action={formAction} className="flex flex-col gap-4">
           <input type="hidden" name="topicArn" value={topicArn} />
+          <input type="hidden" name="locale" value={locale} />
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="publish-message">{dict.messageLabel}</Label>
             <textarea

@@ -13,6 +13,7 @@ import {
 import { ConfirmDialog } from "@/features/shared/components/confirm-dialog/confirm-dialog";
 import { deleteQueueAction } from "@/features/sqs/use-cases/delete-queue/delete-queue";
 import type { AppDict } from "@/features/shared/i18n/get-dictionary";
+import type { Locale } from "@/features/shared/i18n/locale";
 import { t } from "@/features/shared/i18n/interpolate";
 import { encodeQueueUrlForRoute } from "@/features/sqs/lib/encode-queue-url-param";
 
@@ -22,6 +23,7 @@ type Props = {
   dict: AppDict["sqs"]["queueRowActions"];
   confirmDict: AppDict["shared"]["confirmDialog"];
   localePrefix: string;
+  locale: Locale;
 };
 
 export function QueueRowActions({
@@ -30,6 +32,7 @@ export function QueueRowActions({
   dict,
   confirmDict,
   localePrefix,
+  locale,
 }: Props) {
   const [deleteOpen, setDeleteOpen] = useState(false);
   const encoded = encodeQueueUrlForRoute(queueUrl);
@@ -69,7 +72,7 @@ export function QueueRowActions({
         title={dict.deleteTitle}
         description={t(dict.deleteConfirm, { queue: queueName })}
         action={deleteQueueAction}
-        hiddenFields={[{ name: "queueUrl", value: queueUrl }]}
+        hiddenFields={[{ name: "queueUrl", value: queueUrl }, { name: "locale", value: locale }]}
         confirmLabel={dict.delete}
         cancelLabel={confirmDict.cancel}
         confirmingTemplate={confirmDict.confirming}

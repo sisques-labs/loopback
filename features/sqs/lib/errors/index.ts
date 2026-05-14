@@ -3,12 +3,32 @@ type FriendlyError = {
   message: string;
 };
 
-export function toFriendlyError(err: unknown): FriendlyError {
+type SqsErrorsDict = {
+  invalidParam: string;
+  notFound: string;
+  limitExceeded: string;
+  notAuthorized: string;
+  endpointUnreachable: string;
+  unknown: string;
+};
+
+const DEFAULT_DICT: SqsErrorsDict = {
+  invalidParam: "Invalid queue parameter.",
+  notFound: "The specified queue does not exist.",
+  limitExceeded: "Queue limit exceeded for this account.",
+  notAuthorized: "Not authorized to perform this SQS action.",
+  endpointUnreachable: "Cannot connect to LocalStack at {endpoint}. Make sure it is running.",
+  unknown: "An unexpected error occurred.",
+};
+
+export function toFriendlyError(err: unknown, dict?: SqsErrorsDict): FriendlyError {
+  const d = dict ?? DEFAULT_DICT;
+
   if (err instanceof Error) {
     const name = err.name;
 
     if (name === "QueueDoesNotExist" || name === "AWS.SimpleQueueService.NonExistentQueue") {
-      return { code: "QueueDoesNotExist", message: "The specified queue does not exist." };
+      return { code: "QueueDoesNotExist", message: d.notFound };
     }
 
     if (name === "QueueNameExists" || name === "QueueAlreadyExists") {
@@ -19,7 +39,7 @@ export function toFriendlyError(err: unknown): FriendlyError {
     }
 
     if (name === "InvalidParameterValue" || name === "InvalidParameter") {
-      return { code: "InvalidParameterValue", message: "Invalid queue parameter." };
+      return { code: "InvalidParameterValue", message: d.invalidParam };
     }
 
     if (name === "BatchRequestTooLong" || name === "MessageTooLong") {
@@ -30,7 +50,7 @@ export function toFriendlyError(err: unknown): FriendlyError {
     }
 
     if (name === "OverLimit" || name === "AWS.SimpleQueueService.TooManyEntriesInBatchRequest") {
-      return { code: "OverLimit", message: "SQS request limit exceeded." };
+      return { code: "OverLimit", message: d.limitExceeded };
     }
 
     if (name === "PurgeQueueInProgress") {
@@ -41,10 +61,7 @@ export function toFriendlyError(err: unknown): FriendlyError {
     }
 
     if (name === "AccessDenied" || name === "AccessDeniedException") {
-      return {
-        code: "AccessDenied",
-        message: "Not authorized to perform this SQS action.",
-      };
+      return { code: "AccessDenied", message: d.notAuthorized };
     }
 
     const cause = (err as NodeJS.ErrnoException).code;
@@ -52,7 +69,7 @@ export function toFriendlyError(err: unknown): FriendlyError {
       const endpoint = process.env.AWS_ENDPOINT_URL ?? "unknown";
       return {
         code: "EndpointUnreachable",
-        message: `Cannot connect to LocalStack at ${endpoint}. Make sure it is running.`,
+        message: d.endpointUnreachable.replace("{endpoint}", endpoint),
       };
     }
 
