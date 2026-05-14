@@ -20,11 +20,20 @@ type Props = {
   dict: AppDict["lambda"]["table"];
   rowActionsDict: AppDict["lambda"]["rowActions"];
   invokeDialogDict: AppDict["lambda"]["invokeDialog"];
+  updateCodeDialogDict: AppDict["lambda"]["updateCodeDialog"];
   localePrefix: string;
   locale: Locale;
 };
 
-export function FunctionTable({ functions, dict, rowActionsDict, invokeDialogDict, localePrefix, locale }: Props) {
+export function FunctionTable({
+  functions,
+  dict,
+  rowActionsDict,
+  invokeDialogDict,
+  updateCodeDialogDict,
+  localePrefix,
+  locale,
+}: Props) {
   return (
     <Table>
       <TableHeader>
@@ -85,6 +94,7 @@ export function FunctionTable({ functions, dict, rowActionsDict, invokeDialogDic
                 functionName={fn.functionName}
                 dict={rowActionsDict}
                 invokeDialogDict={invokeDialogDict}
+                updateCodeDialogDict={updateCodeDialogDict}
                 localePrefix={localePrefix}
                 locale={locale}
               />
