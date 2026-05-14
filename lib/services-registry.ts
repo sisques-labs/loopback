@@ -28,7 +28,7 @@ export const services: ServiceEntry[] = [
     label: "Lambda",
     icon: FunctionSquare,
     href: "/lambda",
-    status: "coming-soon",
+    status: "enabled",
   },
   {
     slug: "sns",
