@@ -45,6 +45,7 @@ export default async function SNSPage({ params }: Props) {
         dict={sns.topicTable}
         rowActionsDict={sns.topicRowActions}
         confirmDict={shared.confirmDialog}
+        publishDict={sns.publishDialog}
         localePrefix={localePrefix}
       />
     </div>

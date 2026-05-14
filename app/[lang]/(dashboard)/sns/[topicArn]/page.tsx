@@ -1,9 +1,13 @@
 import Link from "next/link";
 import { ArrowLeftIcon } from "lucide-react";
 import { getTopicAttributes } from "@/features/sns/services/get-topic-attributes/get-topic-attributes";
+import { listSubscriptionsByTopic } from "@/features/sns/services/list-subscriptions/list-subscriptions";
 import { getDictionary } from "@/features/shared/i18n/get-dictionary";
 import { DEFAULT_LOCALE, isLocale, type Locale } from "@/features/shared/i18n/locale";
 import { Badge } from "@/components/ui/badge";
+import { SubscribeDialog } from "@/features/sns/components/subscribe-dialog/subscribe-dialog";
+import { SubscriptionTable } from "@/features/sns/components/subscription-table/subscription-table";
+import { PublishDialog } from "@/features/sns/components/publish-dialog/publish-dialog";
 
 export const dynamic = "force-dynamic";
 
@@ -18,7 +22,11 @@ export default async function TopicDetailPage({ params }: Props) {
   const d = dict.sns.topicDetail;
   const localePrefix = `/${locale}`;
 
-  const attrs = await getTopicAttributes(topicArn);
+  const [attrs, subscriptions] = await Promise.all([
+    getTopicAttributes(topicArn),
+    listSubscriptionsByTopic(topicArn),
+  ]);
+
   const topicName = topicArn.split(":").pop() ?? topicArn;
   const isFifo = topicName.endsWith(".fifo");
 
@@ -41,9 +49,16 @@ export default async function TopicDetailPage({ params }: Props) {
             <span className="font-medium">{d.arnLabel}:</span> {topicArn}
           </p>
         </div>
-        <Badge variant={isFifo ? "default" : "secondary"}>
-          {isFifo ? d.typeFifo : d.typeStandard}
-        </Badge>
+        <div className="flex shrink-0 items-center gap-2">
+          <PublishDialog
+            topicArn={topicArn}
+            topicName={topicName}
+            dict={dict.sns.publishDialog}
+          />
+          <Badge variant={isFifo ? "default" : "secondary"}>
+            {isFifo ? d.typeFifo : d.typeStandard}
+          </Badge>
+        </div>
       </div>
 
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-4">
@@ -57,8 +72,24 @@ export default async function TopicDetailPage({ params }: Props) {
         </div>
       </div>
 
-      <div>
-        <p className="text-sm text-muted-foreground">{d.empty}</p>
+      <div className="flex flex-col gap-4">
+        <div className="flex items-center justify-between">
+          <SubscribeDialog
+            topicArn={topicArn}
+            isFifo={isFifo}
+            dict={dict.sns.subscribeDialog}
+          />
+        </div>
+        {subscriptions.length > 0 ? (
+          <SubscriptionTable
+            subscriptions={subscriptions}
+            topicName={topicName}
+            dict={dict.sns.subscriptionTable}
+            confirmDict={dict.shared.confirmDialog}
+          />
+        ) : (
+          <p className="text-sm text-muted-foreground">{d.empty}</p>
+        )}
       </div>
     </div>
   );
