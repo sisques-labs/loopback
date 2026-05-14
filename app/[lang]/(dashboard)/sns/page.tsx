@@ -17,6 +17,7 @@ export default async function SNSPage({ params }: Props) {
   const dict = getDictionary(locale);
   const sns = dict.sns;
   const shared = dict.shared;
+  const localePrefix = `/${locale}`;
   const topics = await listTopics();
 
   if (topics.length === 0) {
@@ -44,6 +45,7 @@ export default async function SNSPage({ params }: Props) {
         dict={sns.topicTable}
         rowActionsDict={sns.topicRowActions}
         confirmDict={shared.confirmDialog}
+        localePrefix={localePrefix}
       />
     </div>
   );

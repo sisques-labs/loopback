@@ -26,6 +26,18 @@ const dict = {
     deleteTitle: "Delete topic",
     deleteConfirm:
       "Are you sure you want to delete {topic}? This action cannot be undone.",
+    viewDetail: "View detail",
+  },
+  topicDetail: {
+    title: "Topic Detail",
+    arnLabel: "ARN",
+    typeLabel: "Type",
+    typeStandard: "Standard",
+    typeFifo: "FIFO",
+    subscriptionsConfirmed: "Confirmed Subscriptions",
+    subscriptionsPending: "Pending Subscriptions",
+    back: "Back to Topics",
+    empty: "No subscriptions found",
   },
   errors: {
     connectFailed: "Failed to connect to SNS",

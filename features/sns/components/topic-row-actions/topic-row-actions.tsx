@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { MoreHorizontalIcon, Trash2Icon } from "lucide-react";
+import Link from "next/link";
+import { MoreHorizontalIcon, Trash2Icon, EyeIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -19,9 +20,10 @@ type Props = {
   topicName: string;
   dict: AppDict["sns"]["topicRowActions"];
   confirmDict: AppDict["shared"]["confirmDialog"];
+  localePrefix: string;
 };
 
-export function TopicRowActions({ topicArn, topicName, dict, confirmDict }: Props) {
+export function TopicRowActions({ topicArn, topicName, dict, confirmDict, localePrefix }: Props) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -40,6 +42,14 @@ export function TopicRowActions({ topicArn, topicName, dict, confirmDict }: Prop
           <MoreHorizontalIcon />
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
+          <DropdownMenuItem
+            render={
+              <Link href={`${localePrefix}/sns/${encodeURIComponent(topicArn)}`} />
+            }
+          >
+            <EyeIcon />
+            {dict.viewDetail}
+          </DropdownMenuItem>
           <DropdownMenuItem variant="destructive" onSelect={() => setOpen(true)}>
             <Trash2Icon />
             {dict.delete}

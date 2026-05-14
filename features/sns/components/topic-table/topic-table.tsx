@@ -1,3 +1,4 @@
+import Link from "next/link";
 import {
   Table,
   TableBody,
@@ -15,9 +16,10 @@ type Props = {
   dict: AppDict["sns"]["topicTable"];
   rowActionsDict: AppDict["sns"]["topicRowActions"];
   confirmDict: AppDict["shared"]["confirmDialog"];
+  localePrefix: string;
 };
 
-export function TopicTable({ topics, dict, rowActionsDict, confirmDict }: Props) {
+export function TopicTable({ topics, dict, rowActionsDict, confirmDict, localePrefix }: Props) {
   return (
     <Table>
       <TableHeader>
@@ -33,9 +35,12 @@ export function TopicTable({ topics, dict, rowActionsDict, confirmDict }: Props)
         {topics.map((topic) => (
           <TableRow key={topic.arn}>
             <TableCell className="min-w-0 max-w-[min(100%,12rem)] sm:max-w-none">
-              <span className="block truncate font-medium sm:overflow-visible sm:whitespace-normal">
+              <Link
+                href={`${localePrefix}/sns/${encodeURIComponent(topic.arn)}`}
+                className="block truncate font-medium hover:underline sm:overflow-visible sm:whitespace-normal"
+              >
                 {topic.name}
-              </span>
+              </Link>
             </TableCell>
             <TableCell className="hidden text-muted-foreground sm:table-cell">
               {topic.displayName ?? "—"}
@@ -52,6 +57,7 @@ export function TopicTable({ topics, dict, rowActionsDict, confirmDict }: Props)
                 topicName={topic.name}
                 dict={rowActionsDict}
                 confirmDict={confirmDict}
+                localePrefix={localePrefix}
               />
             </TableCell>
           </TableRow>
