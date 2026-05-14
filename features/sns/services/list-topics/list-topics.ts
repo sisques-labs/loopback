@@ -1,6 +1,6 @@
 import "server-only";
 
-import { ListTopicsCommand, GetTopicAttributesCommand } from "@aws-sdk/client-sns";
+import { ListTopicsCommand, GetTopicAttributesCommand, type ListTopicsCommandOutput } from "@aws-sdk/client-sns";
 import type { Topic } from "@/features/sns/types/sns";
 import { getSNSClient } from "@/features/sns/lib/client";
 import { toFriendlyError } from "@/features/sns/lib/errors";
@@ -18,7 +18,7 @@ export async function listTopics(): Promise<Topic[]> {
     const arns: string[] = [];
     let nextToken: string | undefined = undefined;
     do {
-      const res = await client.send(new ListTopicsCommand({ NextToken: nextToken }));
+      const res: ListTopicsCommandOutput = await client.send(new ListTopicsCommand({ NextToken: nextToken }));
       for (const t of res.Topics ?? []) {
         if (t.TopicArn) arns.push(t.TopicArn);
       }
