@@ -8,6 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "test": "pnpm exec vitest run",
     "prepare": "husky"
   },
   "lint-staged": {
@@ -16,6 +17,7 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1045.0",
     "@aws-sdk/client-sns": "^3.1046.0",
+    "@aws-sdk/client-sqs": "^3.1046.0",
     "@aws-sdk/lib-storage": "^3.1045.0",
     "@aws-sdk/s3-request-presigner": "^3.1045.0",
     "@base-ui/react": "^1.4.1",
@@ -42,6 +44,7 @@
     "husky": "^9.1.7",
     "lint-staged": "^17.0.4",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^3.2.4"
   }
 }
