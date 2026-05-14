@@ -14,7 +14,7 @@ export const services: ServiceEntry[] = [
     label: "SQS",
     icon: MessageSquare,
     href: "/sqs",
-    status: "coming-soon",
+    status: "enabled",
   },
   {
     slug: "dynamodb",
