@@ -14,3 +14,13 @@ export type TopicAttributes = {
   FifoTopic?: string; // "true" | "false"
   Owner?: string;
 };
+
+export type SubscriptionProtocol = "http" | "https" | "sqs" | "email";
+
+export type Subscription = {
+  subscriptionArn: string; // "PendingConfirmation" when not yet confirmed
+  topicArn: string;
+  protocol: SubscriptionProtocol;
+  endpoint: string;
+  owner: string;
+};
