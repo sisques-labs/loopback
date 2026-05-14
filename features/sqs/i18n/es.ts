@@ -27,6 +27,18 @@ const dict = {
     fifoHint: "Si hace falta, se agrega el sufijo .fifo automáticamente.",
     nameFifoPlaceholder: "mi-cola (pasa a ser mi-cola.fifo)",
   },
+  createQueueValidation: {
+    required: "El nombre de la cola es obligatorio.",
+    standardCannotEndFifo:
+      "Las colas estándar no pueden terminar en .fifo. Desmarcá FIFO o usá una cola FIFO.",
+    nameTooLong:
+      "El nombre debe tener como máximo 80 caracteres (incluido .fifo en colas FIFO).",
+    fifoMustEndFifo: "Los nombres de cola FIFO deben terminar en .fifo.",
+    fifoInvalidPrefix:
+      "Solo letras, números, guiones y guiones bajos antes de .fifo.",
+    standardInvalidPattern:
+      "El nombre debe tener 1–80 caracteres: letras, números, guiones o guiones bajos.",
+  },
   queueRowActions: {
     actions: "Acciones de la cola",
     delete: "Eliminar",

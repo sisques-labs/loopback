@@ -22,6 +22,17 @@ const dict = {
     fifoHint: "Name will be suffixed with .fifo automatically when needed.",
     nameFifoPlaceholder: "my-queue (becomes my-queue.fifo)",
   },
+  createQueueValidation: {
+    required: "Queue name is required.",
+    standardCannotEndFifo:
+      "Standard queue names cannot end with .fifo. Uncheck FIFO or use a FIFO queue.",
+    nameTooLong: "Queue name must be at most 80 characters (including .fifo for FIFO queues).",
+    fifoMustEndFifo: "FIFO queue names must end with .fifo.",
+    fifoInvalidPrefix:
+      "Queue name may only contain letters, numbers, hyphens, and underscores before .fifo.",
+    standardInvalidPattern:
+      "Queue name must be 1–80 characters: letters, numbers, hyphens, or underscores only.",
+  },
   queueRowActions: {
     actions: "Queue actions",
     delete: "Delete",
