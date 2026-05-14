@@ -56,6 +56,7 @@ export default async function TopicDetailPage({ params }: Props) {
             topicArn={topicArn}
             topicName={topicName}
             dict={dict.sns.publishDialog}
+            locale={locale}
           />
           <Badge variant={isFifo ? "default" : "secondary"}>
             {isFifo ? d.typeFifo : d.typeStandard}
@@ -80,6 +81,7 @@ export default async function TopicDetailPage({ params }: Props) {
             topicArn={topicArn}
             isFifo={isFifo}
             dict={dict.sns.subscribeDialog}
+            locale={locale}
           />
         </div>
         {subscriptions.length > 0 ? (
@@ -88,6 +90,7 @@ export default async function TopicDetailPage({ params }: Props) {
             topicName={topicName}
             dict={dict.sns.subscriptionTable}
             confirmDict={dict.shared.confirmDialog}
+            locale={locale}
           />
         ) : (
           <p className="text-sm text-muted-foreground">{d.empty}</p>

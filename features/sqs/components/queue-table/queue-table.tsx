@@ -10,6 +10,7 @@ import {
 import type { QueueListItem } from "@/features/sqs/types/sqs";
 import { encodeQueueUrlForRoute } from "@/features/sqs/lib/encode-queue-url-param";
 import type { AppDict } from "@/features/shared/i18n/get-dictionary";
+import type { Locale } from "@/features/shared/i18n/locale";
 import { QueueRowActions } from "@/features/sqs/components/queue-row-actions/queue-row-actions";
 
 type Props = {
@@ -18,6 +19,7 @@ type Props = {
   rowActionsDict: AppDict["sqs"]["queueRowActions"];
   confirmDict: AppDict["shared"]["confirmDialog"];
   localePrefix: string;
+  locale: Locale;
 };
 
 export function QueueTable({
@@ -26,6 +28,7 @@ export function QueueTable({
   rowActionsDict,
   confirmDict,
   localePrefix,
+  locale,
 }: Props) {
   return (
     <Table>
@@ -61,6 +64,7 @@ export function QueueTable({
                 dict={rowActionsDict}
                 confirmDict={confirmDict}
                 localePrefix={localePrefix}
+                locale={locale}
               />
             </TableCell>
           </TableRow>

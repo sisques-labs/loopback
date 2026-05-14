@@ -14,6 +14,7 @@ import { ConfirmDialog } from "@/features/shared/components/confirm-dialog/confi
 import { deleteTopicAction } from "@/features/sns/use-cases/delete-topic/delete-topic";
 import { PublishDialog } from "@/features/sns/components/publish-dialog/publish-dialog";
 import type { AppDict } from "@/features/shared/i18n/get-dictionary";
+import type { Locale } from "@/features/shared/i18n/locale";
 import { t } from "@/features/shared/i18n/interpolate";
 
 type Props = {
@@ -23,9 +24,10 @@ type Props = {
   confirmDict: AppDict["shared"]["confirmDialog"];
   publishDict: AppDict["sns"]["publishDialog"];
   localePrefix: string;
+  locale: Locale;
 };
 
-export function TopicRowActions({ topicArn, topicName, dict, confirmDict, publishDict, localePrefix }: Props) {
+export function TopicRowActions({ topicArn, topicName, dict, confirmDict, publishDict, localePrefix, locale }: Props) {
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [publishOpen, setPublishOpen] = useState(false);
 
@@ -68,6 +70,7 @@ export function TopicRowActions({ topicArn, topicName, dict, confirmDict, publis
         topicArn={topicArn}
         topicName={topicName}
         dict={publishDict}
+        locale={locale}
         open={publishOpen}
         onOpenChange={setPublishOpen}
       />
@@ -78,7 +81,7 @@ export function TopicRowActions({ topicArn, topicName, dict, confirmDict, publis
         title={dict.deleteTitle}
         description={t(dict.deleteConfirm, { topic: topicName })}
         action={deleteTopicAction}
-        hiddenFields={[{ name: "topicArn", value: topicArn }]}
+        hiddenFields={[{ name: "topicArn", value: topicArn }, { name: "locale", value: locale }]}
         confirmLabel={dict.delete}
         cancelLabel={confirmDict.cancel}
         confirmingTemplate={confirmDict.confirming}

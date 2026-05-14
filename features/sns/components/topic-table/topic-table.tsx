@@ -10,6 +10,7 @@ import {
 import type { Topic } from "@/features/sns/types/sns";
 import { TopicRowActions } from "@/features/sns/components/topic-row-actions/topic-row-actions";
 import type { AppDict } from "@/features/shared/i18n/get-dictionary";
+import type { Locale } from "@/features/shared/i18n/locale";
 
 type Props = {
   topics: Topic[];
@@ -18,9 +19,10 @@ type Props = {
   confirmDict: AppDict["shared"]["confirmDialog"];
   publishDict: AppDict["sns"]["publishDialog"];
   localePrefix: string;
+  locale: Locale;
 };
 
-export function TopicTable({ topics, dict, rowActionsDict, confirmDict, publishDict, localePrefix }: Props) {
+export function TopicTable({ topics, dict, rowActionsDict, confirmDict, publishDict, localePrefix, locale }: Props) {
   return (
     <Table>
       <TableHeader>
@@ -60,6 +62,7 @@ export function TopicTable({ topics, dict, rowActionsDict, confirmDict, publishD
                 confirmDict={confirmDict}
                 publishDict={publishDict}
                 localePrefix={localePrefix}
+                locale={locale}
               />
             </TableCell>
           </TableRow>

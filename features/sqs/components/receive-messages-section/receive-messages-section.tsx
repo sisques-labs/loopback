@@ -10,15 +10,17 @@ import {
 } from "@/features/sqs/use-cases/receive-messages/receive-messages";
 import type { ActionState } from "@/features/shared/types/action-state";
 import type { AppDict } from "@/features/shared/i18n/get-dictionary";
+import type { Locale } from "@/features/shared/i18n/locale";
 
 const INITIAL: ActionState<ReceiveMessagesSuccess> = { status: "idle" };
 
 type Props = {
   queueUrl: string;
   dict: AppDict["sqs"]["queueDetail"]["receive"];
+  locale: Locale;
 };
 
-export function ReceiveMessagesSection({ queueUrl, dict }: Props) {
+export function ReceiveMessagesSection({ queueUrl, dict, locale }: Props) {
   const [state, formAction, pending] = useActionState(receiveMessagesAction, INITIAL);
   const [lastBatch, setLastBatch] = useState<SqsReceivedMessageBrief[]>([]);
 
@@ -38,6 +40,7 @@ export function ReceiveMessagesSection({ queueUrl, dict }: Props) {
         </div>
         <form action={formAction} className="shrink-0 pt-2 sm:pt-0">
           <input type="hidden" name="queueUrl" value={queueUrl} />
+          <input type="hidden" name="locale" value={locale} />
           <Button
             type="submit"
             variant="secondary"

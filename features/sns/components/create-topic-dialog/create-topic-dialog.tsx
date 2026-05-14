@@ -19,14 +19,16 @@ import { Label } from "@/components/ui/label";
 import { createTopicAction } from "@/features/sns/use-cases/create-topic/create-topic";
 import type { ActionState } from "@/features/shared/types/action-state";
 import type { AppDict } from "@/features/shared/i18n/get-dictionary";
+import type { Locale } from "@/features/shared/i18n/locale";
 
 const INITIAL_STATE: ActionState = { status: "idle" };
 
 type Props = {
   dict: AppDict["sns"]["createTopicDialog"];
+  locale: Locale;
 };
 
-export function CreateTopicDialog({ dict }: Props) {
+export function CreateTopicDialog({ dict, locale }: Props) {
   const [state, formAction, pending] = useActionState(createTopicAction, INITIAL_STATE);
   const closeRef = useRef<HTMLButtonElement>(null);
   const [isFifo, setIsFifo] = useState(false);
@@ -75,6 +77,7 @@ export function CreateTopicDialog({ dict }: Props) {
             <Label htmlFor="topic-fifo">{dict.fifoLabel}</Label>
           </div>
           <input type="hidden" name="isFifo" value={String(isFifo)} />
+          <input type="hidden" name="locale" value={locale} />
           <DialogFooter>
             <DialogClose ref={closeRef} render={<Button variant="outline" type="button" />}>
               {dict.cancel}

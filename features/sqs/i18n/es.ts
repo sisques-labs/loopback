@@ -81,6 +81,18 @@ const dict = {
       confirmLabel: "Vaciar mensajes",
     },
   },
+  validation: {
+    queueUrlRequired: "La URL de la cola es obligatoria.",
+    messageRequired: "El cuerpo del mensaje no puede estar vacío.",
+  },
+  sdkErrors: {
+    invalidParam: "Parámetro de cola inválido.",
+    notFound: "La cola especificada no existe.",
+    limitExceeded: "Se alcanzó el límite de colas para esta cuenta.",
+    notAuthorized: "Sin autorización para realizar esta acción en SQS.",
+    endpointUnreachable: "No se puede conectar a LocalStack en {endpoint}. Asegurate de que esté en ejecución.",
+    unknown: "Ocurrió un error inesperado.",
+  },
   errors: {
     connectFailed: "No se pudo conectar a SQS",
     connectFailedDetail:

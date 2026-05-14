@@ -18,6 +18,7 @@ import { sendMessageAction } from "@/features/sqs/use-cases/send-message/send-me
 import { t } from "@/features/shared/i18n/interpolate";
 import type { ActionState } from "@/features/shared/types/action-state";
 import type { AppDict } from "@/features/shared/i18n/get-dictionary";
+import type { Locale } from "@/features/shared/i18n/locale";
 
 const INITIAL_STATE: ActionState = { status: "idle" };
 
@@ -26,9 +27,10 @@ type Props = {
   queueName: string;
   isFifo: boolean;
   dict: AppDict["sqs"]["queueDetail"]["sendMessage"];
+  locale: Locale;
 };
 
-export function SendMessageDialog({ queueUrl, queueName, isFifo, dict }: Props) {
+export function SendMessageDialog({ queueUrl, queueName, isFifo, dict, locale }: Props) {
   const [state, formAction, pending] = useActionState(sendMessageAction, INITIAL_STATE);
   const closeRef = useRef<HTMLButtonElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
@@ -53,6 +55,7 @@ export function SendMessageDialog({ queueUrl, queueName, isFifo, dict }: Props) 
         <form ref={formRef} action={formAction} className="flex flex-col gap-4">
           <input type="hidden" name="queueUrl" value={queueUrl} />
           <input type="hidden" name="isFifo" value={String(isFifo)} />
+          <input type="hidden" name="locale" value={locale} />
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="sqs-send-body">{dict.bodyLabel}</Label>
             <textarea

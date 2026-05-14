@@ -4,6 +4,7 @@ import { SendMessageDialog } from "@/features/sqs/components/send-message-dialog
 import { ReceiveMessagesSection } from "@/features/sqs/components/receive-messages-section/receive-messages-section";
 import { PurgeQueueDialog } from "@/features/sqs/components/purge-queue-dialog/purge-queue-dialog";
 import type { AppDict } from "@/features/shared/i18n/get-dictionary";
+import type { Locale } from "@/features/shared/i18n/locale";
 
 type Props = {
   queueUrl: string;
@@ -11,9 +12,10 @@ type Props = {
   isFifo: boolean;
   dict: AppDict["sqs"]["queueDetail"];
   confirmDict: AppDict["shared"]["confirmDialog"];
+  locale: Locale;
 };
 
-export function QueueDetailMessaging({ queueUrl, queueName, isFifo, dict, confirmDict }: Props) {
+export function QueueDetailMessaging({ queueUrl, queueName, isFifo, dict, confirmDict, locale }: Props) {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-3">
@@ -24,16 +26,18 @@ export function QueueDetailMessaging({ queueUrl, queueName, isFifo, dict, confir
             queueName={queueName}
             isFifo={isFifo}
             dict={dict.sendMessage}
+            locale={locale}
           />
           <PurgeQueueDialog
             queueUrl={queueUrl}
             queueName={queueName}
             dict={dict.purge}
             confirmDict={confirmDict}
+            locale={locale}
           />
         </div>
       </div>
-      <ReceiveMessagesSection queueUrl={queueUrl} dict={dict.receive} />
+      <ReceiveMessagesSection queueUrl={queueUrl} dict={dict.receive} locale={locale} />
     </div>
   );
 }

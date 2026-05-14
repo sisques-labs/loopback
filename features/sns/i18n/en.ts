@@ -75,6 +75,25 @@ const dict = {
     submitting: "Publishing…",
     successToast: "Message published to {topic}.",
   },
+  validation: {
+    topicNameRequired: "Topic name is required.",
+    topicNameInvalid: "Topic name must be 1–256 characters, alphanumeric, hyphens, or underscores only.",
+    topicArnRequired: "Topic ARN is required.",
+    messageRequired: "Message cannot be empty.",
+    protocolRequired: "Protocol is required.",
+    endpointRequired: "Endpoint is required.",
+    fifoSqsOnly: "FIFO topics only support SQS subscriptions.",
+    pendingUnsubscribe: "Cannot unsubscribe a pending subscription.",
+  },
+  sdkErrors: {
+    notFound: "The specified topic does not exist.",
+    invalidParam: "Invalid topic parameter.",
+    limitExceeded: "Topic limit exceeded for this account.",
+    kmsError: "The KMS key associated with this topic is not accessible.",
+    notAuthorized: "Not authorized to perform this SNS action.",
+    endpointUnreachable: "Cannot connect to LocalStack at {endpoint}. Make sure it is running.",
+    unknown: "An unexpected error occurred.",
+  },
   errors: {
     connectFailed: "Failed to connect to SNS",
     connectFailedDetail:

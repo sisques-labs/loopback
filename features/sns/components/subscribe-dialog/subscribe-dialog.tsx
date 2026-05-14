@@ -17,6 +17,7 @@ import { Label } from "@/components/ui/label";
 import { subscribeAction } from "@/features/sns/use-cases/subscribe/subscribe";
 import type { ActionState } from "@/features/shared/types/action-state";
 import type { AppDict } from "@/features/shared/i18n/get-dictionary";
+import type { Locale } from "@/features/shared/i18n/locale";
 
 const INITIAL_STATE: ActionState = { status: "idle" };
 
@@ -26,9 +27,10 @@ type Props = {
   topicArn: string;
   isFifo: boolean;
   dict: AppDict["sns"]["subscribeDialog"];
+  locale: Locale;
 };
 
-export function SubscribeDialog({ topicArn, isFifo, dict }: Props) {
+export function SubscribeDialog({ topicArn, isFifo, dict, locale }: Props) {
   const [state, formAction, pending] = useActionState(subscribeAction, INITIAL_STATE);
   const closeRef = useRef<HTMLButtonElement>(null);
   const [endpoint, setEndpoint] = useState("");
@@ -54,6 +56,7 @@ export function SubscribeDialog({ topicArn, isFifo, dict }: Props) {
         <form action={formAction} className="flex flex-col gap-4">
           <input type="hidden" name="topicArn" value={topicArn} />
           <input type="hidden" name="isFifo" value={String(isFifo)} />
+          <input type="hidden" name="locale" value={locale} />
 
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="subscribe-protocol">{dict.protocolLabel}</Label>

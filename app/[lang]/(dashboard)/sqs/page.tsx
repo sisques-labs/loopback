@@ -46,6 +46,7 @@ export default async function SQSPage({ params }: Props) {
         rowActionsDict={sqs.queueRowActions}
         confirmDict={shared.confirmDialog}
         localePrefix={localePrefix}
+        locale={locale}
       />
     </div>
   );
