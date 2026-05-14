@@ -19,6 +19,9 @@ const dict = {
     creating: "Creating…",
     submit: "Create",
     success: "Topic created successfully.",
+    fifoLabel: "FIFO queue",
+    fifoHint: "Name will be suffixed with .fifo automatically",
+    nameFifoPlaceholder: "my-topic (auto-suffixed to my-topic.fifo)",
   },
   topicRowActions: {
     actions: "Topic actions",

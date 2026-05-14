@@ -1,9 +1,10 @@
 "use client";
 
-import { useActionState, useEffect, useRef } from "react";
+import { useActionState, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { PlusIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Dialog,
   DialogContent,
@@ -28,6 +29,7 @@ type Props = {
 export function CreateTopicDialog({ dict }: Props) {
   const [state, formAction, pending] = useActionState(createTopicAction, INITIAL_STATE);
   const closeRef = useRef<HTMLButtonElement>(null);
+  const [isFifo, setIsFifo] = useState(false);
 
   useEffect(() => {
     if (state.status === "success") {
@@ -52,15 +54,27 @@ export function CreateTopicDialog({ dict }: Props) {
             <Input
               id="topic-name"
               name="name"
-              placeholder="my-topic"
+              placeholder={isFifo ? dict.nameFifoPlaceholder : "my-topic"}
               autoComplete="off"
               required
               aria-invalid={state.status === "error" ? true : undefined}
             />
+            {isFifo && (
+              <p className="text-xs text-muted-foreground">{dict.fifoHint}</p>
+            )}
             {state.status === "error" && (
               <p className="text-xs text-destructive">{state.message}</p>
             )}
           </div>
+          <div className="flex items-center gap-2">
+            <Checkbox
+              id="topic-fifo"
+              checked={isFifo}
+              onCheckedChange={(checked) => setIsFifo(checked === true)}
+            />
+            <Label htmlFor="topic-fifo">{dict.fifoLabel}</Label>
+          </div>
+          <input type="hidden" name="isFifo" value={String(isFifo)} />
           <DialogFooter>
             <DialogClose ref={closeRef} render={<Button variant="outline" type="button" />}>
               {dict.cancel}
