@@ -39,7 +39,7 @@ export function BucketRowActions({ bucket, dict, confirmDict }: Props) {
           <MoreHorizontalIcon />
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuItem variant="destructive" onSelect={() => setOpen(true)}>
+          <DropdownMenuItem variant="destructive" onClick={() => setOpen(true)}>
             <Trash2Icon />
             {dict.delete}
           </DropdownMenuItem>
