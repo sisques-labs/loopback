@@ -42,6 +42,7 @@ export default async function BucketPage({ params }: Props) {
         dict={s3.objectTable}
         uploadDict={s3.uploadDialog}
         rowActionsDict={s3.objectRowActions}
+        renameActionsDict={s3.renameObjectDialog}
         confirmDict={shared.confirmDialog}
       />
     </div>

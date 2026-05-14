@@ -35,10 +35,24 @@ const dict = {
   objectRowActions: {
     actions: "Object actions",
     download: "Download",
+    rename: "Rename",
     delete: "Delete",
     deleteTitle: "Delete object",
     deleteConfirm:
       "Are you sure you want to delete {key}? This action cannot be undone.",
+  },
+  renameObjectDialog: {
+    title: "Rename object",
+    keyLabel: "New key",
+    submit: "Rename",
+    cancel: "Cancel",
+    renaming: "Renaming…",
+    success: "Object renamed successfully",
+    failed: "Failed to rename object",
+    sameKey: "New key must be different from the current key",
+    emptyKey: "Key cannot be empty",
+    leadingSlash: "Key must not start with a slash",
+    tooLong: "Key must not exceed 1024 characters",
   },
   uploadDialog: {
     trigger: "Upload",
