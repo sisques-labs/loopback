@@ -13,3 +13,15 @@ export function getLambdaErrorStrings(maybeLocale: string | undefined): LambdaEr
   const locale: Locale = maybeLocale && isLocale(maybeLocale) ? maybeLocale : DEFAULT_LOCALE;
   return errorDicts[locale];
 }
+
+const sdkErrorDicts = {
+  en: enLambda.sdkErrors,
+  es: esLambda.sdkErrors,
+} as const;
+
+export type LambdaSdkErrorStrings = (typeof sdkErrorDicts)[Locale];
+
+export function getLambdaSdkErrorStrings(maybeLocale: string | undefined): LambdaSdkErrorStrings {
+  const locale: Locale = maybeLocale && isLocale(maybeLocale) ? maybeLocale : DEFAULT_LOCALE;
+  return sdkErrorDicts[locale];
+}

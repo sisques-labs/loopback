@@ -1,3 +1,4 @@
+import { CreateFunctionDialog } from "@/features/lambda/components/create-function-dialog/create-function-dialog";
 import { FunctionTable } from "@/features/lambda/components/function-table/function-table";
 import { LambdaEmptyState } from "@/features/lambda/components/lambda-empty-state/lambda-empty-state";
 import { listFunctions } from "@/features/lambda/services/list-functions/list-functions";
@@ -18,15 +19,30 @@ export default async function LambdaPage({ params }: Props) {
   const localePrefix = `/${locale}`;
   const functions = await listFunctions();
 
+  const header = (
+    <div className="flex w-full min-w-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+      <div className="min-w-0">
+        <h1 className="text-xl font-semibold break-words">{lambda.page.title}</h1>
+      </div>
+      <CreateFunctionDialog
+        dict={lambda.createFunctionDialog}
+        locale={locale}
+      />
+    </div>
+  );
+
   if (functions.length === 0) {
-    return <LambdaEmptyState dict={lambda.page} />;
+    return (
+      <div className="flex flex-col items-start gap-4">
+        {header}
+        <LambdaEmptyState dict={lambda.page} />
+      </div>
+    );
   }
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
-        <h1 className="text-xl font-semibold break-words">{lambda.page.title}</h1>
-      </div>
+      {header}
       <FunctionTable
         functions={functions}
         dict={lambda.table}
