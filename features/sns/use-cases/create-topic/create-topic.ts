@@ -1,4 +1,5 @@
 "use server";
+import "server-only";
 
 import { CreateTopicCommand } from "@aws-sdk/client-sns";
 import { revalidatePath } from "next/cache";

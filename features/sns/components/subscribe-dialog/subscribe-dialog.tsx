@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useEffect, useRef } from "react";
+import { useActionState, useEffect, useRef, useState } from "react";
 import { PlusIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -31,6 +31,7 @@ type Props = {
 export function SubscribeDialog({ topicArn, isFifo, dict }: Props) {
   const [state, formAction, pending] = useActionState(subscribeAction, INITIAL_STATE);
   const closeRef = useRef<HTMLButtonElement>(null);
+  const [endpoint, setEndpoint] = useState("");
 
   const protocols = isFifo ? (["sqs"] as const) : ALL_PROTOCOLS;
 
@@ -81,6 +82,8 @@ export function SubscribeDialog({ topicArn, isFifo, dict }: Props) {
               placeholder={dict.endpointPlaceholder}
               autoComplete="off"
               required
+              value={endpoint}
+              onChange={(e) => setEndpoint(e.target.value)}
               aria-invalid={state.status === "error" ? true : undefined}
             />
             {state.status === "error" && (
@@ -92,7 +95,7 @@ export function SubscribeDialog({ topicArn, isFifo, dict }: Props) {
             <DialogClose ref={closeRef} render={<Button variant="outline" type="button" />}>
               {dict.cancel}
             </DialogClose>
-            <Button type="submit" disabled={pending}>
+            <Button type="submit" disabled={pending || !endpoint.trim()}>
               {pending ? dict.submitting : dict.submit}
             </Button>
           </DialogFooter>

@@ -16,7 +16,7 @@ export async function deleteTopicAction(
   try {
     const client = getSNSClient();
     await client.send(new DeleteTopicCommand({ TopicArn: topicArn }));
-    revalidatePath("/sns");
+    revalidatePath("/sns", "layout");
     return { status: "success", data: undefined };
   } catch (err) {
     const { message } = toFriendlyError(err);
