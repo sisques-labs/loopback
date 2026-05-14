@@ -11,6 +11,8 @@ type LambdaErrorsDict = {
   payloadTooLarge: string;
   endpointUnreachable: string;
   unknown: string;
+  codeStorageExceeded: string;
+  invalidZip: string;
 };
 
 const DEFAULT_DICT: LambdaErrorsDict = {
@@ -21,6 +23,8 @@ const DEFAULT_DICT: LambdaErrorsDict = {
   payloadTooLarge: "Payload is too large.",
   endpointUnreachable: "Cannot connect to LocalStack at {endpoint}. Make sure it is running.",
   unknown: "An unexpected error occurred.",
+  codeStorageExceeded: "Account code storage limit exceeded.",
+  invalidZip: "The uploaded file is not a valid Lambda deployment package.",
 };
 
 export function toFriendlyError(err: unknown, dict?: LambdaErrorsDict): FriendlyError {
@@ -47,6 +51,14 @@ export function toFriendlyError(err: unknown, dict?: LambdaErrorsDict): Friendly
 
     if (name === "RequestEntityTooLargeException") {
       return { code: name, message: d.payloadTooLarge };
+    }
+
+    if (name === "CodeStorageExceededException") {
+      return { code: name, message: d.codeStorageExceeded };
+    }
+
+    if (name === "InvalidZipFileException") {
+      return { code: name, message: d.invalidZip };
     }
 
     const cause = (err as NodeJS.ErrnoException).code;
