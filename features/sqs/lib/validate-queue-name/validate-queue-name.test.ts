@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { finalQueueName, validateQueueNameInput } from "./validate-queue-name";
+import { finalQueueName, validateQueueNameInput } from "./index";
 
 describe("validateQueueNameInput", () => {
   it("returns required for empty input", () => {
