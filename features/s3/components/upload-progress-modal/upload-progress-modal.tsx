@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { useUploadProgressStore } from "@/features/shared/stores/upload-progress-store";
 import { cn } from "@/lib/utils";
 import type { AppDict } from "@/features/shared/i18n/get-dictionary";
@@ -14,6 +15,10 @@ export function UploadProgressModal({ dict }: Props) {
   const setMinimized = useUploadProgressStore((s) => s.setMinimized);
   const dismiss = useUploadProgressStore((s) => s.dismiss);
   const clearCompleted = useUploadProgressStore((s) => s.clearCompleted);
+
+  useEffect(() => {
+    if (window.innerWidth < 640) setMinimized(true);
+  }, [setMinimized]);
 
   if (items.length === 0) return null;
 
