@@ -45,16 +45,16 @@ export function ObjectRowActions({ bucket, objectKey, dict, renameDict, confirmD
           <MoreHorizontalIcon />
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuItem onSelect={() => window.location.assign(downloadHref)}>
+          <DropdownMenuItem onClick={() => window.location.assign(downloadHref)}>
             <DownloadIcon />
             {dict.download}
           </DropdownMenuItem>
-          <DropdownMenuItem onSelect={() => setRenameOpen(true)}>
+          <DropdownMenuItem onClick={() => setRenameOpen(true)}>
             <PencilIcon />
             {dict.rename}
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem variant="destructive" onSelect={() => setDeleteOpen(true)}>
+          <DropdownMenuItem variant="destructive" onClick={() => setDeleteOpen(true)}>
             <Trash2Icon />
             {dict.delete}
           </DropdownMenuItem>

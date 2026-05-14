@@ -53,11 +53,11 @@ export function TopicRowActions({ topicArn, topicName, dict, confirmDict, publis
             <EyeIcon />
             {dict.viewDetail}
           </DropdownMenuItem>
-          <DropdownMenuItem onSelect={() => setPublishOpen(true)}>
+          <DropdownMenuItem onClick={() => setPublishOpen(true)}>
             <SendIcon />
             {dict.publish}
           </DropdownMenuItem>
-          <DropdownMenuItem variant="destructive" onSelect={() => setDeleteOpen(true)}>
+          <DropdownMenuItem variant="destructive" onClick={() => setDeleteOpen(true)}>
             <Trash2Icon />
             {dict.delete}
           </DropdownMenuItem>
