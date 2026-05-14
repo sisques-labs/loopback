@@ -84,6 +84,12 @@ const dict = {
     connectFailed: "No se pudo conectar a SNS",
     connectFailedDetail:
       "No se pudo alcanzar {endpoint}. Asegurate de que LocalStack esté en ejecución y de que AWS_ENDPOINT_URL esté configurado correctamente.",
+    connectFailedDetailGeneric:
+      "No se pudo alcanzar LocalStack desde el servidor de la app. Comprueba que esté en marcha, que AWS_ENDPOINT_URL sea correcto y define NEXT_PUBLIC_AWS_ENDPOINT_URL con la misma URL (necesario para mensajes en el cliente si usas una IP de red local).",
+    topicNotFound: "Topic no encontrado",
+    topicNotFoundDetail:
+      "LocalStack no tiene un topic para esta URL. Puede haberse borrado, reiniciado LocalStack o el enlace estar desactualizado.",
+    backToTopics: "Volver a SNS",
     retry: "Reintentar",
   },
 } as const satisfies SNSDictTranslated;

@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { SubscribeDialog } from "@/features/sns/components/subscribe-dialog/subscribe-dialog";
 import { SubscriptionTable } from "@/features/sns/components/subscription-table/subscription-table";
 import { PublishDialog } from "@/features/sns/components/publish-dialog/publish-dialog";
+import { decodeTopicArnParam } from "@/features/sns/lib/decode-topic-arn-param";
 
 export const dynamic = "force-dynamic";
 
@@ -16,7 +17,8 @@ type Props = {
 };
 
 export default async function TopicDetailPage({ params }: Props) {
-  const { lang, topicArn } = await params;
+  const { lang, topicArn: topicArnParam } = await params;
+  const topicArn = decodeTopicArnParam(topicArnParam);
   const locale: Locale = isLocale(lang) ? lang : DEFAULT_LOCALE;
   const dict = getDictionary(locale);
   const d = dict.sns.topicDetail;
