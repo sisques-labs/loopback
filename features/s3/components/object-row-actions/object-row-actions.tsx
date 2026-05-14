@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { MoreHorizontalIcon, DownloadIcon, Trash2Icon } from "lucide-react";
+import { MoreHorizontalIcon, DownloadIcon, PencilIcon, Trash2Icon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -11,6 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ConfirmDialog } from "@/features/shared/components/confirm-dialog/confirm-dialog";
+import { RenameObjectDialog } from "@/features/s3/components/rename-object-dialog/rename-object-dialog";
 import { deleteObjectAction } from "@/features/s3/use-cases/delete-object/delete-object";
 import type { AppDict } from "@/features/shared/i18n/get-dictionary";
 import { t } from "@/features/shared/i18n/interpolate";
@@ -19,11 +20,13 @@ type Props = {
   bucket: string;
   objectKey: string;
   dict: AppDict["s3"]["objectRowActions"];
+  renameDict: AppDict["s3"]["renameObjectDialog"];
   confirmDict: AppDict["shared"]["confirmDialog"];
 };
 
-export function ObjectRowActions({ bucket, objectKey, dict, confirmDict }: Props) {
-  const [open, setOpen] = useState(false);
+export function ObjectRowActions({ bucket, objectKey, dict, renameDict, confirmDict }: Props) {
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [renameOpen, setRenameOpen] = useState(false);
   const downloadHref = `/api/aws/s3/${encodeURIComponent(bucket)}/objects/${encodeURIComponent(objectKey)}?download=1`;
 
   return (
@@ -46,17 +49,29 @@ export function ObjectRowActions({ bucket, objectKey, dict, confirmDict }: Props
             <DownloadIcon />
             {dict.download}
           </DropdownMenuItem>
+          <DropdownMenuItem onSelect={() => setRenameOpen(true)}>
+            <PencilIcon />
+            {dict.rename}
+          </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem variant="destructive" onSelect={() => setOpen(true)}>
+          <DropdownMenuItem variant="destructive" onSelect={() => setDeleteOpen(true)}>
             <Trash2Icon />
             {dict.delete}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
 
+      <RenameObjectDialog
+        open={renameOpen}
+        onOpenChange={setRenameOpen}
+        bucket={bucket}
+        objectKey={objectKey}
+        dict={renameDict}
+      />
+
       <ConfirmDialog
-        open={open}
-        onOpenChange={setOpen}
+        open={deleteOpen}
+        onOpenChange={setDeleteOpen}
         title={dict.deleteTitle}
         description={t(dict.deleteConfirm, { key: objectKey })}
         action={deleteObjectAction}

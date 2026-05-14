@@ -18,6 +18,7 @@ type Props = {
   dict: AppDict["s3"]["objectTable"];
   uploadDict: AppDict["s3"]["uploadDialog"];
   rowActionsDict: AppDict["s3"]["objectRowActions"];
+  renameActionsDict: AppDict["s3"]["renameObjectDialog"];
   confirmDict: AppDict["shared"]["confirmDialog"];
 };
 
@@ -27,6 +28,7 @@ export function ObjectTable({
   dict,
   uploadDict,
   rowActionsDict,
+  renameActionsDict,
   confirmDict,
 }: Props) {
   return (
@@ -61,6 +63,7 @@ export function ObjectTable({
                   bucket={bucket}
                   objectKey={obj.key}
                   dict={rowActionsDict}
+                  renameDict={renameActionsDict}
                   confirmDict={confirmDict}
                 />
               </TableCell>

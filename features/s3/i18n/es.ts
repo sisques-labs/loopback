@@ -40,10 +40,24 @@ const dict = {
   objectRowActions: {
     actions: "Acciones del objeto",
     download: "Descargar",
+    rename: "Renombrar",
     delete: "Eliminar",
     deleteTitle: "Eliminar objeto",
     deleteConfirm:
       "¿Seguro que quieres eliminar {key}? Esta acción no se puede deshacer.",
+  },
+  renameObjectDialog: {
+    title: "Renombrar objeto",
+    keyLabel: "Nueva clave",
+    submit: "Renombrar",
+    cancel: "Cancelar",
+    renaming: "Renombrando…",
+    success: "Objeto renombrado correctamente",
+    failed: "No se pudo renombrar el objeto",
+    sameKey: "La nueva clave debe ser distinta a la actual",
+    emptyKey: "La clave no puede estar vacía",
+    leadingSlash: "La clave no debe comenzar con una barra",
+    tooLong: "La clave no puede superar los 1024 caracteres",
   },
   uploadDialog: {
     trigger: "Subir",
