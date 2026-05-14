@@ -11,6 +11,13 @@ export function toFriendlyError(err: unknown): FriendlyError {
       return { code: "QueueDoesNotExist", message: "The specified queue does not exist." };
     }
 
+    if (name === "QueueNameExists" || name === "QueueAlreadyExists") {
+      return {
+        code: "QueueNameExists",
+        message: "A queue with this name already exists in the account.",
+      };
+    }
+
     if (name === "InvalidParameterValue" || name === "InvalidParameter") {
       return { code: "InvalidParameterValue", message: "Invalid queue parameter." };
     }

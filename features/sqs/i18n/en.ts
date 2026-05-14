@@ -10,6 +10,26 @@ const dict = {
     typeFifo: "FIFO",
     typeStandard: "Standard",
   },
+  createQueueDialog: {
+    trigger: "New queue",
+    title: "Create queue",
+    nameLabel: "Queue name",
+    cancel: "Cancel",
+    creating: "Creating…",
+    submit: "Create",
+    success: "Queue created successfully.",
+    fifoLabel: "FIFO queue",
+    fifoHint: "Name will be suffixed with .fifo automatically when needed.",
+    nameFifoPlaceholder: "my-queue (becomes my-queue.fifo)",
+  },
+  queueRowActions: {
+    actions: "Queue actions",
+    delete: "Delete",
+    deleteTitle: "Delete queue",
+    deleteConfirm:
+      "Are you sure you want to delete {queue}? Messages in the queue will be removed. This action cannot be undone.",
+    viewDetail: "View detail",
+  },
   queueDetailStub: {
     title: "Queue",
     description:

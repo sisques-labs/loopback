@@ -15,6 +15,26 @@ const dict = {
     typeFifo: "FIFO",
     typeStandard: "Estándar",
   },
+  createQueueDialog: {
+    trigger: "Nueva cola",
+    title: "Crear cola",
+    nameLabel: "Nombre de la cola",
+    cancel: "Cancelar",
+    creating: "Creando…",
+    submit: "Crear",
+    success: "Cola creada correctamente.",
+    fifoLabel: "Cola FIFO",
+    fifoHint: "Si hace falta, se agrega el sufijo .fifo automáticamente.",
+    nameFifoPlaceholder: "mi-cola (pasa a ser mi-cola.fifo)",
+  },
+  queueRowActions: {
+    actions: "Acciones de la cola",
+    delete: "Eliminar",
+    deleteTitle: "Eliminar cola",
+    deleteConfirm:
+      "¿Seguro que querés eliminar {queue}? Los mensajes de la cola se perderán. Esta acción no se puede deshacer.",
+    viewDetail: "Ver detalle",
+  },
   queueDetailStub: {
     title: "Cola",
     description:
