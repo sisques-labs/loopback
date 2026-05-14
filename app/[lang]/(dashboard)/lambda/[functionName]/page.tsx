@@ -4,7 +4,7 @@ import { getFunction } from "@/features/lambda/services/get-function/get-functio
 import { getDictionary } from "@/features/shared/i18n/get-dictionary";
 import { DEFAULT_LOCALE, isLocale, type Locale } from "@/features/shared/i18n/locale";
 import { decodeFunctionNameParam } from "@/features/lambda/lib/route-codec";
-import { InvokeDialog } from "@/features/lambda/components/invoke-dialog/invoke-dialog";
+import { LambdaDetailToolbar } from "@/features/lambda/components/lambda-detail-toolbar/lambda-detail-toolbar";
 import { Badge } from "@/components/ui/badge";
 import { stateBadgeVariant, stateLabel } from "@/features/lambda/lib/state-badge";
 
@@ -44,18 +44,18 @@ export default async function LambdaFunctionDetailPage({ params }: Props) {
             {fn.functionArn}
           </p>
         </div>
-        <div className="flex shrink-0 items-center gap-2">
-          <InvokeDialog
-            functionName={fn.functionName}
-            dict={dict.lambda.invokeDialog}
-            locale={locale}
-          />
-          {fn.state && (
-            <Badge variant={stateBadgeVariant(fn.state)}>
-              {stateLabel(fn.state, tableDict)}
-            </Badge>
-          )}
-        </div>
+        <LambdaDetailToolbar
+          functionName={fn.functionName}
+          locale={locale}
+          invokeDialogDict={dict.lambda.invokeDialog}
+          updateCodeDialogDict={dict.lambda.updateCodeDialog}
+          replaceCodeCta={d.replaceCodeCta}
+          trailing={
+            fn.state ? (
+              <Badge variant={stateBadgeVariant(fn.state)}>{stateLabel(fn.state, tableDict)}</Badge>
+            ) : null
+          }
+        />
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">

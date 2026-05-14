@@ -48,6 +48,7 @@ export default async function LambdaPage({ params }: Props) {
         dict={lambda.table}
         rowActionsDict={lambda.rowActions}
         invokeDialogDict={lambda.invokeDialog}
+        updateCodeDialogDict={lambda.updateCodeDialog}
         localePrefix={localePrefix}
         locale={locale}
       />

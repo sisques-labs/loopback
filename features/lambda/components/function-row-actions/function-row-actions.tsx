@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { MoreHorizontalIcon, EyeIcon, PlayIcon } from "lucide-react";
+import { MoreHorizontalIcon, EyeIcon, PlayIcon, UploadIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -11,6 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { InvokeDialog } from "@/features/lambda/components/invoke-dialog/invoke-dialog";
+import { UpdateCodeDialog } from "@/features/lambda/components/update-code-dialog/update-code-dialog";
 import { encodeFunctionNameForRoute } from "@/features/lambda/lib/route-codec";
 import type { AppDict } from "@/features/shared/i18n/get-dictionary";
 import type { Locale } from "@/features/shared/i18n/locale";
@@ -19,12 +20,21 @@ type Props = {
   functionName: string;
   dict: AppDict["lambda"]["rowActions"];
   invokeDialogDict: AppDict["lambda"]["invokeDialog"];
+  updateCodeDialogDict: AppDict["lambda"]["updateCodeDialog"];
   localePrefix: string;
   locale: Locale;
 };
 
-export function FunctionRowActions({ functionName, dict, invokeDialogDict, localePrefix, locale }: Props) {
+export function FunctionRowActions({
+  functionName,
+  dict,
+  invokeDialogDict,
+  updateCodeDialogDict,
+  localePrefix,
+  locale,
+}: Props) {
   const [invokeOpen, setInvokeOpen] = useState(false);
+  const [updateCodeOpen, setUpdateCodeOpen] = useState(false);
 
   return (
     <>
@@ -54,6 +64,10 @@ export function FunctionRowActions({ functionName, dict, invokeDialogDict, local
             <PlayIcon />
             {dict.invoke}
           </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => setUpdateCodeOpen(true)}>
+            <UploadIcon />
+            {dict.updateCode}
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
 
@@ -63,6 +77,12 @@ export function FunctionRowActions({ functionName, dict, invokeDialogDict, local
         locale={locale}
         open={invokeOpen}
         onOpenChange={setInvokeOpen}
+      />
+      <UpdateCodeDialog
+        functionName={functionName}
+        dict={updateCodeDialogDict}
+        open={updateCodeOpen}
+        onOpenChange={setUpdateCodeOpen}
       />
     </>
   );
