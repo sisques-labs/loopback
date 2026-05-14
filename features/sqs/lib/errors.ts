@@ -22,6 +22,13 @@ export function toFriendlyError(err: unknown): FriendlyError {
       return { code: "InvalidParameterValue", message: "Invalid queue parameter." };
     }
 
+    if (name === "BatchRequestTooLong" || name === "MessageTooLong") {
+      return {
+        code: "MessageTooLong",
+        message: "Message body exceeds the maximum allowed size.",
+      };
+    }
+
     if (name === "OverLimit" || name === "AWS.SimpleQueueService.TooManyEntriesInBatchRequest") {
       return { code: "OverLimit", message: "SQS request limit exceeded." };
     }

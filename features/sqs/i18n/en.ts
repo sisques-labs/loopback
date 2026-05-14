@@ -30,12 +30,39 @@ const dict = {
       "Are you sure you want to delete {queue}? Messages in the queue will be removed. This action cannot be undone.",
     viewDetail: "View detail",
   },
-  queueDetailStub: {
-    title: "Queue",
-    description:
-      "Full queue attributes and messaging tools will appear here in a later update. You can still bookmark this URL.",
-    urlLabel: "Queue URL",
+  queueDetail: {
     back: "Back to queues",
+    urlLabel: "Queue URL",
+    attributesTitle: "Queue attributes",
+    messagingTitle: "Messages",
+    typeStandard: "Standard",
+    typeFifo: "FIFO",
+    sendMessage: {
+      trigger: "Send message",
+      title: "Send message to {queue}",
+      bodyLabel: "Message body",
+      bodyPlaceholder: "Plain text or JSON…",
+      cancel: "Cancel",
+      submitting: "Sending…",
+      submit: "Send",
+      successToast: "Message sent to {queue}.",
+    },
+    receive: {
+      trigger: "Receive messages",
+      title: "Receive messages",
+      description:
+        "Fetches up to 5 messages with up to 2 seconds long polling. Messages are not deleted from the queue; visibility timeout may temporarily hide them.",
+      empty: "No messages returned (queue may be empty or messages are in flight).",
+      messageIdLabel: "Message ID",
+      submitting: "Receiving…",
+    },
+    purge: {
+      trigger: "Purge queue",
+      title: "Purge queue messages",
+      description:
+        "Purge removes all messages from {queue}. The queue itself is kept—this is not the same as deleting the queue. You cannot undo a purge.",
+      confirmLabel: "Purge messages",
+    },
   },
   errors: {
     connectFailed: "Failed to connect to SQS",

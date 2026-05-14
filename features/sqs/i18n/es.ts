@@ -35,12 +35,39 @@ const dict = {
       "¿Seguro que querés eliminar {queue}? Los mensajes de la cola se perderán. Esta acción no se puede deshacer.",
     viewDetail: "Ver detalle",
   },
-  queueDetailStub: {
-    title: "Cola",
-    description:
-      "Los atributos completos de la cola y las herramientas de mensajería llegarán en una actualización posterior. Podés guardar esta URL en favoritos.",
-    urlLabel: "URL de la cola",
+  queueDetail: {
     back: "Volver a las colas",
+    urlLabel: "URL de la cola",
+    attributesTitle: "Atributos de la cola",
+    messagingTitle: "Mensajes",
+    typeStandard: "Estándar",
+    typeFifo: "FIFO",
+    sendMessage: {
+      trigger: "Enviar mensaje",
+      title: "Enviar mensaje a {queue}",
+      bodyLabel: "Cuerpo del mensaje",
+      bodyPlaceholder: "Texto plano o JSON…",
+      cancel: "Cancelar",
+      submitting: "Enviando…",
+      submit: "Enviar",
+      successToast: "Mensaje enviado a {queue}.",
+    },
+    receive: {
+      trigger: "Recibir mensajes",
+      title: "Recibir mensajes",
+      description:
+        "Obtiene hasta 5 mensajes con hasta 2 segundos de espera larga. No se borran mensajes de la cola; el tiempo de visibilidad puede ocultarlos temporalmente.",
+      empty: "No hubo mensajes (cola vacía o mensajes en vuelo).",
+      messageIdLabel: "ID de mensaje",
+      submitting: "Recibiendo…",
+    },
+    purge: {
+      trigger: "Vaciar cola",
+      title: "Vaciar mensajes de la cola",
+      description:
+        "Vaciar elimina todos los mensajes de {queue}. La cola sigue existiendo: no es lo mismo que eliminar la cola. No se puede deshacer.",
+      confirmLabel: "Vaciar mensajes",
+    },
   },
   errors: {
     connectFailed: "No se pudo conectar a SQS",
