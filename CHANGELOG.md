@@ -1,7 +1,14 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
-## [unreleased]
+## [0.2.0-alpha.0] - 2026-05-15
+
+### Documentation
+- **changelog:** Seed initial changelog from git history (378d65a)
+
+### Features
+- **changelog:** Add git-cliff config and local preview scripts (38b50e5)
+## [0.1.0-alpha.0] - 2026-05-15
 
 ### Bug Fixes
 - **tokens:** Wire Geist fonts and narrow primitive transitions (94b7ac7)
@@ -10,6 +17,7 @@ All notable changes to this project will be documented in this file.
 ### Chore
 - **test:** Add Vitest jsdom harness for UI specs (7330fd5)
 - Remove unused dependencies from pnpm-lock.yaml (9a8ee9c)
+- Release v0.1.0-alpha.0 (51f2b03)
 
 ### Documentation
 - Sync design-system with shipped tokens, nav, and primitives (136bdf3)
