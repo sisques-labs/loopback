@@ -287,6 +287,8 @@ describe("updateItemAction — SDK error handling", () => {
     );
 
     expect(result.status).toBe("error");
-    expect(result.message).toBeTruthy();
+    if (result.status === "error") {
+      expect(result.message).toBeTruthy();
+    }
   });
 });
