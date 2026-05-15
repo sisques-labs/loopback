@@ -21,13 +21,31 @@ import type { ActionState } from "@/features/shared/types/action-state";
 
 const INITIAL_STATE: ActionState = { status: "idle" };
 
+function buildItemExampleJson(partitionKeyName: string, sortKeyName?: string): string {
+  const lines = [`  "${partitionKeyName}": "item-1",`];
+  if (sortKeyName) {
+    lines.push(`  "${sortKeyName}": "v1",`);
+  }
+  lines.push('  "name": "Prueba"');
+  return `{\n${lines.join("\n")}\n}`;
+}
+
 type Props = {
   tableName: string;
+  partitionKeyName: string;
+  sortKeyName?: string;
   dict: AppDict["dynamodb"]["putItemDialog"];
   locale: Locale;
 };
 
-export function PutItemDialog({ tableName, dict, locale }: Props) {
+export function PutItemDialog({
+  tableName,
+  partitionKeyName,
+  sortKeyName,
+  dict,
+  locale,
+}: Props) {
+  const exampleJson = buildItemExampleJson(partitionKeyName, sortKeyName);
   const [state, formAction, pending] = useActionState(putItemAction, INITIAL_STATE);
   const closeRef = useRef<HTMLButtonElement>(null);
 
@@ -55,7 +73,7 @@ export function PutItemDialog({ tableName, dict, locale }: Props) {
             <textarea
               id="item-json"
               name="itemJson"
-              placeholder={dict.jsonPlaceholder}
+              placeholder={exampleJson}
               rows={8}
               className="w-full min-w-0 rounded-lg border border-input bg-transparent px-2.5 py-2 font-mono text-sm outline-none transition-colors focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
               aria-invalid={state.status === "error" ? true : undefined}

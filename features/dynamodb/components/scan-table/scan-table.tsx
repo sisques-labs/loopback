@@ -98,7 +98,13 @@ export function ScanTable({
         <div className="min-w-0">
           <h1 className="text-xl font-semibold break-words font-mono">{tableName}</h1>
         </div>
-        <PutItemDialog tableName={tableName} dict={dict.putItemDialog} locale={locale} />
+        <PutItemDialog
+          tableName={tableName}
+          partitionKeyName={partitionKeyName}
+          sortKeyName={sortKeyName}
+          dict={dict.putItemDialog}
+          locale={locale}
+        />
       </div>
 
       <div

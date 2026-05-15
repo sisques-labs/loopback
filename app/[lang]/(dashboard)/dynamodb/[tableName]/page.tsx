@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { ArrowLeftIcon } from "lucide-react";
 import { ScanTable } from "@/features/dynamodb/components/scan-table/scan-table";
-import { DynamoDBEmptyState } from "@/features/dynamodb/components/dynamodb-empty-state/dynamodb-empty-state";
 import { TableDetailPanel } from "@/features/dynamodb/components/table-detail-panel/table-detail-panel";
 import { scanTable } from "@/features/dynamodb/services/scan-table/scan-table";
 import { queryTable } from "@/features/dynamodb/services/query-table/query-table";
@@ -58,9 +57,6 @@ export default async function DynamoDBTablePage({ params, searchParams }: Props)
     }));
   }
 
-  const showScanEmptyState =
-    !isQueryMode && result.items.length === 0 && !startKey;
-
   return (
     <div className="flex flex-col gap-6">
       <div>
@@ -77,27 +73,20 @@ export default async function DynamoDBTablePage({ params, searchParams }: Props)
         <TableDetailPanel table={tableInfo} dict={dict.dynamodb.tableDetail} />
       )}
 
-      {showScanEmptyState ? (
-        <div className="flex flex-col gap-4">
-          <h1 className="text-xl font-semibold font-mono break-words">{tableName}</h1>
-          <DynamoDBEmptyState dict={dict.dynamodb.page} />
-        </div>
-      ) : (
-        <ScanTable
-          tableName={tableName}
-          items={result.items}
-          nextKey={result.nextKey}
-          partitionKeyName={partitionKeyName}
-          sortKeyName={sortKeyName}
-          mode={mode}
-          queryPk={queryPk}
-          querySk={querySk}
-          dict={dict.dynamodb}
-          confirmDict={dict.shared.confirmDialog}
-          locale={locale}
-          localePrefix={localePrefix}
-        />
-      )}
+      <ScanTable
+        tableName={tableName}
+        items={result.items}
+        nextKey={result.nextKey}
+        partitionKeyName={partitionKeyName}
+        sortKeyName={sortKeyName}
+        mode={mode}
+        queryPk={queryPk}
+        querySk={querySk}
+        dict={dict.dynamodb}
+        confirmDict={dict.shared.confirmDialog}
+        locale={locale}
+        localePrefix={localePrefix}
+      />
     </div>
   );
 }
