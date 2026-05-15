@@ -21,7 +21,7 @@ export const services: ServiceEntry[] = [
     label: "DynamoDB",
     icon: Database,
     href: "/dynamodb",
-    status: "coming-soon",
+    status: "enabled",
   },
   {
     slug: "lambda",
