@@ -44,7 +44,11 @@ export function CreateQueueDialog({ dict, locale, closeLabel}: Props) {
 
   return (
     <Dialog>
-      <DialogTrigger render={<Button size="sm" />}>
+      <DialogTrigger
+        render={
+          <Button size="sm" className="min-h-11 min-w-11 md:min-h-9 md:min-w-9" />
+        }
+      >
         <PlusIcon />
         {dict.trigger}
       </DialogTrigger>
@@ -58,7 +62,9 @@ export function CreateQueueDialog({ dict, locale, closeLabel}: Props) {
             <Input
               id="queue-name"
               name="name"
-              placeholder={isFifo ? dict.nameFifoPlaceholder : "my-queue"}
+              placeholder={
+                isFifo ? dict.nameFifoPlaceholder : dict.namePlaceholder
+              }
               autoComplete="off"
               required
               aria-invalid={state.status === "error" ? true : undefined}
