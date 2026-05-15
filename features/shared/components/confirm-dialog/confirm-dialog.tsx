@@ -27,6 +27,7 @@ type Props = {
   hiddenFields?: HiddenField[];
   confirmLabel: string;
   cancelLabel: string;
+  closeLabel: string;
   confirmingTemplate: AppDict["shared"]["confirmDialog"]["confirming"];
 };
 
@@ -41,6 +42,7 @@ export function ConfirmDialog({
   hiddenFields = [],
   confirmLabel,
   cancelLabel,
+  closeLabel,
   confirmingTemplate,
 }: Props) {
   const [state, formAction, pending] = useActionState(action, INITIAL_STATE);
@@ -53,7 +55,7 @@ export function ConfirmDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger className="hidden" />
-      <DialogContent>
+      <DialogContent closeLabel={closeLabel}>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
         </DialogHeader>

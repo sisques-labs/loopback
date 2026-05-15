@@ -19,6 +19,9 @@ const dict = {
     endpointTitle: "Endpoint",
     notSet: "Sin definir",
   },
+  dialog: {
+    close: "Cerrar",
+  },
   confirmDialog: {
     cancel: "Cancelar",
     confirm: "Confirmar",
