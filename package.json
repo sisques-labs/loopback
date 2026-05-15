@@ -9,7 +9,9 @@
     "start": "next start",
     "lint": "eslint",
     "test": "pnpm exec vitest run",
-    "prepare": "husky"
+    "prepare": "husky",
+    "changelog": "pnpm dlx git-cliff -o CHANGELOG.md",
+    "changelog:preview": "pnpm dlx git-cliff --unreleased --strip header"
   },
   "lint-staged": {
     "**/*.{ts,tsx}": "eslint --fix"
