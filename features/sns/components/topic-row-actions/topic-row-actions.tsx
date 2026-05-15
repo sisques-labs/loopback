@@ -25,9 +25,11 @@ type Props = {
   publishDict: AppDict["sns"]["publishDialog"];
   localePrefix: string;
   locale: Locale;
+
+    closeLabel: string;
 };
 
-export function TopicRowActions({ topicArn, topicName, dict, confirmDict, publishDict, localePrefix, locale }: Props) {
+export function TopicRowActions({ topicArn, topicName, dict, confirmDict, publishDict, localePrefix, locale, closeLabel}: Props) {
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [publishOpen, setPublishOpen] = useState(false);
 
@@ -73,7 +75,7 @@ export function TopicRowActions({ topicArn, topicName, dict, confirmDict, publis
         locale={locale}
         open={publishOpen}
         onOpenChange={setPublishOpen}
-      />
+       closeLabel={closeLabel}/>
 
       <ConfirmDialog
         open={deleteOpen}
@@ -84,6 +86,7 @@ export function TopicRowActions({ topicArn, topicName, dict, confirmDict, publis
         hiddenFields={[{ name: "topicArn", value: topicArn }, { name: "locale", value: locale }]}
         confirmLabel={dict.delete}
         cancelLabel={confirmDict.cancel}
+        closeLabel={closeLabel}
         confirmingTemplate={confirmDict.confirming}
       />
     </>

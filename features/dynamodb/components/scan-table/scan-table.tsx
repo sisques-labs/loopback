@@ -28,6 +28,8 @@ type Props = {
   confirmDict: AppDict["shared"]["confirmDialog"];
   locale: Locale;
   localePrefix: string;
+
+    closeLabel: string;
 };
 
 function buildTableHref(
@@ -56,8 +58,7 @@ export function ScanTable({
   dict,
   confirmDict,
   locale,
-  localePrefix,
-}: Props) {
+  localePrefix, closeLabel}: Props) {
   const [viewItem, setViewItem] = useState<Record<string, unknown> | null>(null);
   const [editItem, setEditItem] = useState<Record<string, unknown> | null>(null);
   const scanDict = dict.scan;
@@ -104,7 +105,7 @@ export function ScanTable({
           sortKeyName={sortKeyName}
           dict={dict.putItemDialog}
           locale={locale}
-        />
+         closeLabel={closeLabel}/>
       </div>
 
       <div
@@ -182,7 +183,7 @@ export function ScanTable({
               dict={dict.deleteItemDialog}
               confirmDict={confirmDict}
               locale={locale}
-            />
+             closeLabel={closeLabel}/>
           </>
         )}
       />
@@ -195,6 +196,7 @@ export function ScanTable({
           }}
           item={viewItem}
           dict={dict.itemViewDialog}
+          closeLabel={closeLabel}
         />
       )}
 
@@ -210,6 +212,7 @@ export function ScanTable({
           sortKeyName={sortKeyName}
           dict={dict.editItemDialog}
           locale={locale}
+          closeLabel={closeLabel}
         />
       )}
     </div>

@@ -23,6 +23,7 @@ type Props = {
   updateCodeDialogDict: AppDict["lambda"]["updateCodeDialog"];
   localePrefix: string;
   locale: Locale;
+  closeLabel: string;
 };
 
 export function FunctionTable({
@@ -33,6 +34,7 @@ export function FunctionTable({
   updateCodeDialogDict,
   localePrefix,
   locale,
+  closeLabel,
 }: Props) {
   return (
     <Table>
@@ -97,6 +99,7 @@ export function FunctionTable({
                 updateCodeDialogDict={updateCodeDialogDict}
                 localePrefix={localePrefix}
                 locale={locale}
+                closeLabel={closeLabel}
               />
             </TableCell>
           </TableRow>

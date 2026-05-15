@@ -20,6 +20,7 @@ type Props = {
   rowActionsDict: AppDict["s3"]["objectRowActions"];
   renameActionsDict: AppDict["s3"]["renameObjectDialog"];
   confirmDict: AppDict["shared"]["confirmDialog"];
+  closeLabel: string;
 };
 
 export function ObjectTable({
@@ -30,12 +31,13 @@ export function ObjectTable({
   rowActionsDict,
   renameActionsDict,
   confirmDict,
+  closeLabel,
 }: Props) {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
         <h2 className="text-lg font-semibold">{dict.title}</h2>
-        <UploadDialog bucket={bucket} dict={uploadDict} />
+        <UploadDialog bucket={bucket} dict={uploadDict} closeLabel={closeLabel} />
       </div>
       <Table>
         <TableHeader>
@@ -65,6 +67,7 @@ export function ObjectTable({
                   dict={rowActionsDict}
                   renameDict={renameActionsDict}
                   confirmDict={confirmDict}
+                  closeLabel={closeLabel}
                 />
               </TableCell>
             </TableRow>

@@ -26,9 +26,11 @@ const INITIAL_STATE: ActionState = { status: "idle" };
 type Props = {
   dict: AppDict["lambda"]["createFunctionDialog"];
   locale: Locale;
+
+    closeLabel: string;
 };
 
-export function CreateFunctionDialog({ dict, locale }: Props) {
+export function CreateFunctionDialog({ dict, locale, closeLabel}: Props) {
   const [state, formAction, pending] = useActionState(createFunctionAction, INITIAL_STATE);
   const closeRef = useRef<HTMLButtonElement>(null);
 
@@ -45,7 +47,7 @@ export function CreateFunctionDialog({ dict, locale }: Props) {
         <PlusIcon />
         {dict.trigger}
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent closeLabel={closeLabel}>
         <DialogHeader>
           <DialogTitle>{dict.title}</DialogTitle>
         </DialogHeader>

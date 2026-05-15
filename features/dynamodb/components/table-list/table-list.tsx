@@ -24,6 +24,8 @@ type Props = {
   confirmDict: AppDict["shared"]["confirmDialog"];
   locale: Locale;
   localePrefix: string;
+
+    closeLabel: string;
 };
 
 function formatBytes(bytes: number): string {
@@ -34,14 +36,14 @@ function formatBytes(bytes: number): string {
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`;
 }
 
-export function TableList({ tables, dict, confirmDict, locale, localePrefix }: Props) {
+export function TableList({ tables, dict, confirmDict, locale, localePrefix, closeLabel}: Props) {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex w-full min-w-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
         <div className="min-w-0">
           <h1 className="text-xl font-semibold break-words">{dict.page.title}</h1>
         </div>
-        <CreateTableDialog dict={dict.createTableDialog} locale={locale} />
+        <CreateTableDialog dict={dict.createTableDialog} locale={locale}  closeLabel={closeLabel}/>
       </div>
 
       {tables.length === 0 ? (
@@ -85,6 +87,7 @@ export function TableList({ tables, dict, confirmDict, locale, localePrefix }: P
                     dict={dict.deleteTableDialog}
                     confirmDict={confirmDict}
                     locale={locale}
+                    closeLabel={closeLabel}
                   />
                 </TableCell>
               </TableRow>

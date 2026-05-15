@@ -15,6 +15,7 @@ update this doc.
 | Type        | `next/font/google` → `Geist`, `Geist_Mono` (`app/[lang]/layout.tsx`) |
 | Theme       | `next-themes`, mounted in `app/[lang]/layout.tsx`        |
 | Mobile nav  | `features/shared/components/mobile-nav/*` + Zustand store|
+| Tests       | Vitest + `@testing-library/react` (jsdom for `*.test.tsx`)   |
 
 ## Content fundamentals
 
@@ -53,6 +54,11 @@ exclamation marks, no emoji. This is a tool that lives next to your terminal.
 
 Every string lives in `features/<area>/i18n/{en,es}.ts`. Never hard-code English.
 Spanish uses the same register — `Crear bucket`, `Cargando…`.
+
+Shared chrome copy (dialog close, confirm labels, sidebar section headers) lives in
+`features/shared/i18n/{en,es}.ts`. Pass `closeLabel={dict.shared.dialog.close}`
+into every `DialogContent` — the primitive requires it for the icon-only close
+control (`components/ui/dialog.tsx`).
 
 ### Don't
 
@@ -99,6 +105,11 @@ OKLCH/hex.
 | Geist Mono   | `--font-mono`        | `next/font/google → Geist_Mono` |
 | Headings     | `--font-heading` aliases `--font-sans` (no separate display) |
 
+**Wiring:** `app/[lang]/layout.tsx` applies `geistSans.variable` / `geistMono.variable`
+on `<html>` (`--font-geist-sans`, `--font-geist-mono`). `app/globals.css` maps them in
+`@theme inline` (`--font-sans: var(--font-geist-sans)`, etc.). Do not leave
+`--font-sans` self-referential.
+
 Scale in use across the codebase:
 
 | Role            | Class                                              |
@@ -132,7 +143,33 @@ Tailwind v4 defaults (4px base). Recurring values:
 - Toolbar gap: `gap-2` / `gap-3`
 - Table row height: `h-10` head, `p-2` cells
 - Touch targets on mobile: **`min-h-11 min-w-11` (44×44px)** — non-negotiable
-  for icon buttons, drops back to `min-h-9 min-w-9` at `md:` (see AGENTS.md).
+  for dialog triggers and icon buttons; drops back to `min-h-9 min-w-9` at `md:`
+  (see AGENTS.md). Dialog close (X) uses the same pattern on `DialogContent`.
+
+### Navigation — active route
+
+Desktop sidebar and mobile drawer links (`features/shared/components/mobile-nav/nav-links.tsx`)
+use `usePathname()` to mark the current route:
+
+- Classes: `bg-sidebar-primary text-sidebar-primary-foreground`
+- Attribute: `aria-current="page"` on the active link only
+- Dark mode: `--sidebar-primary` is the documented blue accent (see tokens above)
+
+### UI primitives (`components/ui/`)
+
+shadcn **base-nova** set. Prefer these over ad-hoc markup:
+
+| Primitive   | Notes |
+| ----------- | ----- |
+| `Button`    | No `transition-all` — theme-safe property list only |
+| `Badge`     | Pill `rounded-4xl`; same transition rules as `Button` |
+| `Input`     | Default text fields |
+| `Textarea`  | Multi-line JSON / message bodies in service dialogs (SQS, SNS, DynamoDB, Lambda) |
+| `Card`      | `rounded-lg border bg-card shadow-sm` |
+| `Dialog`    | `closeLabel` required; localized via `dict.shared.dialog.close` |
+
+Service forms must not ship raw `<textarea>` elements or chromatic utility colors
+(e.g. `text-amber-*`) for warnings — use `Textarea` and `text-muted-foreground`.
 
 ### Borders & elevation
 
@@ -162,9 +199,9 @@ Tailwind v4 defaults (4px base). Recurring values:
 
 > **CSS transitions on theme-token-derived colors are dangerous.** Browsers can
 > stick to the old computed value when the variable swaps under a `color`
-> transition. Don't put `color` in `transition: all` — narrow to
-> `background-color`, `border-color`, `box-shadow`, `transform`. Theme switches
-> should be instant on text/icon colors.
+> transition. `Button` and `Badge` use an explicit list
+> (`background-color`, `border-color`, `box-shadow`, `transform`, `opacity`) —
+> never `transition-all`. Theme switches should be instant on text/icon colors.
 
 ### Transparency & blur
 

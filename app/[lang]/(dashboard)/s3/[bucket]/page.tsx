@@ -27,7 +27,7 @@ export default async function BucketPage({ params }: Props) {
             <h1 className="text-xl font-semibold break-words">{bucket}</h1>
             <p className="mt-1 text-sm text-muted-foreground">{s3.bucketDetail.empty}</p>
           </div>
-          <UploadDialog bucket={bucket} dict={s3.uploadDialog} />
+          <UploadDialog bucket={bucket} dict={s3.uploadDialog}  closeLabel={shared.dialog.close}/>
         </div>
       </div>
     );
@@ -44,6 +44,7 @@ export default async function BucketPage({ params }: Props) {
         rowActionsDict={s3.objectRowActions}
         renameActionsDict={s3.renameObjectDialog}
         confirmDict={shared.confirmDialog}
+        closeLabel={shared.dialog.close}
       />
     </div>
   );

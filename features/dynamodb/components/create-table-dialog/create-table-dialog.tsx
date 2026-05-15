@@ -27,9 +27,11 @@ const KEY_TYPES = ["S", "N", "B"] as const;
 type Props = {
   dict: AppDict["dynamodb"]["createTableDialog"];
   locale: Locale;
+
+    closeLabel: string;
 };
 
-export function CreateTableDialog({ dict, locale }: Props) {
+export function CreateTableDialog({ dict, locale, closeLabel}: Props) {
   const router = useRouter();
   const [state, formAction, pending] = useActionState(createTableAction, INITIAL_STATE);
   const closeRef = useRef<HTMLButtonElement>(null);
@@ -50,7 +52,7 @@ export function CreateTableDialog({ dict, locale }: Props) {
         <PlusIcon />
         {dict.trigger}
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent closeLabel={closeLabel}>
         <DialogHeader>
           <DialogTitle>{dict.title}</DialogTitle>
         </DialogHeader>
@@ -80,7 +82,7 @@ export function CreateTableDialog({ dict, locale }: Props) {
             <Input
               id="pk-name"
               name="partitionKeyName"
-              placeholder="pk"
+              placeholder={dict.pkNamePlaceholder}
               autoComplete="off"
               required
             />
@@ -126,7 +128,7 @@ export function CreateTableDialog({ dict, locale }: Props) {
                 <Input
                   id="sk-name"
                   name="sortKeyName"
-                  placeholder="sk"
+                  placeholder={dict.skNamePlaceholder}
                   autoComplete="off"
                 />
               </div>

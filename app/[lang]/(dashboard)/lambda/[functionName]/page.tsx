@@ -55,6 +55,7 @@ export default async function LambdaFunctionDetailPage({ params }: Props) {
               <Badge variant={stateBadgeVariant(fn.state)}>{stateLabel(fn.state, tableDict)}</Badge>
             ) : null
           }
+          closeLabel={dict.shared.dialog.close}
         />
       </div>
 

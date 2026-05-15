@@ -25,6 +25,7 @@ const dict = {
     success: "Cola creada correctamente.",
     fifoLabel: "Cola FIFO",
     fifoHint: "Si hace falta, se agrega el sufijo .fifo automáticamente.",
+    namePlaceholder: "mi-cola",
     nameFifoPlaceholder: "mi-cola (pasa a ser mi-cola.fifo)",
   },
   createQueueValidation: {

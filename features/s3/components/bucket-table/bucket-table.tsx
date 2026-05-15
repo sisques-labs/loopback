@@ -17,9 +17,17 @@ type Props = {
   localePrefix: string;
   rowActionsDict: AppDict["s3"]["bucketRowActions"];
   confirmDict: AppDict["shared"]["confirmDialog"];
+  closeLabel: string;
 };
 
-export function BucketTable({ buckets, dict, localePrefix, rowActionsDict, confirmDict }: Props) {
+export function BucketTable({
+  buckets,
+  dict,
+  localePrefix,
+  rowActionsDict,
+  confirmDict,
+  closeLabel,
+}: Props) {
   return (
     <Table>
       <TableHeader>
@@ -48,6 +56,7 @@ export function BucketTable({ buckets, dict, localePrefix, rowActionsDict, confi
                 bucket={bucket.name}
                 dict={rowActionsDict}
                 confirmDict={confirmDict}
+                closeLabel={closeLabel}
               />
             </TableCell>
           </TableRow>

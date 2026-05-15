@@ -16,12 +16,14 @@ type Props = {
   onOpenChange: (open: boolean) => void;
   item: Record<string, unknown>;
   dict: AppDict["dynamodb"]["itemViewDialog"];
+
+    closeLabel: string;
 };
 
-export function ItemViewDialog({ open, onOpenChange, item, dict }: Props) {
+export function ItemViewDialog({ open, onOpenChange, item, dict, closeLabel}: Props) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl">
+      <DialogContent closeLabel={closeLabel} className="max-w-2xl">
         <DialogHeader>
           <DialogTitle>{dict.title}</DialogTitle>
         </DialogHeader>
