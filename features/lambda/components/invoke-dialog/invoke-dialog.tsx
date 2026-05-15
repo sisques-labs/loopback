@@ -12,6 +12,7 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { invokeFunctionAction } from "@/features/lambda/use-cases/invoke-function/invoke-function";
 import { t } from "@/features/shared/i18n/interpolate";
 import type { ActionState } from "@/features/shared/types/action-state";
@@ -73,12 +74,11 @@ export function InvokeDialog({ functionName, dict, locale, open, onOpenChange, c
           <input type="hidden" name="locale" value={locale} />
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="invoke-payload">{dict.payloadLabel}</Label>
-            <textarea
+            <Textarea
               id="invoke-payload"
               name="payload"
               placeholder={dict.payloadPlaceholder}
-              rows={4}
-              className="min-h-[96px] w-full rounded-lg border border-input bg-transparent px-2.5 py-1.5 font-mono text-sm outline-none transition-colors placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
+              className="font-mono text-sm"
             />
             {payloadError && (
               <p className="text-xs text-destructive">{payloadError}</p>
