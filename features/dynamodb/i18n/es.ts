@@ -101,6 +101,17 @@ const dict = {
       "No se puede conectar a LocalStack en {endpoint}. Asegurate de que esté en ejecución.",
     unknown: "Ocurrió un error inesperado.",
   },
+  tableDetail: {
+    partitionKey: "Clave de partición",
+    sortKey: "Clave de ordenamiento",
+    status: "Estado",
+    items: "Ítems",
+    size: "Tamaño (bytes)",
+    creationDate: "Creada",
+    billingMode: "Modo de facturación",
+    gsiCount: "Cantidad de GSI",
+    noSortKey: "—",
+  },
   errors: {
     connectFailed: "No se pudo conectar a DynamoDB",
     connectFailedDetail:

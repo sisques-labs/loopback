@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowLeftIcon } from "lucide-react";
 import { ScanTable } from "@/features/dynamodb/components/scan-table/scan-table";
 import { DynamoDBEmptyState } from "@/features/dynamodb/components/dynamodb-empty-state/dynamodb-empty-state";
+import { TableDetailPanel } from "@/features/dynamodb/components/table-detail-panel/table-detail-panel";
 import { scanTable } from "@/features/dynamodb/services/scan-table/scan-table";
 import { listTables } from "@/features/dynamodb/services/list-tables/list-tables";
 import { decodeScanStartKey } from "@/features/dynamodb/lib/route-codec";
@@ -47,6 +48,10 @@ export default async function DynamoDBTablePage({ params, searchParams }: Props)
           {dict.dynamodb.scan.back}
         </Link>
       </div>
+
+      {tableInfo && (
+        <TableDetailPanel table={tableInfo} dict={dict.dynamodb.tableDetail} />
+      )}
 
       {scanResult.items.length === 0 && !startKey ? (
         <div className="flex flex-col gap-4">
