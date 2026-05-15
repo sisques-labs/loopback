@@ -7,10 +7,9 @@ import { toFriendlyError } from "@/lib/aws/errors";
 
 const MULTIPART_THRESHOLD = 5 * 1024 * 1024;
 
-export async function POST(
-  req: NextRequest,
-  ctx: RouteContext<"/api/aws/s3/[bucket]/objects">,
-) {
+type ObjectsRouteParams = { params: Promise<{ bucket: string }> };
+
+export async function POST(req: NextRequest, ctx: ObjectsRouteParams) {
   const { bucket } = await ctx.params;
 
   let formData: FormData;
