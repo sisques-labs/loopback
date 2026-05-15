@@ -76,7 +76,7 @@ describe("scanTable", () => {
 
     const client = makeClient(async (cmd) => {
       if (cmd instanceof ScanCommand) {
-        capturedInput = (cmd as ScanCommand).input as Record<string, unknown>;
+        capturedInput = (cmd as ScanCommand).input as unknown as Record<string, unknown>;
         return { Items: [] };
       }
       throw new Error("unexpected command");
@@ -93,7 +93,7 @@ describe("scanTable", () => {
 
     const client = makeClient(async (cmd) => {
       if (cmd instanceof ScanCommand) {
-        capturedInput = (cmd as ScanCommand).input as Record<string, unknown>;
+        capturedInput = (cmd as ScanCommand).input as unknown as Record<string, unknown>;
         return { Items: [] };
       }
       throw new Error("unexpected command");
