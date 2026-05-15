@@ -7,6 +7,9 @@ export interface DynamoDBTable {
   partitionKeyType: string;
   sortKeyName?: string;
   sortKeyType?: string;
+  creationDateTime?: string;
+  billingMode?: string;
+  gsiCount?: number;
 }
 
 export interface ScanResult {

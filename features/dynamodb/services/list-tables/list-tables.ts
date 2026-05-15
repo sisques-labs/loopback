@@ -59,6 +59,9 @@ export async function listTables(): Promise<DynamoDBTable[]> {
           partitionKeyType: getAttrType(partitionKeyName),
           sortKeyName,
           sortKeyType: sortKeyName ? getAttrType(sortKeyName) : undefined,
+          creationDateTime: table.CreationDateTime?.toISOString(),
+          billingMode: table.BillingModeSummary?.BillingMode ?? "PROVISIONED",
+          gsiCount: table.GlobalSecondaryIndexes?.length ?? 0,
         };
       }),
     );

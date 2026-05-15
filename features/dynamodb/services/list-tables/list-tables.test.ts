@@ -68,6 +68,9 @@ describe("listTables", () => {
       partitionKeyType: "S",
       sortKeyName: undefined,
       sortKeyType: undefined,
+      creationDateTime: undefined,
+      billingMode: "PROVISIONED",
+      gsiCount: 0,
     });
   });
 
@@ -147,5 +150,172 @@ describe("listTables", () => {
     vi.mocked(getDynamoDBClient).mockReturnValue(client);
 
     await expect(listTables()).rejects.toThrow();
+  });
+
+  // REQ-TD-01: new fields mapped from DescribeTableCommand response
+  it("maps creationDateTime as ISO string when CreationDateTime is present", async () => {
+    const creationDate = new Date("2024-01-15T10:30:00.000Z");
+    const client = makeClient(async (cmd) => {
+      if (cmd instanceof ListTablesCommand) return { TableNames: ["users"] };
+      if (cmd instanceof DescribeTableCommand) {
+        return {
+          Table: {
+            TableName: "users",
+            TableStatus: "ACTIVE",
+            ItemCount: 0,
+            TableSizeBytes: 0,
+            KeySchema: [{ AttributeName: "pk", KeyType: "HASH" }],
+            AttributeDefinitions: [{ AttributeName: "pk", AttributeType: "S" }],
+            CreationDateTime: creationDate,
+          },
+        };
+      }
+      throw new Error("unexpected command");
+    });
+    vi.mocked(getDynamoDBClient).mockReturnValue(client);
+
+    const result = await listTables();
+    expect(result[0].creationDateTime).toBe(creationDate.toISOString());
+  });
+
+  it("maps creationDateTime as undefined when CreationDateTime is absent", async () => {
+    const client = makeClient(async (cmd) => {
+      if (cmd instanceof ListTablesCommand) return { TableNames: ["users"] };
+      if (cmd instanceof DescribeTableCommand) {
+        return {
+          Table: {
+            TableName: "users",
+            TableStatus: "ACTIVE",
+            ItemCount: 0,
+            TableSizeBytes: 0,
+            KeySchema: [{ AttributeName: "pk", KeyType: "HASH" }],
+            AttributeDefinitions: [{ AttributeName: "pk", AttributeType: "S" }],
+          },
+        };
+      }
+      throw new Error("unexpected command");
+    });
+    vi.mocked(getDynamoDBClient).mockReturnValue(client);
+
+    const result = await listTables();
+    expect(result[0].creationDateTime).toBeUndefined();
+  });
+
+  it("maps billingMode from BillingModeSummary when present", async () => {
+    const client = makeClient(async (cmd) => {
+      if (cmd instanceof ListTablesCommand) return { TableNames: ["users"] };
+      if (cmd instanceof DescribeTableCommand) {
+        return {
+          Table: {
+            TableName: "users",
+            TableStatus: "ACTIVE",
+            ItemCount: 0,
+            TableSizeBytes: 0,
+            KeySchema: [{ AttributeName: "pk", KeyType: "HASH" }],
+            AttributeDefinitions: [{ AttributeName: "pk", AttributeType: "S" }],
+            BillingModeSummary: { BillingMode: "PAY_PER_REQUEST" },
+          },
+        };
+      }
+      throw new Error("unexpected command");
+    });
+    vi.mocked(getDynamoDBClient).mockReturnValue(client);
+
+    const result = await listTables();
+    expect(result[0].billingMode).toBe("PAY_PER_REQUEST");
+  });
+
+  it("defaults billingMode to 'PROVISIONED' when BillingModeSummary is absent", async () => {
+    const client = makeClient(async (cmd) => {
+      if (cmd instanceof ListTablesCommand) return { TableNames: ["users"] };
+      if (cmd instanceof DescribeTableCommand) {
+        return {
+          Table: {
+            TableName: "users",
+            TableStatus: "ACTIVE",
+            ItemCount: 0,
+            TableSizeBytes: 0,
+            KeySchema: [{ AttributeName: "pk", KeyType: "HASH" }],
+            AttributeDefinitions: [{ AttributeName: "pk", AttributeType: "S" }],
+          },
+        };
+      }
+      throw new Error("unexpected command");
+    });
+    vi.mocked(getDynamoDBClient).mockReturnValue(client);
+
+    const result = await listTables();
+    expect(result[0].billingMode).toBe("PROVISIONED");
+  });
+
+  it("maps gsiCount from GlobalSecondaryIndexes length when present", async () => {
+    const client = makeClient(async (cmd) => {
+      if (cmd instanceof ListTablesCommand) return { TableNames: ["users"] };
+      if (cmd instanceof DescribeTableCommand) {
+        return {
+          Table: {
+            TableName: "users",
+            TableStatus: "ACTIVE",
+            ItemCount: 0,
+            TableSizeBytes: 0,
+            KeySchema: [{ AttributeName: "pk", KeyType: "HASH" }],
+            AttributeDefinitions: [{ AttributeName: "pk", AttributeType: "S" }],
+            GlobalSecondaryIndexes: [{ IndexName: "gsi1" }, { IndexName: "gsi2" }],
+          },
+        };
+      }
+      throw new Error("unexpected command");
+    });
+    vi.mocked(getDynamoDBClient).mockReturnValue(client);
+
+    const result = await listTables();
+    expect(result[0].gsiCount).toBe(2);
+  });
+
+  it("defaults gsiCount to 0 when GlobalSecondaryIndexes is absent", async () => {
+    const client = makeClient(async (cmd) => {
+      if (cmd instanceof ListTablesCommand) return { TableNames: ["users"] };
+      if (cmd instanceof DescribeTableCommand) {
+        return {
+          Table: {
+            TableName: "users",
+            TableStatus: "ACTIVE",
+            ItemCount: 0,
+            TableSizeBytes: 0,
+            KeySchema: [{ AttributeName: "pk", KeyType: "HASH" }],
+            AttributeDefinitions: [{ AttributeName: "pk", AttributeType: "S" }],
+          },
+        };
+      }
+      throw new Error("unexpected command");
+    });
+    vi.mocked(getDynamoDBClient).mockReturnValue(client);
+
+    const result = await listTables();
+    expect(result[0].gsiCount).toBe(0);
+  });
+
+  it("defaults gsiCount to 0 when GlobalSecondaryIndexes is an empty array", async () => {
+    const client = makeClient(async (cmd) => {
+      if (cmd instanceof ListTablesCommand) return { TableNames: ["users"] };
+      if (cmd instanceof DescribeTableCommand) {
+        return {
+          Table: {
+            TableName: "users",
+            TableStatus: "ACTIVE",
+            ItemCount: 0,
+            TableSizeBytes: 0,
+            KeySchema: [{ AttributeName: "pk", KeyType: "HASH" }],
+            AttributeDefinitions: [{ AttributeName: "pk", AttributeType: "S" }],
+            GlobalSecondaryIndexes: [],
+          },
+        };
+      }
+      throw new Error("unexpected command");
+    });
+    vi.mocked(getDynamoDBClient).mockReturnValue(client);
+
+    const result = await listTables();
+    expect(result[0].gsiCount).toBe(0);
   });
 });
