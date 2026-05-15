@@ -1,0 +1,110 @@
+const dict = {
+  page: {
+    title: "DynamoDB",
+    empty: "No tables found.",
+    createCta: "Create table",
+  },
+  table: {
+    name: "Name",
+    status: "Status",
+    itemCount: "Items",
+    sizeBytes: "Size",
+    partitionKey: "Partition Key",
+    sortKey: "Sort Key",
+    actions: "Actions",
+    view: "View",
+    delete: "Delete",
+  },
+  createTableDialog: {
+    trigger: "Create table",
+    title: "Create DynamoDB table",
+    description: "Create a new DynamoDB table in LocalStack.",
+    nameLabel: "Table name",
+    namePlaceholder: "my-table",
+    nameHint: "3–255 chars, letters, numbers, hyphens, underscores, dots",
+    pkNameLabel: "Partition key name",
+    pkTypelabel: "Partition key type",
+    addSortKey: "Add sort key",
+    skNameLabel: "Sort key name (optional)",
+    skTypeLabel: "Sort key type",
+    cancel: "Cancel",
+    submit: "Create",
+    creating: "Creating…",
+    successToast: "Table created successfully.",
+  },
+  createTableValidation: {
+    nameRequired: "Table name is required.",
+    nameInvalid:
+      "Table name must be 3–255 characters and contain only letters, numbers, hyphens, underscores, and dots.",
+    pkNameRequired: "Partition key name is required.",
+    pkTypeInvalid: "Please select a valid partition key type.",
+    skIncomplete: "Sort key type is required when sort key name is provided.",
+  },
+  deleteTableDialog: {
+    title: "Delete table",
+    description: "This action cannot be undone. The table and all its data will be deleted.",
+    confirm: "Delete",
+    cancel: "Cancel",
+    successToast: "Table deleted.",
+  },
+  scan: {
+    back: "Back to tables",
+    empty: "No items found.",
+    viewItem: "View",
+    putItem: "Put item",
+    deleteItem: "Delete",
+    prev: "Previous page",
+    next: "Next page",
+    page: "Page",
+  },
+  itemViewDialog: {
+    title: "Item details",
+    close: "Close",
+  },
+  putItemDialog: {
+    trigger: "Put item",
+    title: "Put item",
+    description:
+      'Insert or replace an item using native JSON. Example: {"pk": "value", "count": 1}',
+    jsonLabel: "Item JSON",
+    jsonHint: "Write native JSON — not DynamoDB AttributeValue format.",
+    jsonPlaceholder: '{"pk": "value", "sk": "sort-value"}',
+    cancel: "Cancel",
+    submit: "Put item",
+    saving: "Saving…",
+    successToast: "Item saved.",
+    invalidJson: "Invalid JSON — must be a plain object",
+    notObject: "Value must be a JSON object, not an array or primitive.",
+  },
+  deleteItemDialog: {
+    title: "Delete item",
+    description: "This action cannot be undone.",
+    confirm: "Delete",
+    cancel: "Cancel",
+    successToast: "Item deleted.",
+  },
+  sdkErrors: {
+    notFound: "The specified resource does not exist.",
+    resourceInUse: "The resource is currently in use.",
+    resourceNotFound: "The specified table does not exist.",
+    validation: "Invalid request parameters.",
+    conditionalCheckFailed: "A condition specified in the operation could not be evaluated.",
+    limitExceeded: "Too many requests. Please try again.",
+    endpointUnreachable:
+      "Cannot connect to LocalStack at {endpoint}. Make sure it is running.",
+    unknown: "An unexpected error occurred.",
+  },
+  errors: {
+    connectFailed: "Failed to connect to DynamoDB",
+    connectFailedDetail:
+      "Could not reach {endpoint}. Make sure LocalStack is running and AWS_ENDPOINT_URL is configured correctly.",
+    tableNotFound: "Table not found",
+    tableNotFoundDetail:
+      "LocalStack has no table for this URL. It may have been deleted, LocalStack was reset, or the link is outdated.",
+    backToTables: "Back to tables",
+    retry: "Retry",
+  },
+} as const;
+
+export default dict;
+export type DynamoDBDict = typeof dict;
