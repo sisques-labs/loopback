@@ -2,9 +2,11 @@ name: Docker Build
 
 on:
   pull_request:
+  push:
+    branches: [main]
 
 concurrency:
-  group: docker-${{ github.ref }}
+  group: docker-${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}
   cancel-in-progress: true
 
 jobs:
