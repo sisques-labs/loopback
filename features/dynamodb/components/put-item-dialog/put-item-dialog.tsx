@@ -14,6 +14,7 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { putItemAction } from "@/features/dynamodb/use-cases/put-item/put-item";
 import type { AppDict } from "@/features/shared/i18n/get-dictionary";
 import type { Locale } from "@/features/shared/i18n/locale";
@@ -71,12 +72,12 @@ export function PutItemDialog({
         <form action={formAction} className="flex flex-col gap-4">
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="item-json">{dict.jsonLabel}</Label>
-            <textarea
+            <Textarea
               id="item-json"
               name="itemJson"
               placeholder={exampleJson}
               rows={8}
-              className="w-full min-w-0 rounded-lg border border-input bg-transparent px-2.5 py-2 font-mono text-sm outline-none transition-colors focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
+              className="font-mono text-sm"
               aria-invalid={state.status === "error" ? true : undefined}
             />
             <p className="text-xs text-muted-foreground">{dict.jsonHint}</p>

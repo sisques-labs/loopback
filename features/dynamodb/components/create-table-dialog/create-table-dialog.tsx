@@ -82,7 +82,7 @@ export function CreateTableDialog({ dict, locale, closeLabel}: Props) {
             <Input
               id="pk-name"
               name="partitionKeyName"
-              placeholder="pk"
+              placeholder={dict.pkNamePlaceholder}
               autoComplete="off"
               required
             />
@@ -128,7 +128,7 @@ export function CreateTableDialog({ dict, locale, closeLabel}: Props) {
                 <Input
                   id="sk-name"
                   name="sortKeyName"
-                  placeholder="sk"
+                  placeholder={dict.skNamePlaceholder}
                   autoComplete="off"
                 />
               </div>
