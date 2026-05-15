@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState, useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { PlusIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -29,16 +30,19 @@ type Props = {
 };
 
 export function CreateTableDialog({ dict, locale }: Props) {
+  const router = useRouter();
   const [state, formAction, pending] = useActionState(createTableAction, INITIAL_STATE);
   const closeRef = useRef<HTMLButtonElement>(null);
   const [hasSortKey, setHasSortKey] = useState(false);
+  const [tableNameValue, setTableNameValue] = useState("");
 
   useEffect(() => {
     if (state.status === "success") {
       toast.success(dict.successToast);
       closeRef.current?.click();
+      router.push(`/${locale}/dynamodb/${tableNameValue}`);
     }
-  }, [state, dict.successToast]);
+  }, [state, dict.successToast, locale, router, tableNameValue]);
 
   return (
     <Dialog>
@@ -60,6 +64,8 @@ export function CreateTableDialog({ dict, locale }: Props) {
               placeholder={dict.namePlaceholder}
               autoComplete="off"
               required
+              value={tableNameValue}
+              onChange={(e) => setTableNameValue(e.target.value)}
               aria-invalid={state.status === "error" ? true : undefined}
             />
             <p className="text-xs text-muted-foreground">{dict.nameHint}</p>
