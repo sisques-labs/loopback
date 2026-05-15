@@ -4,10 +4,9 @@ import { revalidatePath } from "next/cache";
 import { getS3Client } from "@/lib/aws/client-factory";
 import { toFriendlyError } from "@/lib/aws/errors";
 
-export async function GET(
-  req: NextRequest,
-  ctx: RouteContext<"/api/aws/s3/[bucket]/objects/[key]">,
-) {
+type ObjectKeyRouteParams = { params: Promise<{ bucket: string; key: string }> };
+
+export async function GET(req: NextRequest, ctx: ObjectKeyRouteParams) {
   const { bucket, key } = await ctx.params;
   const download = req.nextUrl.searchParams.get("download") === "1";
 
@@ -37,10 +36,7 @@ export async function GET(
   }
 }
 
-export async function DELETE(
-  _req: NextRequest,
-  ctx: RouteContext<"/api/aws/s3/[bucket]/objects/[key]">,
-) {
+export async function DELETE(_req: NextRequest, ctx: ObjectKeyRouteParams) {
   const { bucket, key } = await ctx.params;
 
   try {

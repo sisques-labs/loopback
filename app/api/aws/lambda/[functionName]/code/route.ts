@@ -7,10 +7,9 @@ import { updateFunctionCode } from "@/features/lambda/use-cases/update-function-
 import { getDictionary } from "@/features/shared/i18n/get-dictionary";
 import { DEFAULT_LOCALE } from "@/features/shared/i18n/locale";
 
-export async function POST(
-  req: NextRequest,
-  ctx: RouteContext<"/api/aws/lambda/[functionName]/code">,
-) {
+type CodeRouteParams = { params: Promise<{ functionName: string }> };
+
+export async function POST(req: NextRequest, ctx: CodeRouteParams) {
   const { functionName: functionNameParam } = await ctx.params;
   const functionName = decodeFunctionNameParam(functionNameParam);
   const dict = getDictionary(DEFAULT_LOCALE).lambda;
