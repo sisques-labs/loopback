@@ -66,7 +66,15 @@ export function UploadDialog({ bucket, dict, closeLabel}: Props) {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger render={<Button size="sm" variant="outline" />}>
+      <DialogTrigger
+        render={
+          <Button
+            size="sm"
+            variant="outline"
+            className="min-h-11 min-w-11 md:min-h-9 md:min-w-9"
+          />
+        }
+      >
         <UploadIcon />
         {dict.trigger}
       </DialogTrigger>

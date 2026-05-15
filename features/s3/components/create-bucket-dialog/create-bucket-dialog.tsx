@@ -39,7 +39,9 @@ export function CreateBucketDialog({ dict, closeLabel }: Props) {
 
   return (
     <Dialog>
-      <DialogTrigger render={<Button size="sm" />}>
+      <DialogTrigger
+        render={<Button size="sm" className="min-h-11 min-w-11 md:min-h-9 md:min-w-9" />}
+      >
         <PlusIcon />
         {dict.trigger}
       </DialogTrigger>
@@ -53,7 +55,7 @@ export function CreateBucketDialog({ dict, closeLabel }: Props) {
             <Input
               id="bucket-name"
               name="name"
-              placeholder="my-bucket"
+              placeholder={dict.namePlaceholder}
               autoComplete="off"
               required
               aria-invalid={state.status === "error" ? true : undefined}
