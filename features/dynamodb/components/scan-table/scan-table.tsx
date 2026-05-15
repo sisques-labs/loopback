@@ -3,21 +3,17 @@
 import { useState } from "react";
 import Link from "next/link";
 import { PencilIcon } from "lucide-react";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { ItemViewDialog } from "@/features/dynamodb/components/item-view-dialog/item-view-dialog";
 import { PutItemDialog } from "@/features/dynamodb/components/put-item-dialog/put-item-dialog";
 import { DeleteItemButton } from "@/features/dynamodb/components/delete-item-button/delete-item-button";
 import { EditItemDialog } from "@/features/dynamodb/components/edit-item-dialog/edit-item-dialog";
+import { ItemsTable } from "@/features/dynamodb/components/items-table/items-table";
+import { QueryForm } from "@/features/dynamodb/components/query-form/query-form";
 import type { AppDict } from "@/features/shared/i18n/get-dictionary";
 import type { Locale } from "@/features/shared/i18n/locale";
+
+type TableMode = "scan" | "query";
 
 type Props = {
   tableName: string;
@@ -25,11 +21,28 @@ type Props = {
   nextKey: string | null;
   partitionKeyName: string;
   sortKeyName?: string;
+  mode?: TableMode;
+  queryPk?: string;
+  querySk?: string;
   dict: AppDict["dynamodb"];
   confirmDict: AppDict["shared"]["confirmDialog"];
   locale: Locale;
   localePrefix: string;
 };
+
+function buildTableHref(
+  localePrefix: string,
+  tableName: string,
+  params: Record<string, string | undefined>,
+): string {
+  const sp = new URLSearchParams();
+  for (const [key, value] of Object.entries(params)) {
+    if (value) sp.set(key, value);
+  }
+  const query = sp.toString();
+  const base = `${localePrefix}/dynamodb/${encodeURIComponent(tableName)}`;
+  return query ? `${base}?${query}` : base;
+}
 
 export function ScanTable({
   tableName,
@@ -37,6 +50,9 @@ export function ScanTable({
   nextKey,
   partitionKeyName,
   sortKeyName,
+  mode = "scan",
+  queryPk,
+  querySk,
   dict,
   confirmDict,
   locale,
@@ -46,6 +62,25 @@ export function ScanTable({
   const [editItem, setEditItem] = useState<Record<string, unknown> | null>(null);
   const scanDict = dict.scan;
   const tableDict = dict.table;
+  const queryDict = dict.query;
+  const isQueryMode = mode === "query";
+
+  const scanHref = buildTableHref(localePrefix, tableName, { mode: "scan" });
+  const queryHref = buildTableHref(localePrefix, tableName, { mode: "query" });
+
+  const nextPageParams: Record<string, string | undefined> = isQueryMode
+    ? {
+        mode: "query",
+        queryPk,
+        querySk,
+        startKey: nextKey ?? undefined,
+      }
+    : { startKey: nextKey ?? undefined };
+
+  const nextPageHref =
+    nextKey != null ? buildTableHref(localePrefix, tableName, nextPageParams) : null;
+
+  const emptyMessage = isQueryMode ? queryDict.empty : scanDict.empty;
 
   function getItemKey(item: Record<string, unknown>): Record<string, unknown> {
     const key: Record<string, unknown> = {
@@ -57,15 +92,8 @@ export function ScanTable({
     return key;
   }
 
-  function formatKeyValue(value: unknown): string {
-    if (value === null || value === undefined) return "—";
-    if (typeof value === "object") return JSON.stringify(value);
-    return String(value);
-  }
-
   return (
     <div className="flex flex-col gap-4">
-      {/* Toolbar */}
       <div className="flex w-full min-w-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
         <div className="min-w-0">
           <h1 className="text-xl font-semibold break-words font-mono">{tableName}</h1>
@@ -73,96 +101,103 @@ export function ScanTable({
         <PutItemDialog tableName={tableName} dict={dict.putItemDialog} locale={locale} />
       </div>
 
-      {items.length === 0 ? (
-        <p className="mt-1 text-sm text-muted-foreground">{scanDict.empty}</p>
-      ) : (
-        <>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="min-w-0">{partitionKeyName}</TableHead>
-                {sortKeyName && (
-                  <TableHead className="hidden sm:table-cell">{sortKeyName}</TableHead>
-                )}
-                <TableHead className="w-24">{tableDict.actions}</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {items.map((item, idx) => (
-                <TableRow key={idx}>
-                  <TableCell className="min-w-0 max-w-[min(100%,12rem)] sm:max-w-none">
-                    <span className="block truncate font-mono text-sm sm:overflow-visible sm:whitespace-normal">
-                      {formatKeyValue(item[partitionKeyName])}
-                    </span>
-                  </TableCell>
-                  {sortKeyName && (
-                    <TableCell className="hidden sm:table-cell font-mono text-sm text-muted-foreground">
-                      {formatKeyValue(item[sortKeyName])}
-                    </TableCell>
-                  )}
-                  <TableCell>
-                    <div className="flex items-center gap-1">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="min-h-11 min-w-11 md:min-h-9 md:min-w-9"
-                        onClick={() => setViewItem(item)}
-                      >
-                        {tableDict.view}
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="min-h-11 min-w-11 md:min-h-9 md:min-w-9"
-                        onClick={() => setEditItem(item)}
-                      >
-                        <PencilIcon className="size-4" />
-                        <span className="sr-only">{dict.editItemDialog.trigger}</span>
-                      </Button>
-                      <DeleteItemButton
-                        tableName={tableName}
-                        itemKey={getItemKey(item)}
-                        dict={dict.deleteItemDialog}
-                        confirmDict={confirmDict}
-                        locale={locale}
-                      />
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+      <div
+        className="inline-flex w-full min-w-0 rounded-lg border border-border p-1 sm:w-auto"
+        role="group"
+        aria-label={`${queryDict.modeScan} / ${queryDict.modeQuery}`}
+      >
+        <Link href={scanHref} className="flex-1 sm:flex-initial">
+          <Button
+            type="button"
+            variant={isQueryMode ? "ghost" : "secondary"}
+            size="sm"
+            className="w-full min-h-11 min-w-11 md:min-h-9 md:min-w-9"
+            aria-pressed={!isQueryMode}
+          >
+            {queryDict.modeScan}
+          </Button>
+        </Link>
+        <Link href={queryHref} className="flex-1 sm:flex-initial">
+          <Button
+            type="button"
+            variant={isQueryMode ? "secondary" : "ghost"}
+            size="sm"
+            className="w-full min-h-11 min-w-11 md:min-h-9 md:min-w-9"
+            aria-pressed={isQueryMode}
+          >
+            {queryDict.modeQuery}
+          </Button>
+        </Link>
+      </div>
 
-          {/* Pagination */}
-          {nextKey && (
-            <div className="flex justify-end">
-              <Link
-                href={`${localePrefix}/dynamodb/${encodeURIComponent(tableName)}?startKey=${nextKey}`}
-              >
-                <Button variant="outline" size="sm" className="min-h-11 min-w-11 md:min-h-9 md:min-w-9">
-                  {scanDict.next}
-                </Button>
-              </Link>
-            </div>
-          )}
-        </>
+      {isQueryMode && (
+        <QueryForm
+          tableName={tableName}
+          partitionKeyName={partitionKeyName}
+          sortKeyName={sortKeyName}
+          initialPk={queryPk}
+          initialSk={querySk}
+          localePrefix={localePrefix}
+          dict={queryDict}
+        />
       )}
 
-      {/* Item view dialog */}
+      <ItemsTable
+        items={items}
+        partitionKeyName={partitionKeyName}
+        sortKeyName={sortKeyName}
+        tableDict={tableDict}
+        emptyMessage={emptyMessage}
+        nextPageLabel={scanDict.next}
+        nextKey={nextKey}
+        nextPageHref={nextPageHref}
+        renderRowActions={(item) => (
+          <>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="min-h-11 min-w-11 md:min-h-9 md:min-w-9"
+              onClick={() => setViewItem(item)}
+            >
+              {tableDict.view}
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="min-h-11 min-w-11 md:min-h-9 md:min-w-9"
+              onClick={() => setEditItem(item)}
+            >
+              <PencilIcon className="size-4" />
+              <span className="sr-only">{dict.editItemDialog.trigger}</span>
+            </Button>
+            <DeleteItemButton
+              tableName={tableName}
+              itemKey={getItemKey(item)}
+              dict={dict.deleteItemDialog}
+              confirmDict={confirmDict}
+              locale={locale}
+            />
+          </>
+        )}
+      />
+
       {viewItem && (
         <ItemViewDialog
           open={viewItem !== null}
-          onOpenChange={(open) => { if (!open) setViewItem(null); }}
+          onOpenChange={(open) => {
+            if (!open) setViewItem(null);
+          }}
           item={viewItem}
           dict={dict.itemViewDialog}
         />
       )}
 
-      {/* Edit item dialog */}
       {editItem && (
         <EditItemDialog
           open={editItem !== null}
-          onOpenChange={(open) => { if (!open) setEditItem(null); }}
+          onOpenChange={(open) => {
+            if (!open) setEditItem(null);
+          }}
           tableName={tableName}
           item={editItem}
           partitionKeyName={partitionKeyName}

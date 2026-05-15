@@ -109,6 +109,18 @@ const dict = {
     invalidJson: "Invalid JSON — must be a plain object",
     notObject: "Value must be a JSON object, not an array or primitive.",
   },
+  query: {
+    modeScan: "Scan",
+    modeQuery: "Query",
+    pkLabel: "Partition key value",
+    pkPlaceholder: "e.g. user-1",
+    pkHint: "Enter a partition key value to query items. PK is required.",
+    skLabel: "Sort key value (optional)",
+    skPlaceholder: "e.g. order-5",
+    search: "Search",
+    empty: "No items match this query.",
+    pkRequired: "Partition key is required.",
+  },
   tableDetail: {
     partitionKey: "Partition Key",
     sortKey: "Sort Key",

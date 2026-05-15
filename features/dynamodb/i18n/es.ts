@@ -116,6 +116,18 @@ const dict = {
     invalidJson: "JSON inválido — debe ser un objeto plano",
     notObject: "El valor debe ser un objeto JSON, no un array ni un primitivo.",
   },
+  query: {
+    modeScan: "Escaneo",
+    modeQuery: "Consulta",
+    pkLabel: "Valor de clave de partición",
+    pkPlaceholder: "ej. usuario-1",
+    pkHint: "Ingresá un valor de clave de partición para consultar ítems. La PK es obligatoria.",
+    skLabel: "Valor de clave de ordenamiento (opcional)",
+    skPlaceholder: "ej. pedido-5",
+    search: "Buscar",
+    empty: "Ningún ítem coincide con esta consulta.",
+    pkRequired: "La clave de partición es obligatoria.",
+  },
   tableDetail: {
     partitionKey: "Clave de partición",
     sortKey: "Clave de ordenamiento",
