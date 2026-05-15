@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { publishMessageAction } from "@/features/sns/use-cases/publish-message/publish-message";
 import { t } from "@/features/shared/i18n/interpolate";
 import type { ActionState } from "@/features/shared/types/action-state";
@@ -29,9 +30,11 @@ type Props = {
   locale: Locale;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
+
+    closeLabel: string;
 };
 
-export function PublishDialog({ topicArn, topicName, dict, locale, open, onOpenChange }: Props) {
+export function PublishDialog({ topicArn, topicName, dict, locale, open, onOpenChange, closeLabel}: Props) {
   const [state, formAction, pending] = useActionState(publishMessageAction, INITIAL_STATE);
   const closeRef = useRef<HTMLButtonElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
@@ -57,7 +60,7 @@ export function PublishDialog({ topicArn, topicName, dict, locale, open, onOpenC
           {dict.trigger}
         </DialogTrigger>
       )}
-      <DialogContent>
+      <DialogContent closeLabel={closeLabel}>
         <DialogHeader>
           <DialogTitle>{t(dict.title, { topic: topicName })}</DialogTitle>
         </DialogHeader>
@@ -66,14 +69,12 @@ export function PublishDialog({ topicArn, topicName, dict, locale, open, onOpenC
           <input type="hidden" name="locale" value={locale} />
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="publish-message">{dict.messageLabel}</Label>
-            <textarea
+            <Textarea
               id="publish-message"
               name="message"
               placeholder={dict.messagePlaceholder}
               required
-              rows={4}
               aria-required="true"
-              className="min-h-[96px] w-full rounded-lg border border-input bg-transparent px-2.5 py-1.5 text-base outline-none transition-colors placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm dark:bg-input/30"
             />
             {state.status === "error" && (
               <p className="text-xs text-destructive">{state.message}</p>

@@ -22,6 +22,7 @@ export default async function DynamoDBPage({ params }: Props) {
       tables={tables}
       dict={dict.dynamodb}
       confirmDict={dict.shared.confirmDialog}
+      closeLabel={dict.shared.dialog.close}
       locale={locale}
       localePrefix={localePrefix}
     />

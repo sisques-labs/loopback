@@ -20,6 +20,7 @@ const dict = {
     success: "Queue created successfully.",
     fifoLabel: "FIFO queue",
     fifoHint: "Name will be suffixed with .fifo automatically when needed.",
+    namePlaceholder: "my-queue",
     nameFifoPlaceholder: "my-queue (becomes my-queue.fifo)",
   },
   createQueueValidation: {

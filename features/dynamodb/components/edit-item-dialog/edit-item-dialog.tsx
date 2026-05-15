@@ -11,6 +11,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { updateItemAction } from "@/features/dynamodb/use-cases/update-item/update-item";
 import type { AppDict } from "@/features/shared/i18n/get-dictionary";
 import type { Locale } from "@/features/shared/i18n/locale";
@@ -27,6 +28,8 @@ type Props = {
   locale: Locale;
   open: boolean;
   onOpenChange: (open: boolean) => void;
+
+    closeLabel: string;
 };
 
 function buildKeyObject(
@@ -67,8 +70,7 @@ export function EditItemDialog({
   dict,
   locale,
   open,
-  onOpenChange,
-}: Props) {
+  onOpenChange, closeLabel}: Props) {
   const [state, formAction, pending] = useActionState(updateItemAction, INITIAL_STATE);
 
   // We need a ref to close the dialog on success
@@ -87,7 +89,7 @@ export function EditItemDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-xl">
+      <DialogContent closeLabel={closeLabel} className="max-w-xl">
         <DialogHeader>
           <DialogTitle>{dict.title}</DialogTitle>
         </DialogHeader>
@@ -110,17 +112,17 @@ export function EditItemDialog({
         </div>
 
         {/* Overwrite warning */}
-        <p className="text-xs text-amber-600 dark:text-amber-500">{dict.overwriteWarning}</p>
+        <p className="text-xs text-muted-foreground">{dict.overwriteWarning}</p>
 
         <form action={formAction} className="flex flex-col gap-4">
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="edit-item-json">{dict.jsonLabel}</Label>
-            <textarea
+            <Textarea
               id="edit-item-json"
               name="itemJson"
               defaultValue={initialItemJson}
               rows={10}
-              className="w-full min-w-0 rounded-lg border border-input bg-transparent px-2.5 py-2 font-mono text-sm outline-none transition-colors focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
+              className="font-mono text-sm"
               aria-invalid={state.status === "error" ? true : undefined}
             />
             <p className="text-xs text-muted-foreground">{dict.jsonHint}</p>

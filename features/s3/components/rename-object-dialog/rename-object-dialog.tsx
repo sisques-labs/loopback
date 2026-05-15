@@ -26,6 +26,8 @@ type Props = {
   dict: AppDict["s3"]["renameObjectDialog"];
   open: boolean;
   onOpenChange: (open: boolean) => void;
+
+    closeLabel: string;
 };
 
 /**
@@ -38,8 +40,7 @@ function RenameObjectDialogInner({
   objectKey,
   dict,
   open,
-  onOpenChange,
-}: Props) {
+  onOpenChange, closeLabel}: Props) {
   const router = useRouter();
   const [newKey, setNewKey] = useState(objectKey);
   const [state, formAction, pending] = useActionState(renameObjectAction, INITIAL_STATE);
@@ -66,7 +67,7 @@ function RenameObjectDialogInner({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
+      <DialogContent closeLabel={closeLabel}>
         <DialogHeader>
           <DialogTitle>{dict.title}</DialogTitle>
         </DialogHeader>

@@ -18,9 +18,10 @@ type Props = {
   bucket: string;
   dict: AppDict["s3"]["bucketRowActions"];
   confirmDict: AppDict["shared"]["confirmDialog"];
+  closeLabel: string;
 };
 
-export function BucketRowActions({ bucket, dict, confirmDict }: Props) {
+export function BucketRowActions({ bucket, dict, confirmDict, closeLabel }: Props) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -55,6 +56,7 @@ export function BucketRowActions({ bucket, dict, confirmDict }: Props) {
         hiddenFields={[{ name: "bucket", value: bucket }]}
         confirmLabel={dict.delete}
         cancelLabel={confirmDict.cancel}
+        closeLabel={closeLabel}
         confirmingTemplate={confirmDict.confirming}
       />
     </>

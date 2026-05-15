@@ -23,9 +23,10 @@ const INITIAL_STATE: ActionState = { status: "idle" };
 
 type Props = {
   dict: AppDict["s3"]["createBucketDialog"];
+  closeLabel: string;
 };
 
-export function CreateBucketDialog({ dict }: Props) {
+export function CreateBucketDialog({ dict, closeLabel }: Props) {
   const [state, formAction, pending] = useActionState(createBucketAction, INITIAL_STATE);
   const closeRef = useRef<HTMLButtonElement>(null);
 
@@ -38,11 +39,13 @@ export function CreateBucketDialog({ dict }: Props) {
 
   return (
     <Dialog>
-      <DialogTrigger render={<Button size="sm" />}>
+      <DialogTrigger
+        render={<Button size="sm" className="min-h-11 min-w-11 md:min-h-9 md:min-w-9" />}
+      >
         <PlusIcon />
         {dict.trigger}
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent closeLabel={closeLabel}>
         <DialogHeader>
           <DialogTitle>{dict.title}</DialogTitle>
         </DialogHeader>
@@ -52,7 +55,7 @@ export function CreateBucketDialog({ dict }: Props) {
             <Input
               id="bucket-name"
               name="name"
-              placeholder="my-bucket"
+              placeholder={dict.namePlaceholder}
               autoComplete="off"
               required
               aria-invalid={state.status === "error" ? true : undefined}

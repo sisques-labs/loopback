@@ -26,9 +26,11 @@ const INITIAL_STATE: ActionState = { status: "idle" };
 type Props = {
   dict: AppDict["sns"]["createTopicDialog"];
   locale: Locale;
+
+    closeLabel: string;
 };
 
-export function CreateTopicDialog({ dict, locale }: Props) {
+export function CreateTopicDialog({ dict, locale, closeLabel}: Props) {
   const [state, formAction, pending] = useActionState(createTopicAction, INITIAL_STATE);
   const closeRef = useRef<HTMLButtonElement>(null);
   const [isFifo, setIsFifo] = useState(false);
@@ -42,11 +44,15 @@ export function CreateTopicDialog({ dict, locale }: Props) {
 
   return (
     <Dialog>
-      <DialogTrigger render={<Button size="sm" />}>
+      <DialogTrigger
+        render={
+          <Button size="sm" className="min-h-11 min-w-11 md:min-h-9 md:min-w-9" />
+        }
+      >
         <PlusIcon />
         {dict.trigger}
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent closeLabel={closeLabel}>
         <DialogHeader>
           <DialogTitle>{dict.title}</DialogTitle>
         </DialogHeader>
@@ -56,7 +62,9 @@ export function CreateTopicDialog({ dict, locale }: Props) {
             <Input
               id="topic-name"
               name="name"
-              placeholder={isFifo ? dict.nameFifoPlaceholder : "my-topic"}
+              placeholder={
+                isFifo ? dict.nameFifoPlaceholder : dict.namePlaceholder
+              }
               autoComplete="off"
               required
               aria-invalid={state.status === "error" ? true : undefined}

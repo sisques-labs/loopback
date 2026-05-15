@@ -26,6 +26,7 @@ const dict = {
     success: "Topic creado correctamente.",
     fifoLabel: "Cola FIFO",
     fifoHint: "El nombre tendrá el sufijo .fifo automáticamente",
+    namePlaceholder: "mi-topic",
     nameFifoPlaceholder: "mi-topic (se agregará el sufijo mi-topic.fifo)",
   },
   topicRowActions: {

@@ -21,6 +21,7 @@ export default async function TopicDetailPage({ params }: Props) {
   const topicArn = decodeTopicArnParam(topicArnParam);
   const locale: Locale = isLocale(lang) ? lang : DEFAULT_LOCALE;
   const dict = getDictionary(locale);
+  const shared = dict.shared;
   const d = dict.sns.topicDetail;
   const localePrefix = `/${locale}`;
 
@@ -57,6 +58,7 @@ export default async function TopicDetailPage({ params }: Props) {
             topicName={topicName}
             dict={dict.sns.publishDialog}
             locale={locale}
+            closeLabel={shared.dialog.close}
           />
           <Badge variant={isFifo ? "default" : "secondary"}>
             {isFifo ? d.typeFifo : d.typeStandard}
@@ -82,6 +84,7 @@ export default async function TopicDetailPage({ params }: Props) {
             isFifo={isFifo}
             dict={dict.sns.subscribeDialog}
             locale={locale}
+            closeLabel={shared.dialog.close}
           />
         </div>
         {subscriptions.length > 0 ? (
@@ -90,6 +93,7 @@ export default async function TopicDetailPage({ params }: Props) {
             topicName={topicName}
             dict={dict.sns.subscriptionTable}
             confirmDict={dict.shared.confirmDialog}
+            closeLabel={shared.dialog.close}
             locale={locale}
           />
         ) : (

@@ -67,6 +67,7 @@ export default async function QueueDetailPage({ params }: Props) {
         isFifo={isFifo}
         dict={d}
         confirmDict={dict.shared.confirmDialog}
+        closeLabel={dict.shared.dialog.close}
         locale={locale}
       />
     </div>

@@ -28,7 +28,7 @@ export default async function S3Page({ params }: Props) {
             <h1 className="text-xl font-semibold break-words">{s3.page.title}</h1>
             <p className="mt-1 text-sm text-muted-foreground">{s3.page.empty}</p>
           </div>
-          <CreateBucketDialog dict={s3.createBucketDialog} />
+          <CreateBucketDialog dict={s3.createBucketDialog}  closeLabel={shared.dialog.close}/>
         </div>
       </div>
     );
@@ -38,7 +38,7 @@ export default async function S3Page({ params }: Props) {
     <div className="flex flex-col gap-4">
       <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
         <h1 className="text-xl font-semibold break-words">{s3.page.title}</h1>
-        <CreateBucketDialog dict={s3.createBucketDialog} />
+        <CreateBucketDialog dict={s3.createBucketDialog}  closeLabel={shared.dialog.close}/>
       </div>
       <BucketTable
         buckets={buckets}
@@ -46,6 +46,7 @@ export default async function S3Page({ params }: Props) {
         localePrefix={localePrefix}
         rowActionsDict={s3.bucketRowActions}
         confirmDict={shared.confirmDialog}
+        closeLabel={shared.dialog.close}
       />
     </div>
   );

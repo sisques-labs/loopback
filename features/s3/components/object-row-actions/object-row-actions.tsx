@@ -22,9 +22,17 @@ type Props = {
   dict: AppDict["s3"]["objectRowActions"];
   renameDict: AppDict["s3"]["renameObjectDialog"];
   confirmDict: AppDict["shared"]["confirmDialog"];
+  closeLabel: string;
 };
 
-export function ObjectRowActions({ bucket, objectKey, dict, renameDict, confirmDict }: Props) {
+export function ObjectRowActions({
+  bucket,
+  objectKey,
+  dict,
+  renameDict,
+  confirmDict,
+  closeLabel,
+}: Props) {
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [renameOpen, setRenameOpen] = useState(false);
   const downloadHref = `/api/aws/s3/${encodeURIComponent(bucket)}/objects/${encodeURIComponent(objectKey)}?download=1`;
@@ -67,6 +75,7 @@ export function ObjectRowActions({ bucket, objectKey, dict, renameDict, confirmD
         bucket={bucket}
         objectKey={objectKey}
         dict={renameDict}
+        closeLabel={closeLabel}
       />
 
       <ConfirmDialog
@@ -81,6 +90,7 @@ export function ObjectRowActions({ bucket, objectKey, dict, renameDict, confirmD
         ]}
         confirmLabel={dict.delete}
         cancelLabel={confirmDict.cancel}
+        closeLabel={closeLabel}
         confirmingTemplate={confirmDict.confirming}
       />
     </>

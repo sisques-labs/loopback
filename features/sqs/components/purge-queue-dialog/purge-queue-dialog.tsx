@@ -26,9 +26,11 @@ type Props = {
   dict: AppDict["sqs"]["queueDetail"]["purge"];
   confirmDict: AppDict["shared"]["confirmDialog"];
   locale: Locale;
+
+    closeLabel: string;
 };
 
-export function PurgeQueueDialog({ queueUrl, queueName, dict, confirmDict, locale }: Props) {
+export function PurgeQueueDialog({ queueUrl, queueName, dict, confirmDict, locale, closeLabel}: Props) {
   const [open, setOpen] = useState(false);
   const [state, formAction, pending] = useActionState(purgeQueueAction, INITIAL);
 
@@ -52,7 +54,7 @@ export function PurgeQueueDialog({ queueUrl, queueName, dict, confirmDict, local
         {dict.trigger}
       </Button>
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent>
+        <DialogContent closeLabel={closeLabel}>
           <DialogHeader>
             <DialogTitle>{dict.title}</DialogTitle>
           </DialogHeader>

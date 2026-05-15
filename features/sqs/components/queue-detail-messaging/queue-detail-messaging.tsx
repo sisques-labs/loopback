@@ -13,9 +13,11 @@ type Props = {
   dict: AppDict["sqs"]["queueDetail"];
   confirmDict: AppDict["shared"]["confirmDialog"];
   locale: Locale;
+
+    closeLabel: string;
 };
 
-export function QueueDetailMessaging({ queueUrl, queueName, isFifo, dict, confirmDict, locale }: Props) {
+export function QueueDetailMessaging({ queueUrl, queueName, isFifo, dict, confirmDict, locale, closeLabel}: Props) {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-3">
@@ -27,14 +29,14 @@ export function QueueDetailMessaging({ queueUrl, queueName, isFifo, dict, confir
             isFifo={isFifo}
             dict={dict.sendMessage}
             locale={locale}
-          />
+           closeLabel={closeLabel}/>
           <PurgeQueueDialog
             queueUrl={queueUrl}
             queueName={queueName}
             dict={dict.purge}
             confirmDict={confirmDict}
             locale={locale}
-          />
+           closeLabel={closeLabel}/>
         </div>
       </div>
       <ReceiveMessagesSection queueUrl={queueUrl} dict={dict.receive} locale={locale} />

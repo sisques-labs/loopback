@@ -20,6 +20,7 @@ type Props = {
   confirmDict: AppDict["shared"]["confirmDialog"];
   localePrefix: string;
   locale: Locale;
+  closeLabel: string;
 };
 
 export function QueueTable({
@@ -29,6 +30,7 @@ export function QueueTable({
   confirmDict,
   localePrefix,
   locale,
+  closeLabel,
 }: Props) {
   return (
     <Table>
@@ -65,6 +67,7 @@ export function QueueTable({
                 confirmDict={confirmDict}
                 localePrefix={localePrefix}
                 locale={locale}
+                closeLabel={closeLabel}
               />
             </TableCell>
           </TableRow>

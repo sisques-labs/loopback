@@ -20,9 +20,19 @@ type Props = {
   publishDict: AppDict["sns"]["publishDialog"];
   localePrefix: string;
   locale: Locale;
+  closeLabel: string;
 };
 
-export function TopicTable({ topics, dict, rowActionsDict, confirmDict, publishDict, localePrefix, locale }: Props) {
+export function TopicTable({
+  topics,
+  dict,
+  rowActionsDict,
+  confirmDict,
+  publishDict,
+  localePrefix,
+  locale,
+  closeLabel,
+}: Props) {
   return (
     <Table>
       <TableHeader>
@@ -63,6 +73,7 @@ export function TopicTable({ topics, dict, rowActionsDict, confirmDict, publishD
                 publishDict={publishDict}
                 localePrefix={localePrefix}
                 locale={locale}
+                closeLabel={closeLabel}
               />
             </TableCell>
           </TableRow>

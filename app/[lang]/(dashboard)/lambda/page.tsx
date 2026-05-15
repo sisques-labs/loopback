@@ -16,6 +16,7 @@ export default async function LambdaPage({ params }: Props) {
   const locale: Locale = isLocale(lang) ? lang : DEFAULT_LOCALE;
   const dict = getDictionary(locale);
   const lambda = dict.lambda;
+  const shared = dict.shared;
   const localePrefix = `/${locale}`;
   const functions = await listFunctions();
 
@@ -27,7 +28,7 @@ export default async function LambdaPage({ params }: Props) {
       <CreateFunctionDialog
         dict={lambda.createFunctionDialog}
         locale={locale}
-      />
+       closeLabel={shared.dialog.close}/>
     </div>
   );
 
@@ -51,6 +52,7 @@ export default async function LambdaPage({ params }: Props) {
         updateCodeDialogDict={lambda.updateCodeDialog}
         localePrefix={localePrefix}
         locale={locale}
+        closeLabel={shared.dialog.close}
       />
     </div>
   );

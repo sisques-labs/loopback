@@ -14,6 +14,7 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { sendMessageAction } from "@/features/sqs/use-cases/send-message/send-message";
 import { t } from "@/features/shared/i18n/interpolate";
 import type { ActionState } from "@/features/shared/types/action-state";
@@ -28,9 +29,11 @@ type Props = {
   isFifo: boolean;
   dict: AppDict["sqs"]["queueDetail"]["sendMessage"];
   locale: Locale;
+
+    closeLabel: string;
 };
 
-export function SendMessageDialog({ queueUrl, queueName, isFifo, dict, locale }: Props) {
+export function SendMessageDialog({ queueUrl, queueName, isFifo, dict, locale, closeLabel}: Props) {
   const [state, formAction, pending] = useActionState(sendMessageAction, INITIAL_STATE);
   const closeRef = useRef<HTMLButtonElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
@@ -48,7 +51,7 @@ export function SendMessageDialog({ queueUrl, queueName, isFifo, dict, locale }:
         <SendIcon />
         {dict.trigger}
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent closeLabel={closeLabel}>
         <DialogHeader>
           <DialogTitle>{t(dict.title, { queue: queueName })}</DialogTitle>
         </DialogHeader>
@@ -58,14 +61,12 @@ export function SendMessageDialog({ queueUrl, queueName, isFifo, dict, locale }:
           <input type="hidden" name="locale" value={locale} />
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="sqs-send-body">{dict.bodyLabel}</Label>
-            <textarea
+            <Textarea
               id="sqs-send-body"
               name="body"
               placeholder={dict.bodyPlaceholder}
               required
-              rows={4}
               aria-required="true"
-              className="min-h-[96px] w-full rounded-lg border border-input bg-transparent px-2.5 py-1.5 text-base outline-none transition-colors placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm dark:bg-input/30"
             />
             {state.status === "error" && (
               <p className="text-xs text-destructive">{state.message}</p>

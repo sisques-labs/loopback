@@ -28,7 +28,7 @@ export default async function SQSPage({ params }: Props) {
             <h1 className="text-xl font-semibold wrap-break-word">{sqs.page.title}</h1>
             <p className="mt-1 text-sm text-muted-foreground">{sqs.page.empty}</p>
           </div>
-          <CreateQueueDialog dict={sqs.createQueueDialog} locale={locale} />
+          <CreateQueueDialog dict={sqs.createQueueDialog} locale={locale}  closeLabel={shared.dialog.close}/>
         </div>
       </div>
     );
@@ -38,7 +38,7 @@ export default async function SQSPage({ params }: Props) {
     <div className="flex flex-col gap-4">
       <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
         <h1 className="text-xl font-semibold wrap-break-word">{sqs.page.title}</h1>
-        <CreateQueueDialog dict={sqs.createQueueDialog} locale={locale} />
+        <CreateQueueDialog dict={sqs.createQueueDialog} locale={locale}  closeLabel={shared.dialog.close}/>
       </div>
       <QueueTable
         queues={queues}
@@ -47,6 +47,7 @@ export default async function SQSPage({ params }: Props) {
         confirmDict={shared.confirmDialog}
         localePrefix={localePrefix}
         locale={locale}
+        closeLabel={shared.dialog.close}
       />
     </div>
   );

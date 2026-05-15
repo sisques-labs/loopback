@@ -24,6 +24,7 @@ type Props = {
   confirmDict: AppDict["shared"]["confirmDialog"];
   localePrefix: string;
   locale: Locale;
+  closeLabel: string;
 };
 
 export function QueueRowActions({
@@ -33,6 +34,7 @@ export function QueueRowActions({
   confirmDict,
   localePrefix,
   locale,
+  closeLabel,
 }: Props) {
   const [deleteOpen, setDeleteOpen] = useState(false);
   const encoded = encodeQueueUrlForRoute(queueUrl);
@@ -75,6 +77,7 @@ export function QueueRowActions({
         hiddenFields={[{ name: "queueUrl", value: queueUrl }, { name: "locale", value: locale }]}
         confirmLabel={dict.delete}
         cancelLabel={confirmDict.cancel}
+        closeLabel={closeLabel}
         confirmingTemplate={confirmDict.confirming}
       />
     </>
