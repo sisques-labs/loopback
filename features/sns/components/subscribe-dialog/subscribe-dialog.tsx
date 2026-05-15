@@ -47,7 +47,11 @@ export function SubscribeDialog({ topicArn, isFifo, dict, locale, closeLabel}: P
 
   return (
     <Dialog>
-      <DialogTrigger render={<Button size="sm" />}>
+      <DialogTrigger
+        render={
+          <Button size="sm" className="min-h-11 min-w-11 md:min-h-9 md:min-w-9" />
+        }
+      >
         <PlusIcon />
         {dict.trigger}
       </DialogTrigger>
