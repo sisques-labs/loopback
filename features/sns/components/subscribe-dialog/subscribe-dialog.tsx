@@ -28,9 +28,11 @@ type Props = {
   isFifo: boolean;
   dict: AppDict["sns"]["subscribeDialog"];
   locale: Locale;
+
+    closeLabel: string;
 };
 
-export function SubscribeDialog({ topicArn, isFifo, dict, locale }: Props) {
+export function SubscribeDialog({ topicArn, isFifo, dict, locale, closeLabel}: Props) {
   const [state, formAction, pending] = useActionState(subscribeAction, INITIAL_STATE);
   const closeRef = useRef<HTMLButtonElement>(null);
   const [endpoint, setEndpoint] = useState("");
@@ -49,7 +51,7 @@ export function SubscribeDialog({ topicArn, isFifo, dict, locale }: Props) {
         <PlusIcon />
         {dict.trigger}
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent closeLabel={closeLabel}>
         <DialogHeader>
           <DialogTitle>{dict.title}</DialogTitle>
         </DialogHeader>

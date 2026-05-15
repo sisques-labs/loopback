@@ -29,9 +29,11 @@ type Props = {
   locale: Locale;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
+
+    closeLabel: string;
 };
 
-export function PublishDialog({ topicArn, topicName, dict, locale, open, onOpenChange }: Props) {
+export function PublishDialog({ topicArn, topicName, dict, locale, open, onOpenChange, closeLabel}: Props) {
   const [state, formAction, pending] = useActionState(publishMessageAction, INITIAL_STATE);
   const closeRef = useRef<HTMLButtonElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
@@ -57,7 +59,7 @@ export function PublishDialog({ topicArn, topicName, dict, locale, open, onOpenC
           {dict.trigger}
         </DialogTrigger>
       )}
-      <DialogContent>
+      <DialogContent closeLabel={closeLabel}>
         <DialogHeader>
           <DialogTitle>{t(dict.title, { topic: topicName })}</DialogTitle>
         </DialogHeader>

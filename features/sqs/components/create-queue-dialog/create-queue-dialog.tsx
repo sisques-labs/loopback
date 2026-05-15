@@ -26,9 +26,11 @@ const INITIAL_STATE: ActionState = { status: "idle" };
 type Props = {
   dict: AppDict["sqs"]["createQueueDialog"];
   locale: Locale;
+
+    closeLabel: string;
 };
 
-export function CreateQueueDialog({ dict, locale }: Props) {
+export function CreateQueueDialog({ dict, locale, closeLabel}: Props) {
   const [state, formAction, pending] = useActionState(createQueueAction, INITIAL_STATE);
   const closeRef = useRef<HTMLButtonElement>(null);
   const [isFifo, setIsFifo] = useState(false);
@@ -46,7 +48,7 @@ export function CreateQueueDialog({ dict, locale }: Props) {
         <PlusIcon />
         {dict.trigger}
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent closeLabel={closeLabel}>
         <DialogHeader>
           <DialogTitle>{dict.title}</DialogTitle>
         </DialogHeader>

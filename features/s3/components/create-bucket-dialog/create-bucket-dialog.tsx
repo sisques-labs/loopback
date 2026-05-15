@@ -23,9 +23,10 @@ const INITIAL_STATE: ActionState = { status: "idle" };
 
 type Props = {
   dict: AppDict["s3"]["createBucketDialog"];
+  closeLabel: string;
 };
 
-export function CreateBucketDialog({ dict }: Props) {
+export function CreateBucketDialog({ dict, closeLabel }: Props) {
   const [state, formAction, pending] = useActionState(createBucketAction, INITIAL_STATE);
   const closeRef = useRef<HTMLButtonElement>(null);
 
@@ -42,7 +43,7 @@ export function CreateBucketDialog({ dict }: Props) {
         <PlusIcon />
         {dict.trigger}
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent closeLabel={closeLabel}>
         <DialogHeader>
           <DialogTitle>{dict.title}</DialogTitle>
         </DialogHeader>

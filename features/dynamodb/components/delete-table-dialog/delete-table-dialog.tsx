@@ -13,9 +13,11 @@ type Props = {
   dict: AppDict["dynamodb"]["deleteTableDialog"];
   confirmDict: AppDict["shared"]["confirmDialog"];
   locale: Locale;
+
+    closeLabel: string;
 };
 
-export function DeleteTableDialog({ tableName, dict, confirmDict, locale }: Props) {
+export function DeleteTableDialog({ tableName, dict, confirmDict, locale, closeLabel}: Props) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -41,6 +43,7 @@ export function DeleteTableDialog({ tableName, dict, confirmDict, locale }: Prop
         ]}
         confirmLabel={dict.confirm}
         cancelLabel={dict.cancel}
+        closeLabel={closeLabel}
         confirmingTemplate={confirmDict.confirming}
       />
     </>

@@ -15,6 +15,8 @@ type Props = {
   updateCodeDialogDict: AppDict["lambda"]["updateCodeDialog"];
   replaceCodeCta: string;
   trailing?: ReactNode;
+
+    closeLabel: string;
 };
 
 export function LambdaDetailToolbar({
@@ -23,14 +25,13 @@ export function LambdaDetailToolbar({
   invokeDialogDict,
   updateCodeDialogDict,
   replaceCodeCta,
-  trailing,
-}: Props) {
+  trailing, closeLabel}: Props) {
   const [updateOpen, setUpdateOpen] = useState(false);
 
   return (
     <>
       <div className="flex shrink-0 flex-wrap items-center gap-2">
-        <InvokeDialog functionName={functionName} dict={invokeDialogDict} locale={locale} />
+        <InvokeDialog functionName={functionName} dict={invokeDialogDict} locale={locale}  closeLabel={closeLabel}/>
         <Button
           type="button"
           variant="outline"
@@ -48,7 +49,7 @@ export function LambdaDetailToolbar({
         dict={updateCodeDialogDict}
         open={updateOpen}
         onOpenChange={setUpdateOpen}
-      />
+       closeLabel={closeLabel}/>
     </>
   );
 }

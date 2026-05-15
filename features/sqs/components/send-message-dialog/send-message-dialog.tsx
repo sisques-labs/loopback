@@ -28,9 +28,11 @@ type Props = {
   isFifo: boolean;
   dict: AppDict["sqs"]["queueDetail"]["sendMessage"];
   locale: Locale;
+
+    closeLabel: string;
 };
 
-export function SendMessageDialog({ queueUrl, queueName, isFifo, dict, locale }: Props) {
+export function SendMessageDialog({ queueUrl, queueName, isFifo, dict, locale, closeLabel}: Props) {
   const [state, formAction, pending] = useActionState(sendMessageAction, INITIAL_STATE);
   const closeRef = useRef<HTMLButtonElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
@@ -48,7 +50,7 @@ export function SendMessageDialog({ queueUrl, queueName, isFifo, dict, locale }:
         <SendIcon />
         {dict.trigger}
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent closeLabel={closeLabel}>
         <DialogHeader>
           <DialogTitle>{t(dict.title, { queue: queueName })}</DialogTitle>
         </DialogHeader>

@@ -24,9 +24,11 @@ import { useUploadProgressStore } from "@/features/shared/stores/upload-progress
 type Props = {
   bucket: string;
   dict: AppDict["s3"]["uploadDialog"];
+
+    closeLabel: string;
 };
 
-export function UploadDialog({ bucket, dict }: Props) {
+export function UploadDialog({ bucket, dict, closeLabel}: Props) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -68,7 +70,7 @@ export function UploadDialog({ bucket, dict }: Props) {
         <UploadIcon />
         {dict.trigger}
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent closeLabel={closeLabel}>
         <DialogHeader>
           <DialogTitle>{dict.title}</DialogTitle>
         </DialogHeader>

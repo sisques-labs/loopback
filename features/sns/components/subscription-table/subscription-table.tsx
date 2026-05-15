@@ -25,6 +25,8 @@ type Props = {
   dict: AppDict["sns"]["subscriptionTable"];
   confirmDict: AppDict["shared"]["confirmDialog"];
   locale: Locale;
+
+    closeLabel: string;
 };
 
 function SubscriptionRow({
@@ -33,12 +35,14 @@ function SubscriptionRow({
   dict,
   confirmDict,
   locale,
+  closeLabel,
 }: {
   subscription: Subscription;
   topicName: string;
   dict: Props["dict"];
   confirmDict: Props["confirmDict"];
   locale: Locale;
+  closeLabel: string;
 }) {
   const [open, setOpen] = useState(false);
   const isPending = subscription.subscriptionArn === "PendingConfirmation";
@@ -83,13 +87,14 @@ function SubscriptionRow({
         hiddenFields={[{ name: "subscriptionArn", value: subscription.subscriptionArn }, { name: "locale", value: locale }]}
         confirmLabel={dict.unsubscribe}
         cancelLabel={confirmDict.cancel}
+        closeLabel={closeLabel}
         confirmingTemplate={confirmDict.confirming}
       />
     </>
   );
 }
 
-export function SubscriptionTable({ subscriptions, topicName, dict, confirmDict, locale }: Props) {
+export function SubscriptionTable({ subscriptions, topicName, dict, confirmDict, locale, closeLabel}: Props) {
   return (
     <Table>
       <TableHeader>
@@ -109,6 +114,7 @@ export function SubscriptionTable({ subscriptions, topicName, dict, confirmDict,
             dict={dict}
             confirmDict={confirmDict}
             locale={locale}
+            closeLabel={closeLabel}
           />
         ))}
       </TableBody>

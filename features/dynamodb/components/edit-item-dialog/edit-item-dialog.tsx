@@ -27,6 +27,8 @@ type Props = {
   locale: Locale;
   open: boolean;
   onOpenChange: (open: boolean) => void;
+
+    closeLabel: string;
 };
 
 function buildKeyObject(
@@ -67,8 +69,7 @@ export function EditItemDialog({
   dict,
   locale,
   open,
-  onOpenChange,
-}: Props) {
+  onOpenChange, closeLabel}: Props) {
   const [state, formAction, pending] = useActionState(updateItemAction, INITIAL_STATE);
 
   // We need a ref to close the dialog on success
@@ -87,7 +88,7 @@ export function EditItemDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-xl">
+      <DialogContent closeLabel={closeLabel} className="max-w-xl">
         <DialogHeader>
           <DialogTitle>{dict.title}</DialogTitle>
         </DialogHeader>

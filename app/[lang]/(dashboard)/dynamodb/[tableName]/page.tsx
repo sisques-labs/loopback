@@ -84,6 +84,7 @@ export default async function DynamoDBTablePage({ params, searchParams }: Props)
         querySk={querySk}
         dict={dict.dynamodb}
         confirmDict={dict.shared.confirmDialog}
+        closeLabel={dict.shared.dialog.close}
         locale={locale}
         localePrefix={localePrefix}
       />

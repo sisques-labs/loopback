@@ -27,9 +27,11 @@ type Props = {
   locale: Locale;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
+
+    closeLabel: string;
 };
 
-export function InvokeDialog({ functionName, dict, locale, open, onOpenChange }: Props) {
+export function InvokeDialog({ functionName, dict, locale, open, onOpenChange, closeLabel}: Props) {
   const [state, formAction, pending] = useActionState(invokeFunctionAction, INITIAL_STATE);
   const closeRef = useRef<HTMLButtonElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
@@ -62,7 +64,7 @@ export function InvokeDialog({ functionName, dict, locale, open, onOpenChange }:
           {dict.submit}
         </DialogTrigger>
       )}
-      <DialogContent>
+      <DialogContent closeLabel={closeLabel}>
         <DialogHeader>
           <DialogTitle>{t(dict.title, { functionName })}</DialogTitle>
         </DialogHeader>

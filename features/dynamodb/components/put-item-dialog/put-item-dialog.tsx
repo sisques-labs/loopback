@@ -36,6 +36,8 @@ type Props = {
   sortKeyName?: string;
   dict: AppDict["dynamodb"]["putItemDialog"];
   locale: Locale;
+
+    closeLabel: string;
 };
 
 export function PutItemDialog({
@@ -43,8 +45,7 @@ export function PutItemDialog({
   partitionKeyName,
   sortKeyName,
   dict,
-  locale,
-}: Props) {
+  locale, closeLabel}: Props) {
   const exampleJson = buildItemExampleJson(partitionKeyName, sortKeyName);
   const [state, formAction, pending] = useActionState(putItemAction, INITIAL_STATE);
   const closeRef = useRef<HTMLButtonElement>(null);
@@ -62,7 +63,7 @@ export function PutItemDialog({
         <PlusIcon />
         {dict.trigger}
       </DialogTrigger>
-      <DialogContent className="max-w-xl">
+      <DialogContent closeLabel={closeLabel} className="max-w-xl">
         <DialogHeader>
           <DialogTitle>{dict.title}</DialogTitle>
         </DialogHeader>

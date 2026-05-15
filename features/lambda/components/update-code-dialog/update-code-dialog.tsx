@@ -24,9 +24,11 @@ type Props = {
   dict: AppDict["lambda"]["updateCodeDialog"];
   open: boolean;
   onOpenChange: (open: boolean) => void;
+
+    closeLabel: string;
 };
 
-export function UpdateCodeDialog({ functionName, dict, open, onOpenChange }: Props) {
+export function UpdateCodeDialog({ functionName, dict, open, onOpenChange, closeLabel}: Props) {
   const router = useRouter();
   const inputId = useId();
   const fileRef = useRef<HTMLInputElement>(null);
@@ -89,7 +91,7 @@ export function UpdateCodeDialog({ functionName, dict, open, onOpenChange }: Pro
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger className="hidden" />
-      <DialogContent>
+      <DialogContent closeLabel={closeLabel}>
         <DialogHeader>
           <DialogTitle>{dict.title}</DialogTitle>
         </DialogHeader>
