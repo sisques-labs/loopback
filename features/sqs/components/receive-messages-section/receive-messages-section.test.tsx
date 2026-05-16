@@ -111,7 +111,7 @@ describe("ReceiveMessagesSection — MessageRow requeue button (T-07)", () => {
 
     // Each row should have a requeue submit button (RotateCcwIcon with aria-label "Requeue")
     const requeueButtons = screen.getAllByRole("button", { name: /requeue/i });
-    expect(requeueButtons.length).toBeGreaterThanOrEqual(messages.length);
+    expect(requeueButtons.length).toBe(messages.length);
   });
 
   it("renders hidden receiptHandle input for each message row", async () => {
@@ -149,7 +149,7 @@ describe("ReceiveMessagesSection — MessageRow pending state (T-08)", () => {
     const nonPendingButtons = buttons.filter(
       (btn) => !(btn as HTMLButtonElement).disabled,
     );
-    expect(nonPendingButtons.length).toBeGreaterThanOrEqual(1);
+    expect(nonPendingButtons.length).toBe(messages.length - 1);
   });
 });
 

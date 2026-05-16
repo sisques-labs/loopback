@@ -31,6 +31,12 @@ describe("SQS English requeue i18n keys", () => {
   });
 });
 
+describe("SQS English validation i18n keys", () => {
+  it("provides validation.receiptHandleRequired key", () => {
+    expect(en.validation.receiptHandleRequired).toBeTruthy();
+  });
+});
+
 describe("SQS i18n key-set parity (en vs es)", () => {
   it("queueDetail.receive.requeue has same keys in en and es", () => {
     expect(Object.keys(en.queueDetail.receive.requeue)).toEqual(

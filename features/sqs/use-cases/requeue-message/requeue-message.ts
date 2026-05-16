@@ -21,7 +21,7 @@ export async function requeueMessageAction(
 
   if (!queueUrl) return { status: "error", message: dict.sqs.validation.queueUrlRequired };
   if (!receiptHandle)
-    return { status: "error", message: dict.sqs.validation.queueUrlRequired };
+    return { status: "error", message: dict.sqs.validation.receiptHandleRequired };
 
   try {
     const client = getSQSClient();

@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import en from "./en";
 import es from "./es";
 
 describe("SQS Spanish copy", () => {
@@ -27,5 +28,19 @@ describe("SQS Spanish requeue i18n keys", () => {
 
   it("provides sdkErrors.receiptHandleInvalid key", () => {
     expect(es.sdkErrors.receiptHandleInvalid).toBeTruthy();
+  });
+});
+
+describe("SQS Spanish validation i18n keys", () => {
+  it("provides validation.receiptHandleRequired key", () => {
+    expect(es.validation.receiptHandleRequired).toBeTruthy();
+  });
+});
+
+describe("SQS i18n key-set parity (es vs en)", () => {
+  it("queueDetail.receive.requeue has same keys in es and en", () => {
+    expect(Object.keys(es.queueDetail.receive.requeue)).toEqual(
+      Object.keys(en.queueDetail.receive.requeue),
+    );
   });
 });

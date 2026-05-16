@@ -89,6 +89,7 @@ const dict = {
   },
   validation: {
     queueUrlRequired: "La URL de la cola es obligatoria.",
+    receiptHandleRequired: "El receipt handle es obligatorio.",
     messageRequired: "El cuerpo del mensaje no puede estar vacío.",
   },
   sdkErrors: {

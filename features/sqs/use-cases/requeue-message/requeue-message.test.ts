@@ -10,6 +10,7 @@ import { ChangeMessageVisibilityCommand, type SQSClient } from "@aws-sdk/client-
 import { getSQSClient } from "@/features/sqs/lib/client";
 import { requeueMessageAction } from "./requeue-message";
 import type { ActionState } from "@/features/shared/types/action-state";
+import en from "@/features/sqs/i18n/en";
 
 function makeSqsClient(sendFn: (cmd: unknown) => Promise<unknown>): SQSClient {
   return { send: sendFn } as unknown as SQSClient;
@@ -45,6 +46,9 @@ describe("requeueMessageAction — validation", () => {
       buildFormData({ queueUrl: "https://localhost/queue/test", locale: "en" }),
     );
     expect(result.status).toBe("error");
+    if (result.status === "error") {
+      expect(result.message).toBe(en.validation.receiptHandleRequired);
+    }
     expect(vi.mocked(getSQSClient)).not.toHaveBeenCalled();
   });
 });

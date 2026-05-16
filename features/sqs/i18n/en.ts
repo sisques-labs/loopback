@@ -83,6 +83,7 @@ const dict = {
   },
   validation: {
     queueUrlRequired: "Queue URL is required.",
+    receiptHandleRequired: "Receipt handle is required.",
     messageRequired: "Message body cannot be empty.",
   },
   sdkErrors: {
