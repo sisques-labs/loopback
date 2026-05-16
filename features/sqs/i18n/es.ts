@@ -73,6 +73,11 @@ const dict = {
       empty: "No hubo mensajes (cola vacía o mensajes en vuelo).",
       messageIdLabel: "ID de mensaje",
       submitting: "Recibiendo…",
+      requeue: {
+        requeue: "Reencolar",
+        requeueing: "Reencolando…",
+        requeueSuccess: "Mensaje reencolado.",
+      },
     },
     purge: {
       trigger: "Vaciar cola",
@@ -93,6 +98,8 @@ const dict = {
     notAuthorized: "Sin autorización para realizar esta acción en SQS.",
     endpointUnreachable: "No se puede conectar a LocalStack en {endpoint}. Asegurate de que esté en ejecución.",
     unknown: "Ocurrió un error inesperado.",
+    receiptHandleInvalid:
+      "La ventana de visibilidad de este mensaje expiró — recibí un nuevo lote para reintentar.",
   },
   errors: {
     connectFailed: "No se pudo conectar a SQS",

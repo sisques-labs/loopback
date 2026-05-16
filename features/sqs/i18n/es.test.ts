@@ -11,3 +11,21 @@ describe("SQS Spanish copy", () => {
     expect(es.createQueueDialog.nameFifoPlaceholder).toContain("mi-cola");
   });
 });
+
+describe("SQS Spanish requeue i18n keys", () => {
+  it("provides requeue key", () => {
+    expect(es.queueDetail.receive.requeue.requeue).toBeTruthy();
+  });
+
+  it("provides requeueing key", () => {
+    expect(es.queueDetail.receive.requeue.requeueing).toBeTruthy();
+  });
+
+  it("provides requeueSuccess key", () => {
+    expect(es.queueDetail.receive.requeue.requeueSuccess).toBeTruthy();
+  });
+
+  it("provides sdkErrors.receiptHandleInvalid key", () => {
+    expect(es.sdkErrors.receiptHandleInvalid).toBeTruthy();
+  });
+});

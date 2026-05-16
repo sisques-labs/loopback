@@ -67,6 +67,11 @@ const dict = {
       empty: "No messages returned (queue may be empty or messages are in flight).",
       messageIdLabel: "Message ID",
       submitting: "Receiving…",
+      requeue: {
+        requeue: "Requeue",
+        requeueing: "Requeueing…",
+        requeueSuccess: "Message requeued.",
+      },
     },
     purge: {
       trigger: "Purge queue",
@@ -87,6 +92,8 @@ const dict = {
     notAuthorized: "Not authorized to perform this SQS action.",
     endpointUnreachable: "Cannot connect to LocalStack at {endpoint}. Make sure it is running.",
     unknown: "An unexpected error occurred.",
+    receiptHandleInvalid:
+      "This message's visibility window expired — receive a new batch to retry.",
   },
   errors: {
     connectFailed: "Failed to connect to SQS",
