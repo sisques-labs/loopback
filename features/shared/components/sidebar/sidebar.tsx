@@ -13,6 +13,7 @@ export function Sidebar({ dict, localePrefix }: Props) {
       <Logo className="mb-4" />
       <NavLinks
         localePrefix={localePrefix}
+        dashboardLinkLabel={dict.dashboard}
         servicesLabel={dict.services}
         settingsSectionLabel={dict.settingsSection}
         settingsLinkLabel={dict.settings}

@@ -112,6 +112,24 @@ describe("buildCrumbs", () => {
     expect(crumbs[1].label).toBe("my-function");
   });
 
+  it("returns single Dashboard crumb on /en/dashboard", () => {
+    const crumbs = buildCrumbs("/en/dashboard", "en", "Settings", undefined, "Dashboard");
+    expect(crumbs).toHaveLength(1);
+    expect(crumbs[0].label).toBe("Dashboard");
+    expect(crumbs[0].href).toBeUndefined();
+  });
+
+  it("returns localized Dashboard crumb on /es/dashboard", () => {
+    const crumbs = buildCrumbs("/es/dashboard", "es", "Configuración", undefined, "Panel");
+    expect(crumbs).toHaveLength(1);
+    expect(crumbs[0].label).toBe("Panel");
+  });
+
+  it("falls back to Dashboard when dashboardLabel is omitted", () => {
+    const crumbs = buildCrumbs("/en/dashboard", "en", "Settings");
+    expect(crumbs[0].label).toBe("Dashboard");
+  });
+
   // SC-07: Settings page crumb
   it("returns single Settings crumb using provided settingsLabel", () => {
     const crumbs = buildCrumbs("/en/settings", "en", "Configuración");

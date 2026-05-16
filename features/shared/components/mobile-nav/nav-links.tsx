@@ -2,13 +2,14 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Settings } from "lucide-react";
+import { LayoutDashboard, Settings } from "lucide-react";
 import { services } from "@/lib/services-registry";
 import { tools } from "@/lib/tools-registry";
 import { cn } from "@/lib/utils";
 
 type Props = {
   localePrefix: string;
+  dashboardLinkLabel?: string;
   servicesLabel?: string;
   settingsSectionLabel?: string;
   settingsLinkLabel?: string;
@@ -28,6 +29,7 @@ function isActivePath(pathname: string, href: string) {
 
 export function NavLinks({
   localePrefix,
+  dashboardLinkLabel,
   servicesLabel,
   settingsSectionLabel,
   settingsLinkLabel,
@@ -36,11 +38,30 @@ export function NavLinks({
 }: Props) {
   const pathname = usePathname();
   const enabled = services.filter((s) => s.status === "enabled");
+  const dashboardHref = `${localePrefix}/dashboard`;
   const settingsHref = `${localePrefix}/settings`;
   const hasTools = toolsSectionLabel && tools.length > 0;
 
   return (
     <>
+      {dashboardLinkLabel && (
+        <nav className="mb-6 flex flex-col gap-1" aria-label={dashboardLinkLabel}>
+          <Link
+            href={dashboardHref}
+            className={cn(
+              navLinkBaseClass,
+              pathname === dashboardHref
+                ? "bg-sidebar-primary text-sidebar-primary-foreground"
+                : "text-sidebar-foreground",
+            )}
+            aria-current={pathname === dashboardHref ? "page" : undefined}
+            onClick={onNavigate}
+          >
+            <LayoutDashboard className="size-4 shrink-0" aria-hidden />
+            {dashboardLinkLabel}
+          </Link>
+        </nav>
+      )}
       {servicesLabel && (
         <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-muted-foreground md:mb-6">
           {servicesLabel}
