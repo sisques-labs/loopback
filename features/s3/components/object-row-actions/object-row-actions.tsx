@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { MoreHorizontalIcon, DownloadIcon, EyeIcon, PencilIcon, Trash2Icon } from "lucide-react";
+import { MoreHorizontalIcon, DownloadIcon, EyeIcon, InfoIcon, PencilIcon, Trash2Icon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -13,6 +13,7 @@ import {
 import { ConfirmDialog } from "@/features/shared/components/confirm-dialog/confirm-dialog";
 import { RenameObjectDialog } from "@/features/s3/components/rename-object-dialog/rename-object-dialog";
 import { ObjectPreviewDialog } from "@/features/s3/components/object-preview-dialog/object-preview-dialog";
+import { ObjectMetadataDialog } from "@/features/s3/components/object-metadata-dialog/object-metadata-dialog";
 import { deleteObjectAction } from "@/features/s3/use-cases/delete-object/delete-object";
 import type { AppDict } from "@/features/shared/i18n/get-dictionary";
 import { t } from "@/features/shared/i18n/interpolate";
@@ -24,6 +25,7 @@ type Props = {
   renameDict: AppDict["s3"]["renameObjectDialog"];
   confirmDict: AppDict["shared"]["confirmDialog"];
   previewDict: AppDict["s3"]["previewDialog"];
+  metadataDict: AppDict["s3"]["metadataDialog"];
   closeLabel: string;
 };
 
@@ -34,11 +36,13 @@ export function ObjectRowActions({
   renameDict,
   confirmDict,
   previewDict,
+  metadataDict,
   closeLabel,
 }: Props) {
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [renameOpen, setRenameOpen] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
+  const [metadataOpen, setMetadataOpen] = useState(false);
   const downloadHref = `/api/aws/s3/${encodeURIComponent(bucket)}/objects/${encodeURIComponent(objectKey)}?download=1`;
 
   const previewObject = { key: objectKey, size: 0, lastModified: "" };
@@ -71,6 +75,10 @@ export function ObjectRowActions({
             <PencilIcon />
             {dict.rename}
           </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => setMetadataOpen(true)}>
+            <InfoIcon />
+            {dict.metadata}
+          </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem variant="destructive" onClick={() => setDeleteOpen(true)}>
             <Trash2Icon />
@@ -85,6 +93,15 @@ export function ObjectRowActions({
         object={previewObject}
         bucket={bucket}
         dict={previewDict}
+        closeLabel={closeLabel}
+      />
+
+      <ObjectMetadataDialog
+        open={metadataOpen}
+        onClose={() => setMetadataOpen(false)}
+        bucket={bucket}
+        objectKey={objectKey}
+        dict={metadataDict}
         closeLabel={closeLabel}
       />
 

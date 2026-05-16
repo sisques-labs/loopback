@@ -81,4 +81,48 @@ describe("headObject", () => {
     const result = await headObject("my-bucket", "missing.txt");
     expect(result).toBeNull();
   });
+
+  it("maps custom metadata from res.Metadata", async () => {
+    mockSend.mockResolvedValue({
+      ContentLength: 512,
+      LastModified: new Date("2024-01-01T00:00:00Z"),
+      ETag: '"abc"',
+      StorageClass: "STANDARD",
+      ContentType: "text/plain",
+      Metadata: { foo: "bar", env: "dev" },
+    });
+
+    const result = await headObject("my-bucket", "meta-file.txt");
+    expect(result).not.toBeNull();
+    expect(result!.metadata).toEqual({ foo: "bar", env: "dev" });
+  });
+
+  it("metadata is undefined when res.Metadata absent", async () => {
+    mockSend.mockResolvedValue({
+      ContentLength: 256,
+      LastModified: new Date("2024-01-01T00:00:00Z"),
+      ETag: '"def"',
+      StorageClass: "STANDARD",
+      ContentType: "application/octet-stream",
+    });
+
+    const result = await headObject("my-bucket", "no-meta.bin");
+    expect(result).not.toBeNull();
+    expect(result!.metadata).toBeUndefined();
+  });
+
+  it("metadata is undefined when res.Metadata is empty object", async () => {
+    mockSend.mockResolvedValue({
+      ContentLength: 128,
+      LastModified: new Date("2024-01-01T00:00:00Z"),
+      ETag: '"ghi"',
+      StorageClass: "STANDARD",
+      ContentType: "text/plain",
+      Metadata: {},
+    });
+
+    const result = await headObject("my-bucket", "empty-meta.txt");
+    expect(result).not.toBeNull();
+    expect(result!.metadata).toBeUndefined();
+  });
 });
