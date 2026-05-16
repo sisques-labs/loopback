@@ -1,7 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { getLocalStackHealth } from "./health";
-
-// ── Mocks ──────────────────────────────────────────────────────────────────
+import { ENDPOINT_HEALTH_PATH, getEndpointHealth } from "./health";
 
 vi.mock("server-only", () => ({}));
 
@@ -17,9 +15,7 @@ function mockFetch(opts: { ok?: boolean; body?: unknown }): void {
   );
 }
 
-// ── Tests ──────────────────────────────────────────────────────────────────
-
-describe("getLocalStackHealth", () => {
+describe("getEndpointHealth", () => {
   beforeEach(() => {
     vi.stubEnv("AWS_ENDPOINT_URL", ENDPOINT);
   });
@@ -36,7 +32,7 @@ describe("getLocalStackHealth", () => {
       body: { services: { s3: "running", sqs: "running", sns: "available" } },
     });
 
-    const result = await getLocalStackHealth();
+    const result = await getEndpointHealth();
 
     expect(result.status).toBe("connected");
     expect(result.endpointUrl).toBe(ENDPOINT);
@@ -48,25 +44,24 @@ describe("getLocalStackHealth", () => {
       body: { services: { s3: "running", sqs: "error", sns: "running" } },
     });
 
-    const result = await getLocalStackHealth();
+    const result = await getEndpointHealth();
 
     expect(result.status).toBe("degraded");
     expect(result.endpointUrl).toBe(ENDPOINT);
   });
 
-  it("returns degraded when services object is empty", async () => {
+  it("returns connected when services object is empty", async () => {
     mockFetch({ ok: true, body: { services: {} } });
 
-    const result = await getLocalStackHealth();
+    const result = await getEndpointHealth();
 
-    // empty → allRunning vacuously true → connected
     expect(result.status).toBe("connected");
   });
 
   it("returns unreachable when response is not ok", async () => {
     mockFetch({ ok: false, body: null });
 
-    const result = await getLocalStackHealth();
+    const result = await getEndpointHealth();
 
     expect(result.status).toBe("unreachable");
     expect(result.endpointUrl).toBe(ENDPOINT);
@@ -75,7 +70,7 @@ describe("getLocalStackHealth", () => {
   it("returns unreachable when fetch throws (network error)", async () => {
     vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new Error("ECONNREFUSED")));
 
-    const result = await getLocalStackHealth();
+    const result = await getEndpointHealth();
 
     expect(result.status).toBe("unreachable");
     expect(result.endpointUrl).toBe(ENDPOINT);
@@ -87,7 +82,7 @@ describe("getLocalStackHealth", () => {
     });
     vi.stubGlobal("fetch", vi.fn().mockRejectedValue(abortError));
 
-    const result = await getLocalStackHealth();
+    const result = await getEndpointHealth();
 
     expect(result.status).toBe("unreachable");
   });
@@ -97,22 +92,22 @@ describe("getLocalStackHealth", () => {
     vi.stubEnv("AWS_ENDPOINT_URL", customEndpoint);
     mockFetch({ ok: true, body: { services: { s3: "running" } } });
 
-    const result = await getLocalStackHealth();
+    const result = await getEndpointHealth();
 
     expect(result.endpointUrl).toBe(customEndpoint);
   });
 
-  it("fetches the correct health endpoint URL", async () => {
+  it("fetches the configured health probe path", async () => {
     const fetchSpy = vi.fn().mockResolvedValue({
       ok: true,
       json: () => Promise.resolve({ services: {} }),
     } as Response);
     vi.stubGlobal("fetch", fetchSpy);
 
-    await getLocalStackHealth();
+    await getEndpointHealth();
 
     expect(fetchSpy).toHaveBeenCalledWith(
-      `${ENDPOINT}/_localstack/health`,
+      `${ENDPOINT}${ENDPOINT_HEALTH_PATH}`,
       expect.objectContaining({ cache: "no-store" }),
     );
   });

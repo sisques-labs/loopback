@@ -2,20 +2,23 @@ import "server-only";
 
 export type HealthStatus = "connected" | "degraded" | "unreachable";
 
-export type LocalStackHealth = {
+export type EndpointHealth = {
   status: HealthStatus;
   endpointUrl: string;
 };
 
-type LocalStackHealthResponse = {
+type EndpointHealthPayload = {
   services: Record<string, string>;
 };
 
-export async function getLocalStackHealth(): Promise<LocalStackHealth> {
+/** Relative path for the local AWS endpoint health probe. */
+export const ENDPOINT_HEALTH_PATH = "/_localstack/health";
+
+export async function getEndpointHealth(): Promise<EndpointHealth> {
   const endpointUrl = process.env.AWS_ENDPOINT_URL ?? "";
 
   try {
-    const res = await fetch(`${endpointUrl}/_localstack/health`, {
+    const res = await fetch(`${endpointUrl}${ENDPOINT_HEALTH_PATH}`, {
       signal: AbortSignal.timeout(2000),
       cache: "no-store",
     });
@@ -24,10 +27,12 @@ export async function getLocalStackHealth(): Promise<LocalStackHealth> {
       return { status: "unreachable", endpointUrl };
     }
 
-    const data: LocalStackHealthResponse = await res.json();
+    const data: EndpointHealthPayload = await res.json();
     const serviceStatuses = Object.values(data.services ?? {});
 
-    const allRunning = serviceStatuses.every((s) => s === "running" || s === "available");
+    const allRunning = serviceStatuses.every(
+      (s) => s === "running" || s === "available",
+    );
     const status: HealthStatus = allRunning ? "connected" : "degraded";
 
     return { status, endpointUrl };
