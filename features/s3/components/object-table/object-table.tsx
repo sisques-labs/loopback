@@ -21,6 +21,7 @@ type Props = {
   renameActionsDict: AppDict["s3"]["renameObjectDialog"];
   confirmDict: AppDict["shared"]["confirmDialog"];
   previewDict: AppDict["s3"]["previewDialog"];
+  metadataDict: AppDict["s3"]["metadataDialog"];
   closeLabel: string;
 };
 
@@ -33,6 +34,7 @@ export function ObjectTable({
   renameActionsDict,
   confirmDict,
   previewDict,
+  metadataDict,
   closeLabel,
 }: Props) {
   return (
@@ -70,6 +72,7 @@ export function ObjectTable({
                   renameDict={renameActionsDict}
                   confirmDict={confirmDict}
                   previewDict={previewDict}
+                  metadataDict={metadataDict}
                   closeLabel={closeLabel}
                 />
               </TableCell>

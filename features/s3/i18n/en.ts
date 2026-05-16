@@ -39,6 +39,7 @@ const dict = {
     preview: "Preview",
     download: "Download",
     rename: "Rename",
+    metadata: "Metadata",
     delete: "Delete",
     deleteTitle: "Delete object",
     deleteConfirm:
@@ -51,6 +52,19 @@ const dict = {
     tooLarge: "File too large to preview (max 1 MB).",
     downloadInstead: "Download instead",
     error: "Couldn't load preview.",
+  },
+  metadataDialog: {
+    title: "Object metadata",
+    loading: "Loading metadata…",
+    error: "Couldn't load metadata.",
+    size: "Size",
+    contentType: "Content type",
+    etag: "ETag",
+    storageClass: "Storage class",
+    lastModified: "Last modified",
+    customSection: "Custom metadata",
+    noCustom: "No custom metadata.",
+    notAvailable: "—",
   },
   renameObjectDialog: {
     title: "Rename object",
