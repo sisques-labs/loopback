@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState, useEffect, useState } from "react";
-import { InboxIcon, RotateCcwIcon } from "lucide-react";
+import { InfoIcon, InboxIcon, RotateCcwIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   receiveMessagesAction,
@@ -9,6 +9,7 @@ import {
   type SqsReceivedMessageBrief,
 } from "@/features/sqs/use-cases/receive-messages/receive-messages";
 import { requeueMessageAction } from "@/features/sqs/use-cases/requeue-message/requeue-message";
+import { MessageAttributesDialog } from "@/features/sqs/components/message-attributes-dialog/message-attributes-dialog";
 import type { ActionState } from "@/features/shared/types/action-state";
 import type { AppDict } from "@/features/shared/i18n/get-dictionary";
 import type { Locale } from "@/features/shared/i18n/locale";
@@ -25,6 +26,11 @@ type MessageRowProps = {
 
 function MessageRow({ message, queueUrl, locale, dict }: MessageRowProps) {
   const [state, formAction, pending] = useActionState(requeueMessageAction, INITIAL_REQUEUE_STATE);
+  const [attrsOpen, setAttrsOpen] = useState(false);
+
+  const hasAttrs =
+    (message.attributes && Object.keys(message.attributes).length > 0) ||
+    (message.messageAttributes && Object.keys(message.messageAttributes).length > 0);
 
   return (
     <li
@@ -52,29 +58,52 @@ function MessageRow({ message, queueUrl, locale, dict }: MessageRowProps) {
             <p className="mt-1 text-xs text-destructive">{state.message}</p>
           )}
         </div>
-        <form action={formAction} className="shrink-0">
-          <input type="hidden" name="queueUrl" value={queueUrl} />
-          <input type="hidden" name="receiptHandle" value={message.receiptHandle} />
-          <input type="hidden" name="locale" value={locale} />
-          <Button
-            type="submit"
-            variant="ghost"
-            size="icon"
-            disabled={pending}
-            title={dict.requeue.requeue}
-            aria-label={dict.requeue.requeue}
-            className="min-h-11 min-w-11 md:min-h-9 md:min-w-9"
-          >
-            <RotateCcwIcon />
-            <span className="sr-only">
-              {pending ? dict.requeue.requeueing : dict.requeue.requeue}
-            </span>
-          </Button>
-          {pending && (
-            <span className="text-xs text-muted-foreground">{dict.requeue.requeueing}</span>
+        <div className="flex shrink-0 items-center gap-1">
+          {hasAttrs && (
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              title={dict.attributesDialog.trigger}
+              aria-label={dict.attributesDialog.trigger}
+              className="min-h-11 min-w-11 md:min-h-9 md:min-w-9"
+              onClick={() => setAttrsOpen(true)}
+            >
+              <InfoIcon />
+            </Button>
           )}
-        </form>
+          <form action={formAction} className="shrink-0">
+            <input type="hidden" name="queueUrl" value={queueUrl} />
+            <input type="hidden" name="receiptHandle" value={message.receiptHandle} />
+            <input type="hidden" name="locale" value={locale} />
+            <Button
+              type="submit"
+              variant="ghost"
+              size="icon"
+              disabled={pending}
+              title={dict.requeue.requeue}
+              aria-label={dict.requeue.requeue}
+              className="min-h-11 min-w-11 md:min-h-9 md:min-w-9"
+            >
+              <RotateCcwIcon />
+              <span className="sr-only">
+                {pending ? dict.requeue.requeueing : dict.requeue.requeue}
+              </span>
+            </Button>
+            {pending && (
+              <span className="text-xs text-muted-foreground">{dict.requeue.requeueing}</span>
+            )}
+          </form>
+        </div>
       </div>
+      <MessageAttributesDialog
+        open={attrsOpen}
+        onClose={() => setAttrsOpen(false)}
+        attributes={message.attributes}
+        messageAttributes={message.messageAttributes}
+        dict={dict.attributesDialog}
+        closeLabel={dict.attributesDialog.close}
+      />
     </li>
   );
 }

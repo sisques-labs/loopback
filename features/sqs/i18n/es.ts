@@ -80,6 +80,13 @@ const dict = {
         requeueing: "Reencolando…",
         requeueSuccess: "Mensaje reencolado.",
       },
+      attributesDialog: {
+        trigger: "Ver atributos",
+        title: "Atributos del mensaje",
+        systemSection: "Atributos del sistema",
+        customSection: "Atributos del mensaje",
+        close: "Cerrar",
+      },
     },
     purge: {
       trigger: "Vaciar cola",
