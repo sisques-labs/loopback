@@ -58,6 +58,8 @@ const dict = {
       submitting: "Sending…",
       submit: "Send",
       successToast: "Message sent to {queue}.",
+      invalidJson: "Invalid JSON syntax.",
+      formatButton: "Format JSON",
     },
     receive: {
       trigger: "Receive messages",

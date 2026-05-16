@@ -44,3 +44,21 @@ describe("SQS i18n key-set parity (en vs es)", () => {
     );
   });
 });
+
+describe("SQS send-message i18n keys", () => {
+  it("provides invalidJson key", () => {
+    expect(en.queueDetail.sendMessage.invalidJson).toBeTruthy();
+  });
+
+  it("provides formatButton key", () => {
+    expect(en.queueDetail.sendMessage.formatButton).toBeTruthy();
+  });
+});
+
+describe("SQS i18n sendMessage key-set parity (en vs es)", () => {
+  it("queueDetail.sendMessage has same keys in en and es", () => {
+    expect(Object.keys(en.queueDetail.sendMessage)).toEqual(
+      Object.keys(es.queueDetail.sendMessage),
+    );
+  });
+});
