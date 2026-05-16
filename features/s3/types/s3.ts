@@ -11,6 +11,7 @@ export type S3Object = {
   etag?: string;
   storageClass?: string;
   contentType?: string;
+  metadata?: Record<string, string>; // S3 custom (x-amz-meta-*) metadata
 };
 
 export type UploadResult =
