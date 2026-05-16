@@ -65,6 +65,7 @@ const renameDict = {
 
 const confirmDict = {
   cancel: "Cancel",
+  confirm: "Confirm",
   confirming: "Deleting…",
 };
 
