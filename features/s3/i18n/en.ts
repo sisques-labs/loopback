@@ -59,7 +59,7 @@ const dict = {
     trigger: "Upload",
     title: "Upload file",
     fileLabel: "File",
-    fileLabelMulti: "Files",
+    selectMultiple: "Files",
     cancel: "Cancel",
     uploading: "Uploading…",
     submit: "Upload",

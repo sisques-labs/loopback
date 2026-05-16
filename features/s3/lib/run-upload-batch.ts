@@ -42,6 +42,9 @@ export async function runUploadBatch({
   const store = useUploadProgressStore.getState();
   const ids = files.map((f) => store.addItem({ bucket, filename: f.name }));
 
+  // ── One AbortController per batch ────────────────────────────────────────
+  const controller = new AbortController();
+
   // ── Worker-pool semaphore (3 slots) ───────────────────────────────────────
   let ok = 0;
   let failed = 0;
@@ -55,6 +58,7 @@ export async function runUploadBatch({
         onProgress: (p) => useUploadProgressStore.getState().updateProgress(storeId, p),
         onFinalizing: () =>
           useUploadProgressStore.getState().setStatus(storeId, "finalizing"),
+        signal: controller.signal,
       });
 
       if (result.ok) {
@@ -84,8 +88,15 @@ export async function runUploadBatch({
   const slots = Math.min(3, files.length);
   await Promise.all(Array.from({ length: slots }, () => worker()));
 
-  // ── Batch summary ─────────────────────────────────────────────────────────
-  toast.success(t(dict.batchSummary, { ok: String(ok), failed: String(failed) }));
+  // ── Batch summary (severity depends on outcome) ───────────────────────────
+  const summaryText = t(dict.batchSummary, { ok: String(ok), failed: String(failed) });
+  if (ok === 0) {
+    toast.error(summaryText);
+  } else if (failed > 0) {
+    toast.warning(summaryText);
+  } else {
+    toast.success(summaryText);
+  }
 
   onDone?.();
 

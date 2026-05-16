@@ -35,7 +35,7 @@ const dict = {
   trigger: "Upload",
   title: "Upload file",
   fileLabel: "File",
-  fileLabelMulti: "Files",
+  selectMultiple: "Files",
   cancel: "Cancel",
   uploading: "Uploading…",
   submit: "Upload",
@@ -138,11 +138,11 @@ describe("runUploadBatch — per-file toasts + batch summary", () => {
     const result = await runUploadBatch({ bucket: "test-bucket", files, dict });
 
     expect(result).toEqual({ ok: 2, failed: 1 });
-    // 2 per-file success toasts + 1 batchSummary success toast = 3 total
-    expect(toast.success).toHaveBeenCalledTimes(3);
+    // 2 per-file success toasts only (batch summary uses toast.warning for mixed outcome)
+    expect(toast.success).toHaveBeenCalledTimes(2);
     expect(toast.error).toHaveBeenCalledTimes(1);
-    // batchSummary is shown last
-    expect(toast.success).toHaveBeenLastCalledWith("2 uploaded, 1 failed");
+    // batchSummary for mixed outcome uses toast.warning
+    expect(toast.warning).toHaveBeenLastCalledWith("2 uploaded, 1 failed");
   });
 
   it("calls onDone callback after all files settle", async () => {
@@ -154,5 +154,85 @@ describe("runUploadBatch — per-file toasts + batch summary", () => {
     await runUploadBatch({ bucket: "test-bucket", files, dict, onDone });
 
     expect(onDone).toHaveBeenCalledOnce();
+  });
+});
+
+describe("runUploadBatch — AbortSignal (W1)", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it("passes a signal object to every uploadFile call", async () => {
+    const { uploadFile } = await import("@/features/s3/lib/upload");
+    (uploadFile as ReturnType<typeof vi.fn>).mockResolvedValue({ ok: true, key: "x" });
+
+    const files = [makeFile("a.txt"), makeFile("b.txt")];
+    await runUploadBatch({ bucket: "test-bucket", files, dict });
+
+    const calls = (uploadFile as ReturnType<typeof vi.fn>).mock.calls;
+    expect(calls).toHaveLength(2);
+    for (const [opts] of calls) {
+      expect(opts).toHaveProperty("signal");
+      expect(opts.signal).toBeInstanceOf(AbortSignal);
+    }
+  });
+});
+
+describe("runUploadBatch — batch summary toast severity (S1)", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it("uses toast.error for summary when all files fail", async () => {
+    const { toast } = await import("sonner");
+    const { uploadFile } = await import("@/features/s3/lib/upload");
+    (uploadFile as ReturnType<typeof vi.fn>).mockRejectedValue(new Error("fail"));
+
+    const files = [makeFile("x.txt"), makeFile("y.txt")];
+    await runUploadBatch({ bucket: "test-bucket", files, dict });
+
+    // No success toasts at all (per-file or summary)
+    expect(toast.success).not.toHaveBeenCalled();
+    // Summary must use toast.error
+    expect(toast.error).toHaveBeenLastCalledWith("0 uploaded, 2 failed");
+  });
+
+  it("uses toast.warning for summary when some files fail (partial)", async () => {
+    const { toast } = await import("sonner");
+    const { uploadFile } = await import("@/features/s3/lib/upload");
+    (uploadFile as ReturnType<typeof vi.fn>)
+      .mockResolvedValueOnce({ ok: true, key: "a.txt" })
+      .mockRejectedValueOnce(new Error("fail"));
+
+    const files = [makeFile("a.txt"), makeFile("b.txt")];
+    await runUploadBatch({ bucket: "test-bucket", files, dict });
+
+    // 1 per-file success toast
+    expect(toast.success).toHaveBeenCalledTimes(1);
+    // Summary should be toast.warning
+    expect(toast.warning).toHaveBeenCalledWith("1 uploaded, 1 failed");
+  });
+
+  it("uses toast.success for summary when all files succeed", async () => {
+    const { toast } = await import("sonner");
+    const { uploadFile } = await import("@/features/s3/lib/upload");
+    (uploadFile as ReturnType<typeof vi.fn>).mockResolvedValue({ ok: true, key: "x" });
+
+    const files = [makeFile("a.txt"), makeFile("b.txt")];
+    await runUploadBatch({ bucket: "test-bucket", files, dict });
+
+    // 2 per-file success + 1 summary success = 3
+    expect(toast.success).toHaveBeenCalledTimes(3);
+    expect(toast.success).toHaveBeenLastCalledWith("2 uploaded, 0 failed");
+    expect(toast.error).not.toHaveBeenCalled();
+    expect(toast.warning).not.toHaveBeenCalled();
   });
 });
