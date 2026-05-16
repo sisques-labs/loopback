@@ -15,6 +15,7 @@ export async function headObject(bucket: string, key: string): Promise<S3Object 
       lastModified: res.LastModified?.toISOString() ?? new Date(0).toISOString(),
       etag: res.ETag,
       storageClass: res.StorageClass,
+      contentType: res.ContentType,
     };
   } catch (err) {
     const friendly = toFriendlyError(err);
