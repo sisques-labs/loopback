@@ -23,11 +23,23 @@ type Props = {
   locale: Locale;
   settingsLabel: string;
   terminalLabel?: string;
+  dashboardLabel?: string;
 };
 
-export function HeaderBreadcrumb({ locale, settingsLabel, terminalLabel }: Props) {
+export function HeaderBreadcrumb({
+  locale,
+  settingsLabel,
+  terminalLabel,
+  dashboardLabel,
+}: Props) {
   const pathname = usePathname();
-  const crumbs = buildCrumbs(pathname, locale, settingsLabel, terminalLabel);
+  const crumbs = buildCrumbs(
+    pathname,
+    locale,
+    settingsLabel,
+    terminalLabel,
+    dashboardLabel,
+  );
 
   if (crumbs.length === 0) return null;
 

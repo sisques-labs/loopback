@@ -43,6 +43,7 @@ export function MobileNavDrawer({ sidebarDict, headerDict, localePrefix }: Props
           </div>
           <NavLinks
             localePrefix={localePrefix}
+            dashboardLinkLabel={sidebarDict.dashboard}
             servicesLabel={sidebarDict.services}
             settingsSectionLabel={sidebarDict.settingsSection}
             settingsLinkLabel={sidebarDict.settings}

@@ -9,6 +9,7 @@ const dict = {
     closeMenu: "Cerrar menú de navegación",
   },
   sidebar: {
+    dashboard: "Panel",
     services: "Servicios",
     settingsSection: "Configuración",
     settings: "Ajustes",

@@ -33,6 +33,7 @@ export default async function DashboardLayout({
                 locale={locale}
                 settingsLabel={dict.shared.sidebar.settings}
                 terminalLabel={dict.terminal.title}
+                dashboardLabel={dict.shared.sidebar.dashboard}
               />
             }
           />
