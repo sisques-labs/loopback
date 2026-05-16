@@ -1,6 +1,6 @@
 import { ConnectionStatus } from "@/features/dashboard/components/connection-status/connection-status";
 import { ServiceGrid } from "@/features/dashboard/components/service-grid/service-grid";
-import { getLocalStackHealth } from "@/features/dashboard/lib/health";
+import { getEndpointHealth } from "@/features/dashboard/lib/health";
 import { getDictionary } from "@/features/shared/i18n/get-dictionary";
 import { DEFAULT_LOCALE, isLocale, type Locale } from "@/features/shared/i18n/locale";
 
@@ -17,7 +17,7 @@ export default async function DashboardPage({ params }: Props) {
   const dashboard = dict.dashboard;
   const localePrefix = `/${locale}`;
 
-  const health = await getLocalStackHealth();
+  const health = await getEndpointHealth();
 
   return (
     <div className="flex flex-col gap-6">
