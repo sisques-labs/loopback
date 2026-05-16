@@ -1,12 +1,38 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+## [0.4.0-alpha.0] - 2026-05-16
+
+### Bug Fixes
+- **s3:** Add back link on bucket detail page (35d4090)
+- **terminal:** Import tools inside NavLinks to avoid RSC serialization error (68770a5)
+- **terminal:** Send command as argv array to match route contract; disable xterm stdin (5c36c19)
+- **terminal:** Resolve CSS vars for xterm theme at runtime; echo command before run (d1d473c)
+
+### Features
+- **shared:** Add route breadcrumbs to dashboard header (e0d1f39)
+- **shared:** Rebrand to Loopback (1265a27)
+- **terminal:** Add ToolEntry registry, sidebar Tools section, and SSE execute API (19b6633)
+- **terminal:** Add xterm.js UI components and terminal page (8f68b48)
+- **terminal:** Add experimental PageNotice banner (7fac20b)
+- **dashboard:** Add health probe and i18n foundation (9d7f1bc)
+- **dashboard:** Add landing page, service grid, and nav home link (22dc273)
+
+### Refactor
+- **dashboard:** Rename health API to endpoint-neutral names (bc7693b)
+- **dashboard:** Use getEndpointHealth on dashboard page (cd1cc1c)
+
+### Testing
+- **dashboard:** Cover health UI, service grid, crumbs, and nav (9bcb336)
 ## [0.3.0-alpha.0] - 2026-05-16
 
 ### Bug Fixes
 - **s3:** Add missing confirm key in ObjectRowActions test mock (bb391aa)
 - **s3:** Address verify warnings — AbortSignal, key rename, toast severity (8eaa6a3)
 - **s3:** Restore missing previewDict prop on ObjectTable (89606ea)
+
+### Chore
+- Release v0.3.0-alpha.0 (32c2756)
 
 ### Features
 - **s3:** Add in-app file preview for objects (2e1053b)
