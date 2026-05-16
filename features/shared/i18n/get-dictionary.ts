@@ -1,5 +1,7 @@
 import enShared from "./en";
 import esShared from "./es";
+import enDashboard from "@/features/dashboard/i18n/en";
+import esDashboard from "@/features/dashboard/i18n/es";
 import enS3 from "@/features/s3/i18n/en";
 import esS3 from "@/features/s3/i18n/es";
 import enSNS from "@/features/sns/i18n/en";
@@ -17,6 +19,7 @@ import type { WidenStringLiterals } from "./widen-literals";
 
 export type AppDict = {
   shared: WidenStringLiterals<typeof enShared>;
+  dashboard: WidenStringLiterals<typeof enDashboard>;
   s3: WidenStringLiterals<typeof enS3>;
   sns: WidenStringLiterals<typeof enSNS>;
   sqs: WidenStringLiterals<typeof enSQS>;
@@ -28,6 +31,7 @@ export type AppDict = {
 const dictionaries: Record<Locale, AppDict> = {
   en: {
     shared: enShared,
+    dashboard: enDashboard,
     s3: enS3,
     sns: enSNS,
     sqs: enSQS,
@@ -37,6 +41,7 @@ const dictionaries: Record<Locale, AppDict> = {
   },
   es: {
     shared: esShared,
+    dashboard: esDashboard,
     s3: esS3,
     sns: esSNS,
     sqs: esSQS,

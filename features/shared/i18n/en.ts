@@ -4,6 +4,7 @@ const dict = {
     closeMenu: "Close navigation menu",
   },
   sidebar: {
+    dashboard: "Dashboard",
     services: "Services",
     settingsSection: "Configuration",
     settings: "Settings",

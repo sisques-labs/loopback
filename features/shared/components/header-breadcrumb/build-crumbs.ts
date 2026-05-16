@@ -35,6 +35,7 @@ export function buildCrumbs(
   locale: Locale,
   settingsLabel: string,
   terminalLabel?: string,
+  dashboardLabel?: string,
 ): Crumb[] {
   const localePrefix = `/${locale}`;
 
@@ -50,6 +51,10 @@ export function buildCrumbs(
 
   if (serviceSlug === "settings") {
     return [{ label: settingsLabel }];
+  }
+
+  if (serviceSlug === "dashboard") {
+    return [{ label: dashboardLabel ?? "Dashboard" }];
   }
 
   if (serviceSlug === "terminal") {
