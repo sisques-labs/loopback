@@ -7,8 +7,9 @@ vi.mock("next/navigation", () => ({
   usePathname: vi.fn(),
 }));
 
+const mockTools = vi.hoisted<ToolEntry[]>(() => []);
 vi.mock("@/lib/tools-registry", () => ({
-  tools: [],
+  get tools() { return mockTools; },
 }));
 
 import { usePathname } from "next/navigation";
@@ -73,15 +74,16 @@ describe("NavLinks", () => {
       icon: () => null,
     };
 
-    it("renders Tools section and terminal link when toolsSectionLabel and tools provided", () => {
+    beforeEach(() => {
+      mockTools.length = 0;
+    });
+
+    it("renders Tools section and terminal link when toolsSectionLabel provided and registry has tools", () => {
       vi.mocked(usePathname).mockReturnValue("/en/s3");
+      mockTools.push(terminalTool);
 
       render(
-        <NavLinks
-          localePrefix="/en"
-          toolsSectionLabel="Tools"
-          tools={[terminalTool]}
-        />,
+        <NavLinks localePrefix="/en" toolsSectionLabel="Tools" />,
       );
 
       expect(screen.getByText("Tools")).toBeDefined();
@@ -90,27 +92,19 @@ describe("NavLinks", () => {
 
     it("does not render Tools section when toolsSectionLabel is omitted", () => {
       vi.mocked(usePathname).mockReturnValue("/en/s3");
+      mockTools.push(terminalTool);
 
-      render(
-        <NavLinks
-          localePrefix="/en"
-          tools={[terminalTool]}
-        />,
-      );
+      render(<NavLinks localePrefix="/en" />);
 
       expect(screen.queryByText("Tools")).toBeNull();
       expect(screen.queryByRole("link", { name: "Terminal" })).toBeNull();
     });
 
-    it("does not render Tools section when tools array is empty", () => {
+    it("does not render Tools section when registry is empty", () => {
       vi.mocked(usePathname).mockReturnValue("/en/s3");
 
       render(
-        <NavLinks
-          localePrefix="/en"
-          toolsSectionLabel="Tools"
-          tools={[]}
-        />,
+        <NavLinks localePrefix="/en" toolsSectionLabel="Tools" />,
       );
 
       expect(screen.queryByText("Tools")).toBeNull();
@@ -118,13 +112,10 @@ describe("NavLinks", () => {
 
     it("marks terminal link active with aria-current and pill classes on /en/terminal", () => {
       vi.mocked(usePathname).mockReturnValue("/en/terminal");
+      mockTools.push(terminalTool);
 
       render(
-        <NavLinks
-          localePrefix="/en"
-          toolsSectionLabel="Tools"
-          tools={[terminalTool]}
-        />,
+        <NavLinks localePrefix="/en" toolsSectionLabel="Tools" />,
       );
 
       const link = screen.getByRole("link", { name: "Terminal" });
@@ -135,13 +126,10 @@ describe("NavLinks", () => {
 
     it("terminal link is inactive on /en/s3", () => {
       vi.mocked(usePathname).mockReturnValue("/en/s3");
+      mockTools.push(terminalTool);
 
       render(
-        <NavLinks
-          localePrefix="/en"
-          toolsSectionLabel="Tools"
-          tools={[terminalTool]}
-        />,
+        <NavLinks localePrefix="/en" toolsSectionLabel="Tools" />,
       );
 
       const link = screen.getByRole("link", { name: "Terminal" });
