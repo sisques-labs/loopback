@@ -105,7 +105,7 @@ describe("TerminalPanel", () => {
         "/api/terminal/execute",
         expect.objectContaining({
           method: "POST",
-          body: JSON.stringify({ command: "awslocal", args: ["s3", "ls"] }),
+          body: JSON.stringify({ command: ["awslocal", "s3", "ls"] }),
         }),
       );
     });

@@ -32,6 +32,7 @@ export function TerminalOutput({ terminalRef }: Props) {
     if (!containerRef.current) return;
 
     const term = new Terminal({
+      disableStdin: true,
       convertEol: true,
       theme: {
         background: "var(--color-background)",
