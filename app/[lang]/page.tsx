@@ -6,5 +6,5 @@ type Props = {
 
 export default async function LangHome({ params }: Props) {
   const { lang } = await params;
-  redirect(`/${lang}/s3`);
+  redirect(`/${lang}/dashboard`);
 }
