@@ -40,12 +40,21 @@ const dict = {
   },
   objectRowActions: {
     actions: "Acciones del objeto",
+    preview: "Vista previa",
     download: "Descargar",
     rename: "Renombrar",
     delete: "Eliminar",
     deleteTitle: "Eliminar objeto",
     deleteConfirm:
       "¿Seguro que quieres eliminar {key}? Esta acción no se puede deshacer.",
+  },
+  previewDialog: {
+    title: "Vista previa",
+    loading: "Cargando vista previa…",
+    unsupported: "Este tipo de archivo no se puede previsualizar.",
+    tooLarge: "Archivo demasiado grande para previsualizar (máx. 1 MB).",
+    downloadInstead: "Descargar en su lugar",
+    error: "No se pudo cargar la vista previa.",
   },
   renameObjectDialog: {
     title: "Renombrar objeto",

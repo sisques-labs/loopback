@@ -10,6 +10,7 @@ export type S3Object = {
   lastModified: string;
   etag?: string;
   storageClass?: string;
+  contentType?: string;
 };
 
 export type UploadResult =

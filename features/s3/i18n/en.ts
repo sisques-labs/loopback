@@ -35,12 +35,21 @@ const dict = {
   },
   objectRowActions: {
     actions: "Object actions",
+    preview: "Preview",
     download: "Download",
     rename: "Rename",
     delete: "Delete",
     deleteTitle: "Delete object",
     deleteConfirm:
       "Are you sure you want to delete {key}? This action cannot be undone.",
+  },
+  previewDialog: {
+    title: "Preview",
+    loading: "Loading preview…",
+    unsupported: "This file type can't be previewed.",
+    tooLarge: "File too large to preview (max 1 MB).",
+    downloadInstead: "Download instead",
+    error: "Couldn't load preview.",
   },
   renameObjectDialog: {
     title: "Rename object",
