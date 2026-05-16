@@ -4,6 +4,7 @@ const dict = {
     empty: "No buckets found in this account.",
   },
   bucketDetail: {
+    back: "Back to buckets",
     empty: "This bucket is empty.",
   },
   bucketTable: {
