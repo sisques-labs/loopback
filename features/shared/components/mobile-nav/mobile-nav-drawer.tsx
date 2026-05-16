@@ -5,6 +5,7 @@ import { XIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { NavLinks } from "./nav-links";
 import { Logo } from "@/features/shared/components/logo/logo";
+import { tools } from "@/lib/tools-registry";
 import { useMobileNavStore } from "@/features/shared/stores/mobile-nav-store";
 import type { AppDict } from "@/features/shared/i18n/get-dictionary";
 
@@ -46,6 +47,8 @@ export function MobileNavDrawer({ sidebarDict, headerDict, localePrefix }: Props
             servicesLabel={sidebarDict.services}
             settingsSectionLabel={sidebarDict.settingsSection}
             settingsLinkLabel={sidebarDict.settings}
+            tools={tools}
+            toolsSectionLabel={sidebarDict.tools}
             onNavigate={() => setOpen(false)}
           />
         </DialogPrimitive.Popup>

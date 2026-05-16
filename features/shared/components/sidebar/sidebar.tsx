@@ -1,5 +1,6 @@
 import { NavLinks } from "@/features/shared/components/mobile-nav/nav-links";
 import { Logo } from "@/features/shared/components/logo/logo";
+import { tools } from "@/lib/tools-registry";
 import type { AppDict } from "@/features/shared/i18n/get-dictionary";
 
 type Props = {
@@ -16,6 +17,8 @@ export function Sidebar({ dict, localePrefix }: Props) {
         servicesLabel={dict.services}
         settingsSectionLabel={dict.settingsSection}
         settingsLinkLabel={dict.settings}
+        tools={tools}
+        toolsSectionLabel={dict.tools}
       />
     </aside>
   );

@@ -5,12 +5,15 @@ import { usePathname } from "next/navigation";
 import { Settings } from "lucide-react";
 import { services } from "@/lib/services-registry";
 import { cn } from "@/lib/utils";
+import type { ToolEntry } from "@/features/shared/types/service-entry";
 
 type Props = {
   localePrefix: string;
   servicesLabel?: string;
   settingsSectionLabel?: string;
   settingsLinkLabel?: string;
+  tools?: ToolEntry[];
+  toolsSectionLabel?: string;
   onNavigate?: () => void;
 };
 
@@ -29,11 +32,14 @@ export function NavLinks({
   servicesLabel,
   settingsSectionLabel,
   settingsLinkLabel,
+  tools,
+  toolsSectionLabel,
   onNavigate,
 }: Props) {
   const pathname = usePathname();
   const enabled = services.filter((s) => s.status === "enabled");
   const settingsHref = `${localePrefix}/settings`;
+  const hasTools = toolsSectionLabel && tools && tools.length > 0;
 
   return (
     <>
@@ -66,6 +72,37 @@ export function NavLinks({
           );
         })}
       </nav>
+      {hasTools && (
+        <>
+          <p className="mb-2 mt-6 text-xs font-semibold uppercase tracking-widest text-muted-foreground md:mb-6">
+            {toolsSectionLabel}
+          </p>
+          <nav className="flex flex-col gap-1" aria-label={toolsSectionLabel}>
+            {tools!.map((tool) => {
+              const Icon = tool.icon;
+              const href = `${localePrefix}${tool.href}`;
+              const active = isActivePath(pathname, href);
+              return (
+                <Link
+                  key={tool.id}
+                  href={href}
+                  className={cn(
+                    navLinkBaseClass,
+                    active
+                      ? "bg-sidebar-primary text-sidebar-primary-foreground"
+                      : "text-sidebar-foreground",
+                  )}
+                  aria-current={active ? "page" : undefined}
+                  onClick={onNavigate}
+                >
+                  <Icon className="size-4 shrink-0" />
+                  {tool.label}
+                </Link>
+              );
+            })}
+          </nav>
+        </>
+      )}
       {settingsSectionLabel && settingsLinkLabel && (
         <>
           <p className="mb-2 mt-6 text-xs font-semibold uppercase tracking-widest text-muted-foreground md:mb-6">

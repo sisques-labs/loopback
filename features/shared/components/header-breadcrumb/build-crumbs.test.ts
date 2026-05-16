@@ -157,4 +157,24 @@ describe("buildCrumbs", () => {
     const crumbs = buildCrumbs("/en/s3", "en", "Settings");
     expect(crumbs.map((c) => c.label)).not.toContain("en");
   });
+
+  // Terminal breadcrumb
+  it("returns single Terminal crumb for /en/terminal", () => {
+    const crumbs = buildCrumbs("/en/terminal", "en", "Settings", "Terminal");
+    expect(crumbs).toHaveLength(1);
+    expect(crumbs[0].label).toBe("Terminal");
+    expect(crumbs[0].href).toBeUndefined();
+  });
+
+  it("does not return empty array for /en/terminal", () => {
+    const crumbs = buildCrumbs("/en/terminal", "en", "Settings", "Terminal");
+    expect(crumbs.length).toBeGreaterThan(0);
+  });
+
+  it("returns fallback 'Terminal' crumb when terminalLabel is undefined", () => {
+    const crumbs = buildCrumbs("/en/terminal", "en", "Settings", undefined);
+    expect(crumbs).toHaveLength(1);
+    expect(crumbs[0].label).toBe("Terminal");
+    expect(crumbs[0].href).toBeUndefined();
+  });
 });

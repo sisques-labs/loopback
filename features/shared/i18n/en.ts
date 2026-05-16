@@ -7,6 +7,10 @@ const dict = {
     services: "Services",
     settingsSection: "Configuration",
     settings: "Settings",
+    tools: "Tools",
+  },
+  terminal: {
+    title: "Terminal",
   },
   settings: {
     title: "Settings",
