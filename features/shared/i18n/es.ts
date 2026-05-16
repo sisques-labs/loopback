@@ -14,9 +14,6 @@ const dict = {
     settings: "Ajustes",
     tools: "Herramientas",
   },
-  terminal: {
-    title: "Terminal",
-  },
   settings: {
     title: "Ajustes",
     languageTitle: "Idioma",
