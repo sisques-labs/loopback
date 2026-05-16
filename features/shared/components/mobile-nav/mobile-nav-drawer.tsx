@@ -4,6 +4,7 @@ import { Dialog as DialogPrimitive } from "@base-ui/react/dialog";
 import { XIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { NavLinks } from "./nav-links";
+import { Logo } from "@/features/shared/components/logo/logo";
 import { useMobileNavStore } from "@/features/shared/stores/mobile-nav-store";
 import type { AppDict } from "@/features/shared/i18n/get-dictionary";
 
@@ -25,7 +26,8 @@ export function MobileNavDrawer({ sidebarDict, headerDict, localePrefix }: Props
           id="mobile-nav-drawer"
           className="fixed inset-y-0 left-0 z-50 flex w-64 flex-col bg-sidebar px-4 py-6 shadow-sm duration-200 data-open:animate-in data-open:slide-in-from-left data-closed:animate-out data-closed:slide-out-to-left outline-none"
         >
-          <div className="mb-4 flex items-center justify-end">
+          <div className="mb-4 flex items-center justify-between">
+            <Logo />
             <DialogPrimitive.Close
               render={
                 <Button
@@ -44,6 +46,7 @@ export function MobileNavDrawer({ sidebarDict, headerDict, localePrefix }: Props
             servicesLabel={sidebarDict.services}
             settingsSectionLabel={sidebarDict.settingsSection}
             settingsLinkLabel={sidebarDict.settings}
+            toolsSectionLabel={sidebarDict.tools}
             onNavigate={() => setOpen(false)}
           />
         </DialogPrimitive.Popup>

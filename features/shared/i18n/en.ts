@@ -7,6 +7,7 @@ const dict = {
     services: "Services",
     settingsSection: "Configuration",
     settings: "Settings",
+    tools: "Tools",
   },
   settings: {
     title: "Settings",

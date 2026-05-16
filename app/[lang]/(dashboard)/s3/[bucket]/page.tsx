@@ -1,3 +1,5 @@
+import Link from "next/link";
+import { ArrowLeftIcon } from "lucide-react";
 import { ObjectTable } from "@/features/s3/components/object-table/object-table";
 import { UploadDialog } from "@/features/s3/components/upload-dialog/upload-dialog";
 import { DropZoneWrapper } from "@/features/s3/components/drop-zone-wrapper/drop-zone-wrapper";
@@ -18,18 +20,30 @@ export default async function BucketPage({ params }: Props) {
   const dict = getDictionary(locale);
   const s3 = dict.s3;
   const shared = dict.shared;
+  const localePrefix = `/${locale}`;
   const objects = await listObjects(bucket);
 
   if (objects.length === 0) {
     return (
       <DropZoneWrapper bucket={bucket} prefix="" dict={s3.uploadDialog}>
-        <div className="flex flex-col items-start gap-4">
-          <div className="flex w-full min-w-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
-            <div className="min-w-0">
-              <h1 className="text-xl font-semibold break-words">{bucket}</h1>
-              <p className="mt-1 text-sm text-muted-foreground">{s3.bucketDetail.empty}</p>
+        <div className="flex flex-col gap-6">
+          <div>
+            <Link
+              href={`${localePrefix}/s3`}
+              className="inline-flex min-h-11 min-w-11 items-center gap-2 text-sm text-muted-foreground hover:text-foreground md:min-h-9 md:min-w-9"
+            >
+              <ArrowLeftIcon className="size-4 shrink-0" aria-hidden />
+              {s3.bucketDetail.back}
+            </Link>
+          </div>
+          <div className="flex flex-col items-start gap-4">
+            <div className="flex w-full min-w-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+              <div className="min-w-0">
+                <h1 className="text-xl font-semibold break-words">{bucket}</h1>
+                <p className="mt-1 text-sm text-muted-foreground">{s3.bucketDetail.empty}</p>
+              </div>
+              <UploadDialog bucket={bucket} dict={s3.uploadDialog} closeLabel={shared.dialog.close} />
             </div>
-            <UploadDialog bucket={bucket} dict={s3.uploadDialog} closeLabel={shared.dialog.close}/>
           </div>
         </div>
       </DropZoneWrapper>
@@ -38,19 +52,30 @@ export default async function BucketPage({ params }: Props) {
 
   return (
     <DropZoneWrapper bucket={bucket} prefix="" dict={s3.uploadDialog}>
-      <div className="flex flex-col gap-4">
-        <h1 className="min-w-0 text-xl font-semibold break-words">{bucket}</h1>
-        <ObjectTable
-          bucket={bucket}
-          objects={objects}
-          dict={s3.objectTable}
-          uploadDict={s3.uploadDialog}
-          rowActionsDict={s3.objectRowActions}
-          renameActionsDict={s3.renameObjectDialog}
-          confirmDict={shared.confirmDialog}
-          previewDict={s3.previewDialog}
-          closeLabel={shared.dialog.close}
-        />
+      <div className="flex flex-col gap-6">
+        <div>
+          <Link
+            href={`${localePrefix}/s3`}
+            className="inline-flex min-h-11 min-w-11 items-center gap-2 text-sm text-muted-foreground hover:text-foreground md:min-h-9 md:min-w-9"
+          >
+            <ArrowLeftIcon className="size-4 shrink-0" aria-hidden />
+            {s3.bucketDetail.back}
+          </Link>
+        </div>
+        <div className="flex flex-col gap-4">
+          <h1 className="min-w-0 text-xl font-semibold break-words">{bucket}</h1>
+          <ObjectTable
+            bucket={bucket}
+            objects={objects}
+            dict={s3.objectTable}
+            uploadDict={s3.uploadDialog}
+            rowActionsDict={s3.objectRowActions}
+            renameActionsDict={s3.renameObjectDialog}
+            confirmDict={shared.confirmDialog}
+            previewDict={s3.previewDialog}
+            closeLabel={shared.dialog.close}
+          />
+        </div>
       </div>
     </DropZoneWrapper>
   );

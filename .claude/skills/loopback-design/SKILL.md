@@ -1,6 +1,6 @@
 ---
-name: aws-local-ui-design
-description: Use this skill to generate well-branded interfaces and assets for AWS Local UI — a Next.js + shadcn dashboard that manages local LocalStack AWS services (S3, SNS, SQS, DynamoDB, Lambda). The system is achromatic-grayscale + one destructive red, Geist + Geist Mono, Lucide icons, with a restrained operator-tool voice. Use for production code, prototypes, mocks, and throwaway visual artifacts.
+name: loopback-design
+description: Use this skill to generate well-branded interfaces and assets for Loopback — a Next.js + shadcn dashboard that manages local LocalStack AWS services (S3, SNS, SQS, DynamoDB, Lambda). The system uses warm bone/ink neutrals with an indigo brand accent (#5B5BD6), Geist + Geist Mono, Lucide icons, and a restrained operator-tool voice. Use for production code, prototypes, mocks, and throwaway visual artifacts.
 user-invocable: true
 ---
 
@@ -19,7 +19,7 @@ of `ui_kits/dashboard/`, then create static HTML files. Always import
 
 If working on production code, you can copy assets and read the rules here to
 become an expert in designing with this brand. The source codebase is at
-[github.com/sisques-labs/aws-local-ui @ dev](https://github.com/sisques-labs/aws-local-ui/tree/dev) —
+[github.com/sisques-labs/loopback @ dev](https://github.com/sisques-labs/aws-local-ui/tree/dev) —
 its components in `components/ui/` and `features/` are the canonical
 implementations.
 
@@ -30,7 +30,8 @@ outputs HTML artifacts *or* production code, depending on the need.
 
 Hard rules to follow when designing in this system:
 
-- **No color outside the token set.** Grayscale + destructive red only.
+- **Brand color is indigo `#5B5BD6` / `oklch(0.49 0.20 281)`.** Use `--brand` /
+  `--primary` tokens — never hard-code hex.
 - **No emoji.** Anywhere.
 - **No marketing voice.** Sentences end with periods. Pending states use `…`.
   Destructive copy names the consequence.

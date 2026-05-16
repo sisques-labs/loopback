@@ -12,6 +12,7 @@ const dict = {
     services: "Servicios",
     settingsSection: "Configuración",
     settings: "Ajustes",
+    tools: "Herramientas",
   },
   settings: {
     title: "Ajustes",

@@ -35,8 +35,8 @@ jobs:
   release:
     uses: sisques-labs/workflows/.github/workflows/docker-release.yml@main
     with:
-      image_name: sisqueslabs/aws-local-ui
-      ghcr_image_name: ghcr.io/sisques-labs/aws-local-ui
+      image_name: sisqueslabs/loopback
+      ghcr_image_name: ghcr.io/sisques-labs/loopback
       push_ghcr: true
       version: ${{ inputs.version }}
       release_type: ${{ inputs.release_type }}

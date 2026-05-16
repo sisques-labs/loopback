@@ -10,6 +10,8 @@ import enLambda from "@/features/lambda/i18n/en";
 import esLambda from "@/features/lambda/i18n/es";
 import enDynamoDB from "@/features/dynamodb/i18n/en";
 import esDynamoDB from "@/features/dynamodb/i18n/es";
+import enTerminal from "@/features/terminal/i18n/en";
+import esTerminal from "@/features/terminal/i18n/es";
 import type { Locale } from "./locale";
 import type { WidenStringLiterals } from "./widen-literals";
 
@@ -20,11 +22,28 @@ export type AppDict = {
   sqs: WidenStringLiterals<typeof enSQS>;
   lambda: WidenStringLiterals<typeof enLambda>;
   dynamodb: WidenStringLiterals<typeof enDynamoDB>;
+  terminal: WidenStringLiterals<typeof enTerminal>;
 };
 
 const dictionaries: Record<Locale, AppDict> = {
-  en: { shared: enShared, s3: enS3, sns: enSNS, sqs: enSQS, lambda: enLambda, dynamodb: enDynamoDB },
-  es: { shared: esShared, s3: esS3, sns: esSNS, sqs: esSQS, lambda: esLambda, dynamodb: esDynamoDB },
+  en: {
+    shared: enShared,
+    s3: enS3,
+    sns: enSNS,
+    sqs: enSQS,
+    lambda: enLambda,
+    dynamodb: enDynamoDB,
+    terminal: enTerminal,
+  },
+  es: {
+    shared: esShared,
+    s3: esS3,
+    sns: esSNS,
+    sqs: esSQS,
+    lambda: esLambda,
+    dynamodb: esDynamoDB,
+    terminal: esTerminal,
+  },
 };
 
 export function getDictionary(locale: Locale): AppDict {

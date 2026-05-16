@@ -7,3 +7,10 @@ export type ServiceEntry = {
   href: string;
   status: "enabled" | "coming-soon";
 };
+
+export type ToolEntry = {
+  id: string;
+  label: string;
+  icon: LucideIcon;
+  href: string;
+};

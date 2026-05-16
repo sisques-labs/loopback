@@ -9,6 +9,7 @@ const dict = {
     empty: "No hay buckets en esta cuenta.",
   },
   bucketDetail: {
+    back: "Volver a los buckets",
     empty: "Este bucket está vacío.",
   },
   bucketTable: {
