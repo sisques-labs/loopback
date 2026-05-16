@@ -64,6 +64,8 @@ const dict = {
       submitting: "Enviando…",
       submit: "Enviar",
       successToast: "Mensaje enviado a {queue}.",
+      invalidJson: "JSON con sintaxis inválida.",
+      formatButton: "Formatear JSON",
     },
     receive: {
       trigger: "Recibir mensajes",
