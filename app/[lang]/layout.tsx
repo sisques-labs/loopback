@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import { redirect } from "next/navigation";
@@ -17,8 +17,22 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "AWS Local UI",
-  description: "Local AWS services dashboard",
+  title: "Loopback",
+  description: "Local AWS services dashboard — manage S3, SQS, SNS, DynamoDB, and Lambda on LocalStack.",
+  icons: {
+    icon: [
+      { url: "/favicon-48.png", sizes: "48x48" },
+      { url: "/favicon-32.png", sizes: "32x32" },
+      { url: "/favicon-16.png", sizes: "16x16" },
+    ],
+    shortcut: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
+  },
+  manifest: "/site.webmanifest",
+};
+
+export const viewport: Viewport = {
+  themeColor: "#5B5BD6",
 };
 
 export function generateStaticParams() {

@@ -45,10 +45,10 @@ mirror is closer to your runtime.
 
 ```bash
 # Docker Hub
-docker pull sisqueslabs/aws-local-ui:latest
+docker pull sisqueslabs/loopback:latest
 
 # GitHub Container Registry (GHCR)
-docker pull ghcr.io/sisques-labs/aws-local-ui:latest
+docker pull ghcr.io/sisques-labs/loopback:latest
 ```
 
 ### Run
@@ -57,18 +57,18 @@ The container exposes the dashboard on port `3000`. Map it to any host port you 
 [http://localhost:3000](http://localhost:3000):
 
 ```bash
-docker run --rm -p 3000:3000 sisqueslabs/aws-local-ui:latest
+docker run --rm -p 3000:3000 sisqueslabs/loopback:latest
 ```
 
 Or, against the GHCR mirror:
 
 ```bash
-docker run --rm -p 3000:3000 ghcr.io/sisques-labs/aws-local-ui:latest
+docker run --rm -p 3000:3000 ghcr.io/sisques-labs/loopback:latest
 ```
 
 ### Connect to LocalStack
 
-`aws-local-ui` is a thin operator dashboard for AWS services running on your machine — usually
+Loopback is a thin operator dashboard for AWS services running on your machine — usually
 [LocalStack](https://www.localstack.cloud/). Point it at your LocalStack endpoint with two env
 vars (`NEXT_PUBLIC_AWS_ENDPOINT_URL` mirrors `AWS_ENDPOINT_URL` for browser-side error hints):
 
@@ -79,7 +79,7 @@ docker run --rm -p 3000:3000 \
   -e AWS_REGION=us-east-1 \
   -e AWS_ACCESS_KEY_ID=test \
   -e AWS_SECRET_ACCESS_KEY=test \
-  sisqueslabs/aws-local-ui:latest
+  sisqueslabs/loopback:latest
 ```
 
 On Linux hosts where `host.docker.internal` is not resolved by default, add
