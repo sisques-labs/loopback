@@ -1,6 +1,6 @@
 # Design system
 
-Living guide for the AWS Local UI dashboard. Reflects what's currently shipping
+Living guide for the Loopback dashboard. Reflects what's currently shipping
 in the codebase — not aspirational. When code and this doc disagree, **code wins**;
 update this doc.
 
@@ -71,13 +71,16 @@ control (`components/ui/dialog.tsx`).
 
 ### The big idea
 
-**Achromatic + one red.** The entire UI is built on a grayscale OKLCH ramp from
-`oklch(0.145 0 0)` (near-black) to `oklch(1 0 0)` (pure white). The only
-chromatic color is `--destructive` (red ~`oklch(0.577 0.245 27.3)`), used for
-delete actions and invalid states. Charts are monochrome.
+**Warm neutral + indigo brand + one red.** The UI is built on a warm bone/ink
+OKLCH ramp — bone `#F6F5F1` (`oklch(0.965 0.003 85)`) as the light background,
+ink `#0E0E10` (`oklch(0.157 0.003 280)`) as text. The brand accent is indigo
+`#5B5BD6` (`oklch(0.49 0.20 281)`) in light mode, lifting to `#7C7CE0`
+(`oklch(0.59 0.165 281)`) in dark mode for AA contrast. `--destructive` (red
+~`oklch(0.577 0.245 27.3)`) covers delete actions and invalid states. Charts are
+kept achromatic for neutral data viz.
 
-Dark mode has one exception: `--sidebar-primary` is a blue
-(`oklch(0.488 0.243 264.4)`) reserved for the active sidebar pill.
+`--brand` / `--brand-foreground` are first-class tokens alongside `--primary`.
+`--sidebar-primary` is the indigo brand accent in both light and dark modes.
 
 ### Tokens
 
@@ -89,11 +92,12 @@ OKLCH/hex.
 | ------------------------------ | ------------------------------------------ |
 | `--background` / `--foreground`| page bg, primary text                      |
 | `--card` / `--popover`         | cards, dialogs, dropdowns                  |
-| `--primary`                    | default button fill                        |
+| `--brand` / `--brand-foreground`| indigo accent — use `bg-brand` / `text-brand-foreground` |
+| `--primary`                    | default button fill (= `--brand`)          |
 | `--secondary` / `--muted` / `--accent` | hover fills, muted backgrounds     |
 | `--muted-foreground`           | secondary text                             |
 | `--border` / `--input`         | every divider, input outline               |
-| `--ring`                       | focus ring (3px, 50% alpha)                |
+| `--ring`                       | focus ring (3px, indigo at 60% alpha)      |
 | `--destructive`                | delete, errors, aria-invalid               |
 | `--sidebar*`                   | the sidebar's separate palette             |
 

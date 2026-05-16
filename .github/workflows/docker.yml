@@ -28,6 +28,6 @@ jobs:
           platforms: linux/amd64
           push: false
           load: false
-          tags: aws-local-ui:smoke
+          tags: loopback:smoke
           cache-from: type=gha
           cache-to: type=gha,mode=max

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 80" width="320" height="80">
+  
+  <svg x="8" y="12" width="56" height="56" viewBox="0 0 64 64">
+    <path d="M8 8 H24 V14 H14 V50 H24 V56 H8 Z" fill="#0E0E10"></path>
+    <path d="M56 8 H40 V14 H50 V50 H40 V56 H56 Z" fill="#5B5BD6"></path>
+  </svg>
+  <text x="80" y="55" font-family="&#39;Space Grotesk&#39;, &#39;SF Pro Display&#39;, &#39;Helvetica Neue&#39;, system-ui, sans-serif" font-weight="600" font-size="42" letter-spacing="-1.4" fill="#0E0E10">Loopback</text>
+</svg>
