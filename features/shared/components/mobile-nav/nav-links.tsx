@@ -4,15 +4,14 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Settings } from "lucide-react";
 import { services } from "@/lib/services-registry";
+import { tools } from "@/lib/tools-registry";
 import { cn } from "@/lib/utils";
-import type { ToolEntry } from "@/features/shared/types/service-entry";
 
 type Props = {
   localePrefix: string;
   servicesLabel?: string;
   settingsSectionLabel?: string;
   settingsLinkLabel?: string;
-  tools?: ToolEntry[];
   toolsSectionLabel?: string;
   onNavigate?: () => void;
 };
@@ -32,14 +31,13 @@ export function NavLinks({
   servicesLabel,
   settingsSectionLabel,
   settingsLinkLabel,
-  tools,
   toolsSectionLabel,
   onNavigate,
 }: Props) {
   const pathname = usePathname();
   const enabled = services.filter((s) => s.status === "enabled");
   const settingsHref = `${localePrefix}/settings`;
-  const hasTools = toolsSectionLabel && tools && tools.length > 0;
+  const hasTools = toolsSectionLabel && tools.length > 0;
 
   return (
     <>
@@ -78,7 +76,7 @@ export function NavLinks({
             {toolsSectionLabel}
           </p>
           <nav className="flex flex-col gap-1" aria-label={toolsSectionLabel}>
-            {tools!.map((tool) => {
+            {tools.map((tool) => {
               const Icon = tool.icon;
               const href = `${localePrefix}${tool.href}`;
               const active = isActivePath(pathname, href);
