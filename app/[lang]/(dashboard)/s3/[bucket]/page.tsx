@@ -48,6 +48,7 @@ export default async function BucketPage({ params }: Props) {
           rowActionsDict={s3.objectRowActions}
           renameActionsDict={s3.renameObjectDialog}
           confirmDict={shared.confirmDialog}
+          previewDict={s3.previewDialog}
           closeLabel={shared.dialog.close}
         />
       </div>
