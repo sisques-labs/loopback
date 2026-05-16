@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { UploadIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -13,8 +14,6 @@ import {
   DialogTrigger,
   DialogClose,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import type { AppDict } from "@/features/shared/i18n/get-dictionary";
 import { runUploadBatch } from "@/features/s3/lib/run-upload-batch";
 
@@ -28,8 +27,9 @@ export function UploadDialog({ bucket, dict, closeLabel }: Props) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
-  // Counter ref for nested drag tracking (prevents flickering on child elements)
+  // Counter ref prevents flicker when cursor moves over child elements
   const dragCounterRef = useRef(0);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -41,7 +41,6 @@ export function UploadDialog({ bucket, dict, closeLabel }: Props) {
     }
     setError(null);
     setOpen(false);
-
     await runUploadBatch({ bucket, files, dict, onDone: () => router.refresh() });
   }
 
@@ -49,9 +48,7 @@ export function UploadDialog({ bucket, dict, closeLabel }: Props) {
     e.preventDefault();
     e.stopPropagation();
     dragCounterRef.current++;
-    if (dragCounterRef.current === 1) {
-      (e.currentTarget as HTMLElement).setAttribute("data-dragging", "true");
-    }
+    if (dragCounterRef.current === 1) setIsDragging(true);
   }
 
   function handleDragOver(e: React.DragEvent<HTMLDivElement>) {
@@ -65,7 +62,7 @@ export function UploadDialog({ bucket, dict, closeLabel }: Props) {
     dragCounterRef.current--;
     if (dragCounterRef.current <= 0) {
       dragCounterRef.current = 0;
-      (e.currentTarget as HTMLElement).removeAttribute("data-dragging");
+      setIsDragging(false);
     }
   }
 
@@ -73,11 +70,9 @@ export function UploadDialog({ bucket, dict, closeLabel }: Props) {
     e.preventDefault();
     e.stopPropagation();
     dragCounterRef.current = 0;
-    (e.currentTarget as HTMLElement).removeAttribute("data-dragging");
-
+    setIsDragging(false);
     const files = Array.from(e.dataTransfer.files);
     if (files.length === 0) return;
-
     await runUploadBatch({ bucket, files, dict, onDone: () => router.refresh() });
   }
 
@@ -97,6 +92,8 @@ export function UploadDialog({ bucket, dict, closeLabel }: Props) {
       </DialogTrigger>
       <DialogContent
         closeLabel={closeLabel}
+        className="sm:max-w-lg"
+        data-dragging={isDragging || undefined}
         onDragEnter={handleDragEnter}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
@@ -106,24 +103,44 @@ export function UploadDialog({ bucket, dict, closeLabel }: Props) {
           <DialogTitle>{dict.title}</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4" encType="multipart/form-data">
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="upload-file">{dict.fileLabel}</Label>
-            <Input
-              id="upload-file"
-              type="file"
-              ref={fileRef}
-              multiple
-              aria-invalid={error ? true : undefined}
+          <button
+            type="button"
+            onClick={() => fileRef.current?.click()}
+            className={cn(
+              "flex w-full flex-col items-center justify-center gap-3 rounded-lg border-2 border-dashed p-12 transition-colors",
+              isDragging
+                ? "border-primary bg-primary/10 text-primary"
+                : "border-border text-muted-foreground hover:border-primary/50 hover:text-foreground"
+            )}
+            aria-label={dict.dropHere}
+          >
+            <UploadIcon
+              className={cn(
+                "size-10 transition-transform duration-150",
+                isDragging && "scale-110"
+              )}
             />
-            {error && <p className="text-xs text-destructive">{error}</p>}
-          </div>
+            <div className="text-center">
+              <p className="text-sm font-medium">{dict.dropHere}</p>
+              <p className="mt-1 text-xs">{dict.selectMultiple}</p>
+            </div>
+          </button>
+
+          <input
+            id="upload-file"
+            type="file"
+            ref={fileRef}
+            multiple
+            className="sr-only"
+            aria-invalid={error ? true : undefined}
+          />
+          {error && <p className="text-xs text-destructive">{error}</p>}
+
           <DialogFooter>
             <DialogClose render={<Button variant="outline" type="button" />}>
               {dict.cancel}
             </DialogClose>
-            <Button type="submit">
-              {dict.submit}
-            </Button>
+            <Button type="submit">{dict.submit}</Button>
           </DialogFooter>
         </form>
       </DialogContent>
