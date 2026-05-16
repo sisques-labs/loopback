@@ -1,7 +1,21 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+## [0.3.0-alpha.0] - 2026-05-16
+
+### Bug Fixes
+- **s3:** Add missing confirm key in ObjectRowActions test mock (bb391aa)
+- **s3:** Address verify warnings — AbortSignal, key rename, toast severity (8eaa6a3)
+- **s3:** Restore missing previewDict prop on ObjectTable (89606ea)
+
+### Features
+- **s3:** Add in-app file preview for objects (2e1053b)
+- **s3:** Add drag-drop multi-file upload (PR 1/2 — Phases 1-3) (573027d)
+- **s3:** Add DropZoneWrapper full-page drop zone and redesign upload dialog (88b1ec0)
 ## [0.2.0-alpha.0] - 2026-05-15
+
+### Chore
+- Release v0.2.0-alpha.0 (e4f60d4)
 
 ### Documentation
 - **changelog:** Seed initial changelog from git history (378d65a)
