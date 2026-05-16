@@ -31,13 +31,14 @@ export function TerminalOutput({ terminalRef }: Props) {
   useEffect(() => {
     if (!containerRef.current) return;
 
+    const style = getComputedStyle(containerRef.current);
+    const bg = style.getPropertyValue("--color-background").trim() || "#09090b";
+    const fg = style.getPropertyValue("--color-foreground").trim() || "#fafafa";
+
     const term = new Terminal({
       disableStdin: true,
       convertEol: true,
-      theme: {
-        background: "var(--color-background)",
-        foreground: "var(--color-foreground)",
-      },
+      theme: { background: bg, foreground: fg },
       fontFamily: "var(--font-mono, monospace)",
       fontSize: 13,
       cursorBlink: false,

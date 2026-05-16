@@ -21,6 +21,7 @@ export function TerminalPanel() {
     const args = argv.slice(1);
 
     setIsRunning(true);
+    terminalRef.current?.write(`\x1b[2m$ ${value}\x1b[0m\r\n`);
 
     try {
       const response = await fetch("/api/terminal/execute", {
