@@ -10,6 +10,7 @@ type SqsErrorsDict = {
   notAuthorized: string;
   endpointUnreachable: string;
   unknown: string;
+  receiptHandleInvalid?: string;
 };
 
 const DEFAULT_DICT: SqsErrorsDict = {
@@ -19,6 +20,8 @@ const DEFAULT_DICT: SqsErrorsDict = {
   notAuthorized: "Not authorized to perform this SQS action.",
   endpointUnreachable: "Cannot connect to LocalStack at {endpoint}. Make sure it is running.",
   unknown: "An unexpected error occurred.",
+  receiptHandleInvalid:
+    "This message's visibility window expired — receive a new batch to retry.",
 };
 
 export function toFriendlyError(err: unknown, dict?: SqsErrorsDict): FriendlyError {
@@ -62,6 +65,15 @@ export function toFriendlyError(err: unknown, dict?: SqsErrorsDict): FriendlyErr
 
     if (name === "AccessDenied" || name === "AccessDeniedException") {
       return { code: "AccessDenied", message: d.notAuthorized };
+    }
+
+    if (name === "ReceiptHandleIsInvalid" || name === "ReceiptHandleExpired") {
+      return {
+        code: name,
+        message:
+          d.receiptHandleInvalid ??
+          "This message's visibility window expired — receive a new batch to retry.",
+      };
     }
 
     const cause = (err as NodeJS.ErrnoException).code;
