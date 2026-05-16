@@ -1,5 +1,6 @@
 import { Sidebar } from "@/features/shared/components/sidebar/sidebar";
 import { Header } from "@/features/shared/components/header/header";
+import { HeaderBreadcrumb } from "@/features/shared/components/header-breadcrumb/header-breadcrumb";
 import { MobileNavTrigger } from "@/features/shared/components/mobile-nav/mobile-nav-trigger";
 import { MobileNavDrawer } from "@/features/shared/components/mobile-nav/mobile-nav-drawer";
 import { UploadProgressModalMount } from "@/features/s3/components/upload-progress-modal/upload-progress-modal-mount";
@@ -26,6 +27,12 @@ export default async function DashboardLayout({
           <Header
             leftSlot={
               <MobileNavTrigger label={dict.shared.header.openMenu} />
+            }
+            centerSlot={
+              <HeaderBreadcrumb
+                locale={locale}
+                settingsLabel={dict.shared.sidebar.settings}
+              />
             }
           />
           <main className="flex-1 overflow-auto p-4 md:p-6">{children}</main>
