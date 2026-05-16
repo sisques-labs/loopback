@@ -22,11 +22,12 @@ const crumbPageClass = `${crumbTouchTarget} min-w-0 max-w-full flex-1 truncate s
 type Props = {
   locale: Locale;
   settingsLabel: string;
+  terminalLabel?: string;
 };
 
-export function HeaderBreadcrumb({ locale, settingsLabel }: Props) {
+export function HeaderBreadcrumb({ locale, settingsLabel, terminalLabel }: Props) {
   const pathname = usePathname();
-  const crumbs = buildCrumbs(pathname, locale, settingsLabel);
+  const crumbs = buildCrumbs(pathname, locale, settingsLabel, terminalLabel);
 
   if (crumbs.length === 0) return null;
 

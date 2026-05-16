@@ -16,6 +16,7 @@ export function Sidebar({ dict, localePrefix }: Props) {
         servicesLabel={dict.services}
         settingsSectionLabel={dict.settingsSection}
         settingsLinkLabel={dict.settings}
+        toolsSectionLabel={dict.tools}
       />
     </aside>
   );

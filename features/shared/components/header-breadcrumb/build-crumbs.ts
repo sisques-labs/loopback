@@ -34,6 +34,7 @@ export function buildCrumbs(
   pathname: string,
   locale: Locale,
   settingsLabel: string,
+  terminalLabel?: string,
 ): Crumb[] {
   const localePrefix = `/${locale}`;
 
@@ -49,6 +50,10 @@ export function buildCrumbs(
 
   if (serviceSlug === "settings") {
     return [{ label: settingsLabel }];
+  }
+
+  if (serviceSlug === "terminal") {
+    return [{ label: terminalLabel ?? "Terminal" }];
   }
 
   const service = services.find((s) => s.slug === serviceSlug);

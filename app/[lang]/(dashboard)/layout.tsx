@@ -32,6 +32,7 @@ export default async function DashboardLayout({
               <HeaderBreadcrumb
                 locale={locale}
                 settingsLabel={dict.shared.sidebar.settings}
+                terminalLabel={dict.shared.terminal.title}
               />
             }
           />

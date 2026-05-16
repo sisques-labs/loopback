@@ -46,6 +46,7 @@ export function MobileNavDrawer({ sidebarDict, headerDict, localePrefix }: Props
             servicesLabel={sidebarDict.services}
             settingsSectionLabel={sidebarDict.settingsSection}
             settingsLinkLabel={sidebarDict.settings}
+            toolsSectionLabel={sidebarDict.tools}
             onNavigate={() => setOpen(false)}
           />
         </DialogPrimitive.Popup>
