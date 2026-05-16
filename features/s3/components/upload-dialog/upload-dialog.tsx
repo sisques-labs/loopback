@@ -2,7 +2,6 @@
 
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner";
 import { UploadIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,51 +16,69 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import type { AppDict } from "@/features/shared/i18n/get-dictionary";
-import { t } from "@/features/shared/i18n/interpolate";
-import { uploadFile } from "@/features/s3/lib/upload";
-import { useUploadProgressStore } from "@/features/shared/stores/upload-progress-store";
+import { runUploadBatch } from "@/features/s3/lib/run-upload-batch";
 
 type Props = {
   bucket: string;
   dict: AppDict["s3"]["uploadDialog"];
-
-    closeLabel: string;
+  closeLabel: string;
 };
 
-export function UploadDialog({ bucket, dict, closeLabel}: Props) {
+export function UploadDialog({ bucket, dict, closeLabel }: Props) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
+  // Counter ref for nested drag tracking (prevents flickering on child elements)
+  const dragCounterRef = useRef(0);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const file = fileRef.current?.files?.[0];
-    if (!file) {
+    const files = Array.from(fileRef.current?.files ?? []);
+    if (files.length === 0) {
       setError(dict.selectFile);
       return;
     }
     setError(null);
-
-    // Register the upload in the store and close the dialog immediately
-    const id = useUploadProgressStore.getState().addItem({ bucket, filename: file.name });
     setOpen(false);
 
-    const result = await uploadFile({
-      bucket,
-      file,
-      onProgress: (p) => useUploadProgressStore.getState().updateProgress(id, p),
-      onFinalizing: () => useUploadProgressStore.getState().setStatus(id, "finalizing"),
-    });
+    await runUploadBatch({ bucket, files, dict, onDone: () => router.refresh() });
+  }
 
-    if (result.ok) {
-      useUploadProgressStore.getState().setStatus(id, "done");
-      toast.success(t(dict.success, { key: result.key }));
-      router.refresh();
-    } else {
-      useUploadProgressStore.getState().setStatus(id, "error", result.error);
-      toast.error(result.error);
+  function handleDragEnter(e: React.DragEvent<HTMLDivElement>) {
+    e.preventDefault();
+    e.stopPropagation();
+    dragCounterRef.current++;
+    if (dragCounterRef.current === 1) {
+      (e.currentTarget as HTMLElement).setAttribute("data-dragging", "true");
     }
+  }
+
+  function handleDragOver(e: React.DragEvent<HTMLDivElement>) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+
+  function handleDragLeave(e: React.DragEvent<HTMLDivElement>) {
+    e.preventDefault();
+    e.stopPropagation();
+    dragCounterRef.current--;
+    if (dragCounterRef.current <= 0) {
+      dragCounterRef.current = 0;
+      (e.currentTarget as HTMLElement).removeAttribute("data-dragging");
+    }
+  }
+
+  async function handleDrop(e: React.DragEvent<HTMLDivElement>) {
+    e.preventDefault();
+    e.stopPropagation();
+    dragCounterRef.current = 0;
+    (e.currentTarget as HTMLElement).removeAttribute("data-dragging");
+
+    const files = Array.from(e.dataTransfer.files);
+    if (files.length === 0) return;
+
+    await runUploadBatch({ bucket, files, dict, onDone: () => router.refresh() });
   }
 
   return (
@@ -78,7 +95,13 @@ export function UploadDialog({ bucket, dict, closeLabel}: Props) {
         <UploadIcon />
         {dict.trigger}
       </DialogTrigger>
-      <DialogContent closeLabel={closeLabel}>
+      <DialogContent
+        closeLabel={closeLabel}
+        onDragEnter={handleDragEnter}
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
+      >
         <DialogHeader>
           <DialogTitle>{dict.title}</DialogTitle>
         </DialogHeader>
@@ -89,7 +112,7 @@ export function UploadDialog({ bucket, dict, closeLabel}: Props) {
               id="upload-file"
               type="file"
               ref={fileRef}
-              required
+              multiple
               aria-invalid={error ? true : undefined}
             />
             {error && <p className="text-xs text-destructive">{error}</p>}
