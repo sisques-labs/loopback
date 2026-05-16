@@ -9,9 +9,6 @@ const dict = {
     settings: "Settings",
     tools: "Tools",
   },
-  terminal: {
-    title: "Terminal",
-  },
   settings: {
     title: "Settings",
     languageTitle: "Language",
