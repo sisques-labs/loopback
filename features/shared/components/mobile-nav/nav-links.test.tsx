@@ -23,6 +23,35 @@ describe("NavLinks", () => {
     cleanup();
   });
 
+  it("renders dashboard home link and marks it active on /en/dashboard", () => {
+    vi.mocked(usePathname).mockReturnValue("/en/dashboard");
+
+    render(
+      <NavLinks localePrefix="/en" dashboardLinkLabel="Dashboard" />,
+    );
+
+    const dashboardLink = screen.getByRole("link", { name: "Dashboard" });
+    expect(dashboardLink).toHaveAttribute("href", "/en/dashboard");
+    expect(dashboardLink).toHaveAttribute("aria-current", "page");
+    expect(dashboardLink.className).toContain("bg-sidebar-primary");
+  });
+
+  it("renders dashboard link inactive when on a service route", () => {
+    vi.mocked(usePathname).mockReturnValue("/en/s3");
+
+    render(
+      <NavLinks
+        localePrefix="/en"
+        dashboardLinkLabel="Dashboard"
+        servicesLabel="Services"
+      />,
+    );
+
+    const dashboardLink = screen.getByRole("link", { name: "Dashboard" });
+    expect(dashboardLink).not.toHaveAttribute("aria-current");
+    expect(dashboardLink.className).not.toContain("bg-sidebar-primary");
+  });
+
   it("marks the active service link with sidebar-primary pill and aria-current", () => {
     vi.mocked(usePathname).mockReturnValue("/en/s3");
 
