@@ -37,7 +37,7 @@ export async function receiveMessagesAction(
   if (!queueUrl) return { status: "error", message: dict.sqs.validation.queueUrlRequired };
 
   try {
-    const client = getSQSClient();
+    const client = await getSQSClient();
     const out = await client.send(
       new ReceiveMessageCommand({
         QueueUrl: queueUrl,

@@ -8,7 +8,7 @@ import { queueNameFromUrl } from "@/features/sqs/lib/queue-url-display";
 
 export async function listQueues(): Promise<QueueListItem[]> {
   try {
-    const client = getSQSClient();
+    const client = await getSQSClient();
     const urls: string[] = [];
     let nextToken: string | undefined = undefined;
 
