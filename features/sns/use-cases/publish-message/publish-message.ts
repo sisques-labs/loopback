@@ -25,7 +25,7 @@ export async function publishMessageAction(
   }
 
   try {
-    const client = getSNSClient();
+    const client = await getSNSClient();
     await client.send(
       new PublishCommand({
         TopicArn: topicArn,

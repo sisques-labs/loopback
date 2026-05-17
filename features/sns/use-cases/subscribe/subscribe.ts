@@ -31,7 +31,7 @@ export async function subscribeAction(
   }
 
   try {
-    const client = getSNSClient();
+    const client = await getSNSClient();
     await client.send(
       new SubscribeCommand({ TopicArn: topicArn, Protocol: protocol, Endpoint: endpoint }),
     );
