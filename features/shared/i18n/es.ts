@@ -43,6 +43,11 @@ const dict = {
     credentialSourceInstanceMetadata: "Metadatos de instancia",
     credentialSourceFallback: "Alternativa (test/test)",
     profileActiveLabel: "Perfil",
+    themeTitle: "Apariencia",
+    themeDescription: "Elige tu esquema de colores preferido.",
+    shortcutsTitle: "Atajos de teclado",
+    shortcutOpenPalette: "Abrir paleta de comandos",
+    shortcutCmdK: "⌘K / Ctrl+K",
   },
   dialog: {
     close: "Cerrar",
