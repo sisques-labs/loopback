@@ -74,6 +74,13 @@ const dict = {
         requeueing: "Requeueing…",
         requeueSuccess: "Message requeued.",
       },
+      attributesDialog: {
+        trigger: "View attributes",
+        title: "Message attributes",
+        systemSection: "System attributes",
+        customSection: "Message attributes",
+        close: "Close",
+      },
     },
     purge: {
       trigger: "Purge queue",

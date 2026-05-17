@@ -35,7 +35,13 @@ let lastBatchStub: typeof messages = [];
 const messages = [
   { messageId: "msg-1", body: "Hello", receiptHandle: "handle-aaa" },
   { messageId: "msg-2", body: "World", receiptHandle: "handle-bbb" },
-];
+] as Array<{
+  messageId: string;
+  body: string;
+  receiptHandle: string;
+  attributes?: Record<string, string>;
+  messageAttributes?: Record<string, { dataType: string; value: string }>;
+}>;
 
 vi.mock("react", async (importOriginal) => {
   const react = await importOriginal<typeof import("react")>();
@@ -76,6 +82,15 @@ const receiveDict = {
     requeue: "Requeue",
     requeueing: "Requeueing…",
     requeueSuccess: "Message requeued.",
+  },
+  attributesDialog: {
+    trigger: "View attributes",
+    title: "Message attributes",
+    systemSection: "System attributes",
+    customSection: "Message attributes",
+    noSystem: "No system attributes.",
+    noCustom: "No custom attributes.",
+    close: "Close",
   },
 };
 
@@ -177,5 +192,67 @@ describe("ReceiveMessagesSection — MessageRow error state (T-10)", () => {
     await renderSection();
 
     expect(screen.getByText(errorMessage)).toBeTruthy();
+  });
+});
+
+describe("ReceiveMessagesSection — info button visibility (REQ-04)", () => {
+  it("renders info button when message has system attributes", async () => {
+    lastBatchStub = [
+      {
+        messageId: "msg-attrs",
+        body: "with-sys",
+        receiptHandle: "rh-s",
+        attributes: { SentTimestamp: "1700000000000" },
+      },
+    ];
+    requeueStubs = [[{ status: "idle" }, vi.fn(), false]];
+    await renderSection();
+
+    expect(screen.getByRole("button", { name: receiveDict.attributesDialog.trigger })).toBeTruthy();
+  });
+
+  it("renders info button when message has only custom messageAttributes", async () => {
+    lastBatchStub = [
+      {
+        messageId: "msg-custom",
+        body: "with-custom",
+        receiptHandle: "rh-c",
+        messageAttributes: { color: { dataType: "String", value: "red" } },
+      },
+    ];
+    requeueStubs = [[{ status: "idle" }, vi.fn(), false]];
+    await renderSection();
+
+    expect(screen.getByRole("button", { name: receiveDict.attributesDialog.trigger })).toBeTruthy();
+  });
+
+  it("does not render info button when both attributes and messageAttributes are undefined", async () => {
+    lastBatchStub = [{ messageId: "msg-plain", body: "plain", receiptHandle: "rh-p" }];
+    requeueStubs = [[{ status: "idle" }, vi.fn(), false]];
+    await renderSection();
+
+    expect(
+      screen.queryByRole("button", { name: receiveDict.attributesDialog.trigger }),
+    ).toBeNull();
+  });
+
+  it("clicking info button makes the attributes dialog title appear", async () => {
+    lastBatchStub = [
+      {
+        messageId: "msg-click",
+        body: "clickable",
+        receiptHandle: "rh-cl",
+        attributes: { SentTimestamp: "1700000000000" },
+      },
+    ];
+    requeueStubs = [[{ status: "idle" }, vi.fn(), false]];
+    await renderSection();
+
+    const btn = screen.getByRole("button", { name: receiveDict.attributesDialog.trigger });
+    await act(async () => {
+      btn.click();
+    });
+
+    expect(screen.getAllByText(receiveDict.attributesDialog.title).length).toBeGreaterThanOrEqual(1);
   });
 });

@@ -62,3 +62,31 @@ describe("SQS i18n sendMessage key-set parity (en vs es)", () => {
     );
   });
 });
+
+describe("SQS attributesDialog i18n keys (REQ-05)", () => {
+  it("trigger key is truthy in en", () => {
+    expect(en.queueDetail.receive.attributesDialog.trigger).toBeTruthy();
+  });
+
+  it("title key is truthy in en", () => {
+    expect(en.queueDetail.receive.attributesDialog.title).toBeTruthy();
+  });
+
+  it("systemSection key is truthy in en", () => {
+    expect(en.queueDetail.receive.attributesDialog.systemSection).toBeTruthy();
+  });
+
+  it("customSection key is truthy in en", () => {
+    expect(en.queueDetail.receive.attributesDialog.customSection).toBeTruthy();
+  });
+
+  it("close key is truthy in en", () => {
+    expect(en.queueDetail.receive.attributesDialog.close).toBeTruthy();
+  });
+
+  it("attributesDialog has same keys in en and es", () => {
+    expect(Object.keys(en.queueDetail.receive.attributesDialog)).toEqual(
+      Object.keys(es.queueDetail.receive.attributesDialog),
+    );
+  });
+});
