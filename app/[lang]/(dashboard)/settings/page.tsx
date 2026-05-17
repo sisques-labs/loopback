@@ -3,18 +3,11 @@ import { LocaleSwitcher } from "@/features/shared/components/locale-switcher/loc
 import { getDictionary } from "@/features/shared/i18n/get-dictionary";
 import { DEFAULT_LOCALE, isLocale, type Locale } from "@/features/shared/i18n/locale";
 import { ENDPOINT_COOKIE_NAME, maskSecret } from "@/lib/aws/config";
+import { resolveCredentialSource } from "@/features/config/lib/credential-source";
 import { EndpointForm } from "@/features/config/components/endpoint-form/endpoint-form";
 import { EnvVarsSection } from "@/features/config/components/env-vars-section/env-vars-section";
 import { CredentialsSection } from "@/features/config/components/credentials-section/credentials-section";
 import { ProfileSection } from "@/features/config/components/profile-section/profile-section";
-
-type CredentialSource = "env" | "profile" | "instance-metadata" | "fallback";
-
-function resolveCredentialSource(): CredentialSource {
-  if (process.env.AWS_PROFILE) return "profile";
-  if (process.env.AWS_ACCESS_KEY_ID) return "env";
-  return "fallback";
-}
 
 export default async function SettingsPage({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = await params;
