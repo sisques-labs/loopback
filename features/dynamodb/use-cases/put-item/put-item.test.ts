@@ -83,7 +83,7 @@ describe("putItemAction — JSON validation", () => {
       if (cmd instanceof PutCommand) return {};
       throw new Error("unexpected command");
     });
-    vi.mocked(getDynamoDBDocumentClient).mockReturnValue(client);
+    vi.mocked(getDynamoDBDocumentClient).mockResolvedValue(client);
 
     const result = await putItemAction(
       idle,
@@ -101,7 +101,7 @@ describe("putItemAction — JSON validation", () => {
       if (cmd instanceof PutCommand) return {};
       throw new Error("unexpected command");
     });
-    vi.mocked(getDynamoDBDocumentClient).mockReturnValue(client);
+    vi.mocked(getDynamoDBDocumentClient).mockResolvedValue(client);
 
     const result = await putItemAction(
       idle,
