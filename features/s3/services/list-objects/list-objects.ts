@@ -7,7 +7,7 @@ import { toFriendlyError } from "@/lib/aws/errors";
 
 export async function listObjects(bucket: string, prefix?: string): Promise<S3Object[]> {
   try {
-    const client = getS3Client();
+    const client = await getS3Client();
     const { Contents } = await client.send(
       new ListObjectsV2Command({ Bucket: bucket, Prefix: prefix }),
     );

@@ -14,7 +14,7 @@ export async function deleteBucketAction(
   if (!bucket) return { status: "error", message: "Bucket name is required." };
 
   try {
-    const client = getS3Client();
+    const client = await getS3Client();
     await client.send(new DeleteBucketCommand({ Bucket: bucket }));
     revalidatePath("/s3");
     return { status: "success", data: undefined };
