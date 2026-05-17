@@ -36,7 +36,7 @@ vi.mock("@xterm/addon-fit", () => ({
 // Mock next/dynamic so TerminalOutput renders as a simple div (no SSR guard)
 // ---------------------------------------------------------------------------
 vi.mock("next/dynamic", () => ({
-  default: (_importFn: unknown, _opts: unknown) => {
+  default: () => {
     // Return a simple div acting as the terminal output container
     const MockOutput = ({ terminalRef }: { terminalRef?: React.RefObject<{ write: (t: string) => void; clear: () => void } | null> }) => {
       // Expose mock methods through the ref like the real implementation would
