@@ -1,19 +1,11 @@
 import "server-only";
 import { SNSClient } from "@aws-sdk/client-sns";
+import { createAwsConfig } from "@/lib/aws/config";
 
-let _client: SNSClient | undefined;
-
-export function getSNSClient(): SNSClient {
-  if (_client) return _client;
-
-  _client = new SNSClient({
-    endpoint: process.env.AWS_ENDPOINT_URL,
-    region: process.env.AWS_REGION ?? "us-east-1",
-    credentials: {
-      accessKeyId: process.env.AWS_ACCESS_KEY_ID ?? "test",
-      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY ?? "test",
-    },
-  });
-
-  return _client;
+// No module-level singleton by design — createAwsConfig() is per-request so the
+// endpoint cookie override takes effect on every call. Rebuilding a thin SDK client
+// object is microseconds against LocalStack network latency.
+export async function getSNSClient(): Promise<SNSClient> {
+  const config = await createAwsConfig();
+  return new SNSClient(config);
 }

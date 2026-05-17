@@ -50,7 +50,7 @@ describe("createTableAction — tableName validation", () => {
 
   it("accepts tableName with exactly 3 characters", async () => {
     const client = makeClient(async () => ({}));
-    vi.mocked(getDynamoDBClient).mockReturnValue(client);
+    vi.mocked(getDynamoDBClient).mockResolvedValue(client);
 
     const result = await createTableAction(
       idle,
@@ -74,7 +74,7 @@ describe("createTableAction — tableName validation", () => {
 
   it("accepts tableName with exactly 255 characters", async () => {
     const client = makeClient(async () => ({}));
-    vi.mocked(getDynamoDBClient).mockReturnValue(client);
+    vi.mocked(getDynamoDBClient).mockResolvedValue(client);
 
     const result = await createTableAction(
       idle,
@@ -116,7 +116,7 @@ describe("createTableAction — tableName validation", () => {
 
   it("accepts tableName with valid special chars (.- _)", async () => {
     const client = makeClient(async () => ({}));
-    vi.mocked(getDynamoDBClient).mockReturnValue(client);
+    vi.mocked(getDynamoDBClient).mockResolvedValue(client);
 
     const result = await createTableAction(
       idle,
@@ -156,7 +156,7 @@ describe("createTableAction — PK validation", () => {
   it("accepts valid partitionKeyTypes: S, N, B", async () => {
     for (const type of ["S", "N", "B"]) {
       const client = makeClient(async () => ({}));
-      vi.mocked(getDynamoDBClient).mockReturnValue(client);
+      vi.mocked(getDynamoDBClient).mockResolvedValue(client);
 
       const result = await createTableAction(
         idle,
@@ -190,7 +190,7 @@ describe("createTableAction — SK conditional validation", () => {
 
   it("accepts when sortKeyName is provided with a valid sortKeyType", async () => {
     const client = makeClient(async () => ({}));
-    vi.mocked(getDynamoDBClient).mockReturnValue(client);
+    vi.mocked(getDynamoDBClient).mockResolvedValue(client);
 
     const result = await createTableAction(
       idle,
@@ -208,7 +208,7 @@ describe("createTableAction — SK conditional validation", () => {
 
   it("accepts when sortKeyName is empty and sortKeyType is also empty", async () => {
     const client = makeClient(async () => ({}));
-    vi.mocked(getDynamoDBClient).mockReturnValue(client);
+    vi.mocked(getDynamoDBClient).mockResolvedValue(client);
 
     const result = await createTableAction(
       idle,
@@ -228,7 +228,7 @@ describe("createTableAction — SK conditional validation", () => {
 describe("createTableAction — success", () => {
   it("returns success when all inputs are valid", async () => {
     const client = makeClient(async () => ({}));
-    vi.mocked(getDynamoDBClient).mockReturnValue(client);
+    vi.mocked(getDynamoDBClient).mockResolvedValue(client);
 
     const result = await createTableAction(
       idle,

@@ -26,7 +26,7 @@ describe("getItem", () => {
       }
       throw new Error("unexpected command");
     });
-    vi.mocked(getDynamoDBDocumentClient).mockReturnValue(client);
+    vi.mocked(getDynamoDBDocumentClient).mockResolvedValue(client);
 
     const result = await getItem("users", { pk: "user#1" });
     expect(result).toEqual(mockItem);
@@ -39,7 +39,7 @@ describe("getItem", () => {
       }
       throw new Error("unexpected command");
     });
-    vi.mocked(getDynamoDBDocumentClient).mockReturnValue(client);
+    vi.mocked(getDynamoDBDocumentClient).mockResolvedValue(client);
 
     const result = await getItem("users", { pk: "nonexistent" });
     expect(result).toBeNull();
@@ -54,7 +54,7 @@ describe("getItem", () => {
       }
       throw new Error("unexpected command");
     });
-    vi.mocked(getDynamoDBDocumentClient).mockReturnValue(client);
+    vi.mocked(getDynamoDBDocumentClient).mockResolvedValue(client);
 
     await getItem("orders", { pk: "order#1", sk: "2024-01-01" });
     expect(capturedInput!.TableName).toBe("orders");
@@ -67,7 +67,7 @@ describe("getItem", () => {
       err.name = "ResourceNotFoundException";
       throw err;
     });
-    vi.mocked(getDynamoDBDocumentClient).mockReturnValue(client);
+    vi.mocked(getDynamoDBDocumentClient).mockResolvedValue(client);
 
     await expect(getItem("nonexistent", { pk: "x" })).rejects.toThrow();
   });

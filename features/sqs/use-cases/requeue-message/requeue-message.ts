@@ -24,7 +24,7 @@ export async function requeueMessageAction(
     return { status: "error", message: dict.sqs.validation.receiptHandleRequired };
 
   try {
-    const client = getSQSClient();
+    const client = await getSQSClient();
     await client.send(
       new ChangeMessageVisibilityCommand({
         QueueUrl: queueUrl,

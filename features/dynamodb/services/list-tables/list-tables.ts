@@ -12,7 +12,7 @@ import { toFriendlyError } from "@/features/dynamodb/lib/errors";
 
 export async function listTables(): Promise<DynamoDBTable[]> {
   try {
-    const client = getDynamoDBClient();
+    const client = await getDynamoDBClient();
     const tableNames: string[] = [];
     let lastEvaluatedTableName: string | undefined = undefined;
 

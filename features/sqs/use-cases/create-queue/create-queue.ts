@@ -28,7 +28,7 @@ export async function createQueueAction(
   const queueName = finalQueueName(name.trim(), isFifo);
 
   try {
-    const client = getSQSClient();
+    const client = await getSQSClient();
     await client.send(
       new CreateQueueCommand({
         QueueName: queueName,

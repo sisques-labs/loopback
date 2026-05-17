@@ -35,7 +35,7 @@ export async function deleteItemAction(
   }
 
   try {
-    const client = getDynamoDBDocumentClient();
+    const client = await getDynamoDBDocumentClient();
 
     await client.send(
       new DeleteCommand({

@@ -47,7 +47,7 @@ export async function seedItemsAction(
   let failed = 0;
 
   try {
-    const client = getDynamoDBDocumentClient();
+    const client = await getDynamoDBDocumentClient();
     const chunks = chunk(items as unknown[]);
 
     for (const chunkItems of chunks) {
