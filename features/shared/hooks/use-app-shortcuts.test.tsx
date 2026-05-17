@@ -10,7 +10,7 @@ const { mockUnsubscribe, mockTinykeys } = vi.hoisted(() => {
 });
 
 vi.mock("tinykeys", () => ({
-  default: mockTinykeys,
+  tinykeys: mockTinykeys,
 }));
 
 // Import AFTER mocks are defined
