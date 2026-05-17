@@ -75,7 +75,7 @@ describe("seedItemsAction — validation", () => {
 describe("seedItemsAction — happy path", () => {
   it("calls BatchWriteCommand once for ≤25 items and returns success", async () => {
     const sendFn = vi.fn().mockResolvedValue({});
-    vi.mocked(getDynamoDBDocumentClient).mockReturnValue(makeDocClient(sendFn));
+    vi.mocked(getDynamoDBDocumentClient).mockResolvedValue(makeDocClient(sendFn));
 
     const items = [{ pk: "1" }, { pk: "2" }];
     const result = await seedItemsAction(
@@ -97,7 +97,7 @@ describe("seedItemsAction — happy path", () => {
 
   it("returns written:2 and failed:0 in data on full success", async () => {
     const sendFn = vi.fn().mockResolvedValue({});
-    vi.mocked(getDynamoDBDocumentClient).mockReturnValue(makeDocClient(sendFn));
+    vi.mocked(getDynamoDBDocumentClient).mockResolvedValue(makeDocClient(sendFn));
 
     const items = [{ pk: "1" }, { pk: "2" }];
     const result = await seedItemsAction(
@@ -118,7 +118,7 @@ describe("seedItemsAction — happy path", () => {
 
   it("calls BatchWriteCommand 3 times for 60 items (chunks of 25/25/10)", async () => {
     const sendFn = vi.fn().mockResolvedValue({});
-    vi.mocked(getDynamoDBDocumentClient).mockReturnValue(makeDocClient(sendFn));
+    vi.mocked(getDynamoDBDocumentClient).mockResolvedValue(makeDocClient(sendFn));
 
     const items = Array.from({ length: 60 }, (_, i) => ({ pk: String(i) }));
     const result = await seedItemsAction(
@@ -140,7 +140,7 @@ describe("seedItemsAction — happy path", () => {
 
   it("calls revalidatePath when all items succeed", async () => {
     const sendFn = vi.fn().mockResolvedValue({});
-    vi.mocked(getDynamoDBDocumentClient).mockReturnValue(makeDocClient(sendFn));
+    vi.mocked(getDynamoDBDocumentClient).mockResolvedValue(makeDocClient(sendFn));
 
     const items = [{ pk: "1" }];
     await seedItemsAction(
@@ -180,7 +180,7 @@ describe("seedItemsAction — UnprocessedItems", () => {
         UnprocessedItems: { users: unprocessedRequests },
       });
     });
-    vi.mocked(getDynamoDBDocumentClient).mockReturnValue(makeDocClient(sendFn));
+    vi.mocked(getDynamoDBDocumentClient).mockResolvedValue(makeDocClient(sendFn));
 
     const items = Array.from({ length: 3 }, (_, i) => ({ pk: `item-${i}` }));
     const result = await seedItemsAction(
@@ -202,7 +202,7 @@ describe("seedItemsAction — UnprocessedItems", () => {
     const sendFn = vi.fn().mockResolvedValue({
       UnprocessedItems: { users: unprocessedRequests },
     });
-    vi.mocked(getDynamoDBDocumentClient).mockReturnValue(makeDocClient(sendFn));
+    vi.mocked(getDynamoDBDocumentClient).mockResolvedValue(makeDocClient(sendFn));
 
     const items = [{ pk: "1" }];
     await seedItemsAction(
@@ -226,7 +226,7 @@ describe("seedItemsAction — SDK exception", () => {
     sdkError.name = "ResourceNotFoundException";
 
     const sendFn = vi.fn().mockRejectedValue(sdkError);
-    vi.mocked(getDynamoDBDocumentClient).mockReturnValue(makeDocClient(sendFn));
+    vi.mocked(getDynamoDBDocumentClient).mockResolvedValue(makeDocClient(sendFn));
 
     const items = [{ pk: "1" }];
     const result = await seedItemsAction(

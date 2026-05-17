@@ -9,7 +9,7 @@ export async function getItem(
   key: Record<string, unknown>,
 ): Promise<Record<string, unknown> | null> {
   try {
-    const client = getDynamoDBDocumentClient();
+    const client = await getDynamoDBDocumentClient();
 
     const res = await client.send(
       new GetCommand({

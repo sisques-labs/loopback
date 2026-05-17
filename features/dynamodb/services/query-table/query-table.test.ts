@@ -27,7 +27,7 @@ describe("queryTable", () => {
       }
       throw new Error("unexpected command");
     });
-    vi.mocked(getDynamoDBClient).mockReturnValue(client);
+    vi.mocked(getDynamoDBClient).mockResolvedValue(client);
 
     const result = await queryTable("users", { name: "pk", value: "user#1" });
     expect(result.items).toHaveLength(1);
@@ -43,7 +43,7 @@ describe("queryTable", () => {
       }
       throw new Error("unexpected command");
     });
-    vi.mocked(getDynamoDBClient).mockReturnValue(client);
+    vi.mocked(getDynamoDBClient).mockResolvedValue(client);
 
     const result = await queryTable("users", { name: "pk", value: "user#1" });
     expect(result.nextKey).not.toBeNull();
@@ -61,7 +61,7 @@ describe("queryTable", () => {
       }
       throw new Error("unexpected command");
     });
-    vi.mocked(getDynamoDBClient).mockReturnValue(client);
+    vi.mocked(getDynamoDBClient).mockResolvedValue(client);
 
     await queryTable("users", { name: "pk", value: "user#1" });
     expect(capturedInput!.KeyConditionExpression).toBe("#pk = :pk");
@@ -79,7 +79,7 @@ describe("queryTable", () => {
       }
       throw new Error("unexpected command");
     });
-    vi.mocked(getDynamoDBClient).mockReturnValue(client);
+    vi.mocked(getDynamoDBClient).mockResolvedValue(client);
 
     await queryTable(
       "users",
@@ -104,7 +104,7 @@ describe("queryTable", () => {
       }
       throw new Error("unexpected command");
     });
-    vi.mocked(getDynamoDBClient).mockReturnValue(client);
+    vi.mocked(getDynamoDBClient).mockResolvedValue(client);
 
     await queryTable("users", { name: "pk", value: "user#1" });
     expect(capturedInput!.Limit).toBe(50);
@@ -121,7 +121,7 @@ describe("queryTable", () => {
       }
       throw new Error("unexpected command");
     });
-    vi.mocked(getDynamoDBClient).mockReturnValue(client);
+    vi.mocked(getDynamoDBClient).mockResolvedValue(client);
 
     await queryTable("users", { name: "pk", value: "user#1" }, undefined, startKey);
     expect(capturedInput!.ExclusiveStartKey).toEqual(startKey);
@@ -133,7 +133,7 @@ describe("queryTable", () => {
       err.name = "ResourceNotFoundException";
       throw err;
     });
-    vi.mocked(getDynamoDBClient).mockReturnValue(client);
+    vi.mocked(getDynamoDBClient).mockResolvedValue(client);
 
     await expect(queryTable("nonexistent", { name: "pk", value: "x" })).rejects.toThrow();
   });

@@ -24,7 +24,7 @@ export async function deleteTableAction(
   }
 
   try {
-    const client = getDynamoDBClient();
+    const client = await getDynamoDBClient();
 
     await client.send(
       new DeleteTableCommand({ TableName: tableName }),
