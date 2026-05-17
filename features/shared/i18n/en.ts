@@ -56,7 +56,7 @@ const dict = {
     system: "System",
     light: "Light",
     dark: "Dark",
-    toggleTheme: "Toggle theme",
+    themeToggle: "Toggle theme",
   },
   commandPalette: {
     title: "Command Palette",

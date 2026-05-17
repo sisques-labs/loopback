@@ -10,7 +10,7 @@ type ThemeToggleDict = {
   system: string;
   light: string;
   dark: string;
-  toggleTheme: string;
+  themeToggle: string;
 };
 
 type ThemeToggleProps = {
@@ -48,7 +48,7 @@ export function ThemeToggle({ dict }: ThemeToggleProps) {
       variant="ghost"
       size="icon-sm"
       className="min-h-11 min-w-11 md:min-h-9 md:min-w-9 shrink-0"
-      aria-label={dict.toggleTheme}
+      aria-label={dict.themeToggle}
       data-theme={theme}
       onClick={handleClick}
     >

@@ -4,6 +4,8 @@ import { HeaderBreadcrumb } from "@/features/shared/components/header-breadcrumb
 import { MobileNavTrigger } from "@/features/shared/components/mobile-nav/mobile-nav-trigger";
 import { MobileNavDrawer } from "@/features/shared/components/mobile-nav/mobile-nav-drawer";
 import { UploadProgressModalMount } from "@/features/s3/components/upload-progress-modal/upload-progress-modal-mount";
+// ThemeToggle carries its own "use client" directive and a mounted guard — Next.js creates
+// the client boundary at the import site, so direct import from a Server Component is safe.
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { getDictionary } from "@/features/shared/i18n/get-dictionary";
 import { DEFAULT_LOCALE, isLocale, type Locale } from "@/features/shared/i18n/locale";

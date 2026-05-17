@@ -21,7 +21,7 @@ const dict = {
   system: "System",
   light: "Light",
   dark: "Dark",
-  toggleTheme: "Toggle theme",
+  themeToggle: "Toggle theme",
 };
 
 describe("ThemeToggle", () => {
@@ -36,19 +36,19 @@ describe("ThemeToggle", () => {
   });
 
   it("renders null before mount (SSR guard)", () => {
-    // The component uses a mounted guard — it should NOT render a button
-    // server-side (before useEffect). In jsdom this runs synchronously after
-    // render but we rely on the component's internal gate being false initially.
-    // We just confirm the component can render without throwing.
-    // The full SSR-guard behaviour is validated implicitly through the mounted state.
+    // jsdom limitation: useEffect runs synchronously after render, so the
+    // pre-mount null state cannot be observed in unit tests — the component
+    // transitions from null → button before assertions run.
+    // What CAN be asserted: after mount the button IS present, which confirms
+    // the guard resolves correctly and the component renders without crashing.
     const { container } = render(<ThemeToggle dict={dict} />);
-    // After mount in jsdom the button should be present; just confirm no crash
-    expect(container).toBeTruthy();
+    expect(screen.getByRole("button", { name: dict.themeToggle })).toBeInTheDocument();
+    expect(container.firstChild).not.toBeNull();
   });
 
-  it("renders with aria-label equal to dict.toggleTheme", () => {
+  it("renders with aria-label equal to dict.themeToggle", () => {
     render(<ThemeToggle dict={dict} />);
-    expect(screen.getByRole("button", { name: dict.toggleTheme })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: dict.themeToggle })).toBeInTheDocument();
   });
 
   it("shows Monitor icon when theme is system", () => {
@@ -56,28 +56,28 @@ describe("ThemeToggle", () => {
     render(<ThemeToggle dict={dict} />);
     // Lucide renders svg with aria-hidden; we check via data attribute or title
     // The component should have data-theme="system" on the button for testability
-    const button = screen.getByRole("button", { name: dict.toggleTheme });
+    const button = screen.getByRole("button", { name: dict.themeToggle });
     expect(button).toHaveAttribute("data-theme", "system");
   });
 
   it("shows Sun icon when theme is light", () => {
     mockTheme = "light";
     render(<ThemeToggle dict={dict} />);
-    const button = screen.getByRole("button", { name: dict.toggleTheme });
+    const button = screen.getByRole("button", { name: dict.themeToggle });
     expect(button).toHaveAttribute("data-theme", "light");
   });
 
   it("shows Moon icon when theme is dark", () => {
     mockTheme = "dark";
     render(<ThemeToggle dict={dict} />);
-    const button = screen.getByRole("button", { name: dict.toggleTheme });
+    const button = screen.getByRole("button", { name: dict.themeToggle });
     expect(button).toHaveAttribute("data-theme", "dark");
   });
 
   it("cycles system → light on click", async () => {
     mockTheme = "system";
     render(<ThemeToggle dict={dict} />);
-    const button = screen.getByRole("button", { name: dict.toggleTheme });
+    const button = screen.getByRole("button", { name: dict.themeToggle });
     await userEvent.click(button);
     expect(mockSetTheme).toHaveBeenCalledWith("light");
   });
@@ -85,7 +85,7 @@ describe("ThemeToggle", () => {
   it("cycles light → dark on click", async () => {
     mockTheme = "light";
     render(<ThemeToggle dict={dict} />);
-    const button = screen.getByRole("button", { name: dict.toggleTheme });
+    const button = screen.getByRole("button", { name: dict.themeToggle });
     await userEvent.click(button);
     expect(mockSetTheme).toHaveBeenCalledWith("dark");
   });
@@ -93,7 +93,7 @@ describe("ThemeToggle", () => {
   it("cycles dark → system on click", async () => {
     mockTheme = "dark";
     render(<ThemeToggle dict={dict} />);
-    const button = screen.getByRole("button", { name: dict.toggleTheme });
+    const button = screen.getByRole("button", { name: dict.themeToggle });
     await userEvent.click(button);
     expect(mockSetTheme).toHaveBeenCalledWith("system");
   });
