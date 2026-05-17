@@ -1,14 +1,19 @@
 import "server-only";
 import { cookies } from "next/headers";
 import { fromNodeProviderChain } from "@aws-sdk/credential-providers";
-import type { AwsCredentialIdentity, Provider } from "@aws-sdk/types";
 
 export const ENDPOINT_COOKIE_NAME = "aws-endpoint-override";
+
+export type AwsCredentials = {
+  accessKeyId: string;
+  secretAccessKey: string;
+  sessionToken?: string;
+};
 
 export type AwsClientConfig = {
   endpoint: string | undefined;
   region: string;
-  credentials: AwsCredentialIdentity | Provider<AwsCredentialIdentity>;
+  credentials: AwsCredentials | (() => Promise<AwsCredentials>);
 };
 
 /**
@@ -18,11 +23,16 @@ export type AwsClientConfig = {
  * NOTE: The fallback is intentional — this tool targets local dev against
  * LocalStack where "test/test" is the canonical default.
  */
-function nodeChainWithTestFallback(): Provider<AwsCredentialIdentity> {
+function nodeChainWithTestFallback(): () => Promise<AwsCredentials> {
   const chain = fromNodeProviderChain();
   return async () => {
     try {
-      return await chain();
+      const creds = await chain();
+      return {
+        accessKeyId: creds.accessKeyId,
+        secretAccessKey: creds.secretAccessKey,
+        sessionToken: creds.sessionToken,
+      };
     } catch {
       return { accessKeyId: "test", secretAccessKey: "test" };
     }
