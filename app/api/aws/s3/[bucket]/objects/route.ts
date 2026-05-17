@@ -28,7 +28,7 @@ export async function POST(req: NextRequest, ctx: ObjectsRouteParams) {
   const contentType = file.type || "application/octet-stream";
 
   try {
-    const client = getS3Client();
+    const client = await getS3Client();
 
     if (file.size < MULTIPART_THRESHOLD) {
       const buffer = Buffer.from(await file.arrayBuffer());

@@ -15,7 +15,7 @@ export async function deleteObjectAction(
   if (!bucket || !key) return { status: "error", message: "Bucket and key are required." };
 
   try {
-    const client = getS3Client();
+    const client = await getS3Client();
     await client.send(new DeleteObjectCommand({ Bucket: bucket, Key: key }));
     revalidatePath(`/s3/${bucket}`);
     return { status: "success", data: undefined };

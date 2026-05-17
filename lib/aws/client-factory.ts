@@ -1,20 +1,19 @@
 import "server-only";
 import { S3Client } from "@aws-sdk/client-s3";
+import { createAwsConfig } from "@/lib/aws/config";
 
-let client: S3Client | null = null;
-
-export function getS3Client(): S3Client {
-  if (client) return client;
-
-  client = new S3Client({
-    endpoint: process.env.AWS_ENDPOINT_URL,
-    region: process.env.AWS_REGION ?? "us-east-1",
-    forcePathStyle: true,
-    credentials: {
-      accessKeyId: process.env.AWS_ACCESS_KEY_ID ?? "test",
-      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY ?? "test",
-    },
-  });
-
-  return client;
+/**
+ * Creates a fresh S3Client on every call.
+ *
+ * IMPORTANT: There is intentionally NO module-level cache here.
+ * The endpoint is resolved from the httpOnly cookie per request so that
+ * an endpoint override set via the Settings UI takes effect immediately
+ * without a process restart.
+ *
+ * forcePathStyle: true is REQUIRED for LocalStack path-style S3 addressing.
+ * Do NOT remove this option.
+ */
+export async function getS3Client(): Promise<S3Client> {
+  const config = await createAwsConfig();
+  return new S3Client({ ...config, forcePathStyle: true });
 }
