@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("server-only", () => ({}));
 
@@ -10,9 +10,12 @@ vi.mock("@aws-sdk/credential-providers", () => ({
   fromNodeProviderChain: vi.fn(),
 }));
 
-import { cookies } from "next/headers";
 import { fromNodeProviderChain } from "@aws-sdk/credential-providers";
-import { createAwsConfig, maskSecret, ENDPOINT_COOKIE_NAME } from "./config";
+import { cookies } from "next/headers";
+import { createAwsConfig, ENDPOINT_COOKIE_NAME, maskSecret } from "./config";
+
+type CookieStore = Awaited<ReturnType<typeof cookies>>;
+type CredentialProvider = ReturnType<typeof fromNodeProviderChain>;
 
 function makeCookieStore(cookieValue?: string) {
   return {
@@ -39,10 +42,17 @@ afterEach(() => {
 describe("createAwsConfig — endpoint resolution", () => {
   it("uses AWS_ENDPOINT_URL when no cookie is set", async () => {
     process.env.AWS_ENDPOINT_URL = "http://localhost:4566";
-    vi.mocked(cookies).mockResolvedValue(makeCookieStore() as any);
+    vi.mocked(cookies).mockResolvedValue(
+      makeCookieStore() as unknown as CookieStore,
+    );
 
-    const mockProvider = vi.fn().mockResolvedValue({ accessKeyId: "from-chain", secretAccessKey: "chain-secret" });
-    vi.mocked(fromNodeProviderChain).mockReturnValue(mockProvider as any);
+    const mockProvider = vi.fn().mockResolvedValue({
+      accessKeyId: "from-chain",
+      secretAccessKey: "chain-secret",
+    });
+    vi.mocked(fromNodeProviderChain).mockReturnValue(
+      mockProvider as CredentialProvider,
+    );
 
     const config = await createAwsConfig();
 
@@ -51,10 +61,17 @@ describe("createAwsConfig — endpoint resolution", () => {
 
   it("uses cookie value when cookie is set (cookie wins over env var)", async () => {
     process.env.AWS_ENDPOINT_URL = "http://localhost:4566";
-    vi.mocked(cookies).mockResolvedValue(makeCookieStore("http://cookie-endpoint:9000") as any);
+    vi.mocked(cookies).mockResolvedValue(
+      makeCookieStore("http://cookie-endpoint:9000") as CookieStore,
+    );
 
-    const mockProvider = vi.fn().mockResolvedValue({ accessKeyId: "from-chain", secretAccessKey: "chain-secret" });
-    vi.mocked(fromNodeProviderChain).mockReturnValue(mockProvider as any);
+    const mockProvider = vi.fn().mockResolvedValue({
+      accessKeyId: "from-chain",
+      secretAccessKey: "chain-secret",
+    });
+    vi.mocked(fromNodeProviderChain).mockReturnValue(
+      mockProvider as CredentialProvider,
+    );
 
     const config = await createAwsConfig();
 
@@ -62,10 +79,15 @@ describe("createAwsConfig — endpoint resolution", () => {
   });
 
   it("returns undefined endpoint when no cookie and no env var", async () => {
-    vi.mocked(cookies).mockResolvedValue(makeCookieStore() as any);
+    vi.mocked(cookies).mockResolvedValue(makeCookieStore() as CookieStore);
 
-    const mockProvider = vi.fn().mockResolvedValue({ accessKeyId: "from-chain", secretAccessKey: "chain-secret" });
-    vi.mocked(fromNodeProviderChain).mockReturnValue(mockProvider as any);
+    const mockProvider = vi.fn().mockResolvedValue({
+      accessKeyId: "from-chain",
+      secretAccessKey: "chain-secret",
+    });
+    vi.mocked(fromNodeProviderChain).mockReturnValue(
+      mockProvider as CredentialProvider,
+    );
 
     const config = await createAwsConfig();
 
@@ -75,9 +97,14 @@ describe("createAwsConfig — endpoint resolution", () => {
 
 describe("createAwsConfig — region resolution", () => {
   it("defaults to us-east-1 when AWS_REGION is not set", async () => {
-    vi.mocked(cookies).mockResolvedValue(makeCookieStore() as any);
-    const mockProvider = vi.fn().mockResolvedValue({ accessKeyId: "from-chain", secretAccessKey: "chain-secret" });
-    vi.mocked(fromNodeProviderChain).mockReturnValue(mockProvider as any);
+    vi.mocked(cookies).mockResolvedValue(makeCookieStore() as CookieStore);
+    const mockProvider = vi.fn().mockResolvedValue({
+      accessKeyId: "from-chain",
+      secretAccessKey: "chain-secret",
+    });
+    vi.mocked(fromNodeProviderChain).mockReturnValue(
+      mockProvider as CredentialProvider,
+    );
 
     const config = await createAwsConfig();
 
@@ -86,9 +113,14 @@ describe("createAwsConfig — region resolution", () => {
 
   it("uses AWS_REGION when set", async () => {
     process.env.AWS_REGION = "eu-west-1";
-    vi.mocked(cookies).mockResolvedValue(makeCookieStore() as any);
-    const mockProvider = vi.fn().mockResolvedValue({ accessKeyId: "from-chain", secretAccessKey: "chain-secret" });
-    vi.mocked(fromNodeProviderChain).mockReturnValue(mockProvider as any);
+    vi.mocked(cookies).mockResolvedValue(makeCookieStore() as CookieStore);
+    const mockProvider = vi.fn().mockResolvedValue({
+      accessKeyId: "from-chain",
+      secretAccessKey: "chain-secret",
+    });
+    vi.mocked(fromNodeProviderChain).mockReturnValue(
+      mockProvider as CredentialProvider,
+    );
 
     const config = await createAwsConfig();
 
@@ -98,31 +130,49 @@ describe("createAwsConfig — region resolution", () => {
 
 describe("createAwsConfig — credentials resolution", () => {
   it("uses credentials from fromNodeProviderChain when it resolves", async () => {
-    vi.mocked(cookies).mockResolvedValue(makeCookieStore() as any);
-    const chainCreds = { accessKeyId: "chain-key", secretAccessKey: "chain-secret" };
+    vi.mocked(cookies).mockResolvedValue(makeCookieStore() as CookieStore);
+    const chainCreds = {
+      accessKeyId: "chain-key",
+      secretAccessKey: "chain-secret",
+    };
     const mockProvider = vi.fn().mockResolvedValue(chainCreds);
-    vi.mocked(fromNodeProviderChain).mockReturnValue(mockProvider as any);
+    vi.mocked(fromNodeProviderChain).mockReturnValue(
+      mockProvider as CredentialProvider,
+    );
 
     const config = await createAwsConfig();
-    const resolvedCreds = typeof config.credentials === "function"
-      ? await (config.credentials as () => Promise<typeof chainCreds>)()
-      : config.credentials;
+    const resolvedCreds =
+      typeof config.credentials === "function"
+        ? await (config.credentials as () => Promise<typeof chainCreds>)()
+        : config.credentials;
 
     expect(resolvedCreds.accessKeyId).toBe("chain-key");
   });
 
   it("falls back to test credentials when fromNodeProviderChain throws", async () => {
-    vi.mocked(cookies).mockResolvedValue(makeCookieStore() as any);
-    const mockProvider = vi.fn().mockRejectedValue(new Error("No credentials found"));
-    vi.mocked(fromNodeProviderChain).mockReturnValue(mockProvider as any);
+    vi.mocked(cookies).mockResolvedValue(makeCookieStore() as CookieStore);
+    const mockProvider = vi
+      .fn()
+      .mockRejectedValue(new Error("No credentials found"));
+    vi.mocked(fromNodeProviderChain).mockReturnValue(
+      mockProvider as CredentialProvider,
+    );
 
     const config = await createAwsConfig();
-    const resolvedCreds = typeof config.credentials === "function"
-      ? await (config.credentials as () => Promise<{ accessKeyId: string; secretAccessKey: string }>)()
-      : config.credentials;
+    const resolvedCreds =
+      typeof config.credentials === "function"
+        ? await (
+            config.credentials as () => Promise<{
+              accessKeyId: string;
+              secretAccessKey: string;
+            }>
+          )()
+        : config.credentials;
 
     expect(resolvedCreds.accessKeyId).toBe("test");
-    expect((resolvedCreds as { secretAccessKey: string }).secretAccessKey).toBe("test");
+    expect((resolvedCreds as { secretAccessKey: string }).secretAccessKey).toBe(
+      "test",
+    );
   });
 });
 

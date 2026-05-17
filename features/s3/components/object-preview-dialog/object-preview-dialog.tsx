@@ -126,6 +126,8 @@ function ObjectPreviewDialogInner({
               </a>
             </div>
           ) : previewState === "loaded" && category === "image" ? (
+            // Same-origin API proxy; next/image adds no benefit for authenticated blob responses.
+            // eslint-disable-next-line @next/next/no-img-element -- intentional for S3 proxy preview
             <img
               src={proxyUrl}
               alt={object.key}

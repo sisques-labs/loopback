@@ -49,7 +49,7 @@ vi.mock("react", async (importOriginal) => {
     ...react,
     // Override useActionState: first call is receiveMessagesAction (always idle — we inject via useState),
     // subsequent calls are per-row requeueMessageAction
-    useActionState: (..._args: unknown[]) => {
+    useActionState: () => {
       const idx = requeueCallCount;
       requeueCallCount++;
       if (idx === 0) {
