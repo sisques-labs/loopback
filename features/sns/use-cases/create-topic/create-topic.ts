@@ -38,7 +38,7 @@ export async function createTopicAction(
   const finalName = isFifo && !baseName.endsWith(".fifo") ? `${baseName}.fifo` : baseName;
 
   try {
-    const client = getSNSClient();
+    const client = await getSNSClient();
     await client.send(
       new CreateTopicCommand({
         Name: finalName,

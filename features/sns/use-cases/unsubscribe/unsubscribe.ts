@@ -24,7 +24,7 @@ export async function unsubscribeAction(
   }
 
   try {
-    const client = getSNSClient();
+    const client = await getSNSClient();
     await client.send(new UnsubscribeCommand({ SubscriptionArn: subscriptionArn }));
     revalidatePath("/sns", "layout");
     return { status: "success", data: undefined };

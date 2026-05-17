@@ -100,7 +100,7 @@ describe("NavLinks", () => {
       id: "terminal",
       label: "Terminal",
       href: "/terminal",
-      icon: () => null,
+      icon: (() => null) as unknown as ToolEntry["icon"],
     };
 
     beforeEach(() => {

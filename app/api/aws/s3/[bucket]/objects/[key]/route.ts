@@ -11,7 +11,7 @@ export async function GET(req: NextRequest, ctx: ObjectKeyRouteParams) {
   const download = req.nextUrl.searchParams.get("download") === "1";
 
   try {
-    const client = getS3Client();
+    const client = await getS3Client();
     const { Body, ContentType, ContentLength } = await client.send(
       new GetObjectCommand({ Bucket: bucket, Key: key }),
     );
@@ -40,7 +40,7 @@ export async function DELETE(_req: NextRequest, ctx: ObjectKeyRouteParams) {
   const { bucket, key } = await ctx.params;
 
   try {
-    const client = getS3Client();
+    const client = await getS3Client();
     await client.send(new DeleteObjectCommand({ Bucket: bucket, Key: key }));
     revalidatePath(`/s3/${bucket}`);
     return Response.json({ ok: true });

@@ -7,7 +7,7 @@ import { toFriendlyError } from "@/lib/aws/errors";
 
 export async function listBuckets(): Promise<Bucket[]> {
   try {
-    const client = getS3Client();
+    const client = await getS3Client();
     const { Buckets } = await client.send(new ListBucketsCommand({}));
     if (!Buckets) return [];
     return Buckets.map((b) => ({

@@ -28,7 +28,7 @@ export async function createBucketAction(
   if (validationError) return { status: "error", message: validationError };
 
   try {
-    const client = getS3Client();
+    const client = await getS3Client();
     await client.send(new CreateBucketCommand({ Bucket: name.trim() }));
     revalidatePath("/s3");
     return { status: "success", data: undefined };

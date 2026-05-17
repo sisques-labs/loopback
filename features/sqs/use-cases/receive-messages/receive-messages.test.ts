@@ -46,7 +46,7 @@ describe("receiveMessagesAction — system attributes mapped (REQ-02)", () => {
         },
       ],
     }));
-    vi.mocked(getSQSClient).mockReturnValue(client);
+    vi.mocked(getSQSClient).mockResolvedValue(client);
 
     const result = await receiveMessagesAction(idle, formData);
 
@@ -74,7 +74,7 @@ describe("receiveMessagesAction — custom string attribute mapped (REQ-02)", ()
         },
       ],
     }));
-    vi.mocked(getSQSClient).mockReturnValue(client);
+    vi.mocked(getSQSClient).mockResolvedValue(client);
 
     const result = await receiveMessagesAction(idle, formData);
 
@@ -101,7 +101,7 @@ describe("receiveMessagesAction — binary attribute serialized as label (REQ-02
         },
       ],
     }));
-    vi.mocked(getSQSClient).mockReturnValue(client);
+    vi.mocked(getSQSClient).mockResolvedValue(client);
 
     const result = await receiveMessagesAction(idle, formData);
 
@@ -125,7 +125,7 @@ describe("receiveMessagesAction — absent attributes omitted (REQ-02)", () => {
         },
       ],
     }));
-    vi.mocked(getSQSClient).mockReturnValue(client);
+    vi.mocked(getSQSClient).mockResolvedValue(client);
 
     const result = await receiveMessagesAction(idle, formData);
 
@@ -149,7 +149,7 @@ describe("receiveMessagesAction — empty attribute maps omitted (REQ-02)", () =
         },
       ],
     }));
-    vi.mocked(getSQSClient).mockReturnValue(client);
+    vi.mocked(getSQSClient).mockResolvedValue(client);
 
     const result = await receiveMessagesAction(idle, formData);
 
