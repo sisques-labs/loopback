@@ -52,6 +52,24 @@ const dict = {
     en: "English",
     es: "Español",
   },
+  themeToggle: {
+    system: "System",
+    light: "Light",
+    dark: "Dark",
+    toggleTheme: "Toggle theme",
+  },
+  commandPalette: {
+    title: "Command Palette",
+    placeholder: "Search services, tools, actions…",
+    empty: "No results found.",
+    close: "Close",
+    groupServices: "Services",
+    groupTools: "Tools",
+    groupActions: "Actions",
+    actionSettings: "Settings",
+    actionToggleTheme: "Toggle theme",
+    ariaLabel: "Command palette",
+  },
 } as const;
 
 export default dict;

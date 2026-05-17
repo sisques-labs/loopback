@@ -57,6 +57,24 @@ const dict = {
     en: "English",
     es: "Español",
   },
+  themeToggle: {
+    system: "Sistema",
+    light: "Claro",
+    dark: "Oscuro",
+    toggleTheme: "Cambiar tema",
+  },
+  commandPalette: {
+    title: "Paleta de comandos",
+    placeholder: "Buscar servicios, herramientas, acciones…",
+    empty: "Sin resultados.",
+    close: "Cerrar",
+    groupServices: "Servicios",
+    groupTools: "Herramientas",
+    groupActions: "Acciones",
+    actionSettings: "Ajustes",
+    actionToggleTheme: "Cambiar tema",
+    ariaLabel: "Paleta de comandos",
+  },
 } as const satisfies SharedDictTranslated;
 
 export default dict;
