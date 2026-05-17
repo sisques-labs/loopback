@@ -10,7 +10,7 @@ import { toFriendlyError } from "@/features/lambda/lib/errors";
 
 export async function listFunctions(): Promise<LambdaFunction[]> {
   try {
-    const client = getLambdaClient();
+    const client = await getLambdaClient();
     const functions: LambdaFunction[] = [];
     let nextMarker: string | undefined = undefined;
 

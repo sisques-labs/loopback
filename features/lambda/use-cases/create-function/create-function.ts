@@ -49,7 +49,7 @@ export async function createFunctionAction(
   }
 
   try {
-    const client = getLambdaClient();
+    const client = await getLambdaClient();
     await client.send(
       new CreateFunctionCommand({
         FunctionName: name.trim(),
