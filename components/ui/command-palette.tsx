@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useId } from "react";
+import { useState, useId } from "react";
 import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import { SettingsIcon, PaletteIcon } from "lucide-react";

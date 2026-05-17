@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import tinykeys from "tinykeys";
+import { tinykeys } from "tinykeys";
 import { usePaletteStore } from "@/features/shared/stores/use-palette-store";
 
 /**

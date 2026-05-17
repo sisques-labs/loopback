@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 import { useTheme } from "next-themes";
 import { Monitor, Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -18,12 +18,12 @@ type ThemeToggleProps = {
 };
 
 export function ThemeToggle({ dict }: ThemeToggleProps) {
-  const [mounted, setMounted] = useState(false);
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
   const { theme = "system", setTheme } = useTheme();
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   if (!mounted) {
     return null;
