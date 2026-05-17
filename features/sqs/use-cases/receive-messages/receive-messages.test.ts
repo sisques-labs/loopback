@@ -10,8 +10,6 @@ import { type SQSClient } from "@aws-sdk/client-sqs";
 import { getSQSClient } from "@/features/sqs/lib/client";
 import { receiveMessagesAction } from "./receive-messages";
 import type { ActionState } from "@/features/shared/types/action-state";
-import type { ReceiveMessagesSuccess } from "./receive-messages";
-
 function makeSqsClient(sendFn: (cmd: unknown) => Promise<unknown>): SQSClient {
   return { send: sendFn } as unknown as SQSClient;
 }

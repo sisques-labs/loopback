@@ -36,8 +36,6 @@ function ObjectMetadataDialogInner({
   useEffect(() => {
     if (!open) return;
 
-    setMetadataState("loading");
-
     fetch(
       `/api/aws/s3/${encodeURIComponent(bucket)}/objects/${encodeURIComponent(objectKey)}/metadata`,
     )

@@ -19,7 +19,6 @@ export type QueryFormProps = {
 
 export function QueryForm({
   tableName,
-  partitionKeyName,
   sortKeyName,
   initialPk = "",
   initialSk = "",
