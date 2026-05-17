@@ -6,6 +6,7 @@ import { PencilIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ItemViewDialog } from "@/features/dynamodb/components/item-view-dialog/item-view-dialog";
 import { PutItemDialog } from "@/features/dynamodb/components/put-item-dialog/put-item-dialog";
+import { SeedDialog } from "@/features/dynamodb/components/seed-dialog/seed-dialog";
 import { DeleteItemButton } from "@/features/dynamodb/components/delete-item-button/delete-item-button";
 import { EditItemDialog } from "@/features/dynamodb/components/edit-item-dialog/edit-item-dialog";
 import { ItemsTable } from "@/features/dynamodb/components/items-table/items-table";
@@ -99,13 +100,22 @@ export function ScanTable({
         <div className="min-w-0">
           <h1 className="text-xl font-semibold break-words font-mono">{tableName}</h1>
         </div>
-        <PutItemDialog
-          tableName={tableName}
-          partitionKeyName={partitionKeyName}
-          sortKeyName={sortKeyName}
-          dict={dict.putItemDialog}
-          locale={locale}
-         closeLabel={closeLabel}/>
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+          <PutItemDialog
+            tableName={tableName}
+            partitionKeyName={partitionKeyName}
+            sortKeyName={sortKeyName}
+            dict={dict.putItemDialog}
+            locale={locale}
+            closeLabel={closeLabel}
+          />
+          <SeedDialog
+            tableName={tableName}
+            dict={dict.seedDialog}
+            locale={locale}
+            closeLabel={closeLabel}
+          />
+        </div>
       </div>
 
       <div
