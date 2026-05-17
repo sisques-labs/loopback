@@ -86,7 +86,7 @@ export async function updateItemAction(
   const UpdateExpression = `SET ${expressionParts.join(", ")}`;
 
   try {
-    const client = getDynamoDBDocumentClient();
+    const client = await getDynamoDBDocumentClient();
 
     await client.send(
       new UpdateCommand({

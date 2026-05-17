@@ -7,7 +7,7 @@ import { toFriendlyError } from "@/lib/aws/errors";
 
 export async function headObject(bucket: string, key: string): Promise<S3Object | null> {
   try {
-    const client = getS3Client();
+    const client = await getS3Client();
     const res = await client.send(new HeadObjectCommand({ Bucket: bucket, Key: key }));
     return {
       key,

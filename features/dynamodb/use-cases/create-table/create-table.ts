@@ -57,7 +57,7 @@ export async function createTableAction(
   }
 
   try {
-    const client = getDynamoDBClient();
+    const client = await getDynamoDBClient();
 
     const attributeDefinitions: AttributeDefinition[] = [
       { AttributeName: partitionKeyName.trim(), AttributeType: partitionKeyType as KeyType },

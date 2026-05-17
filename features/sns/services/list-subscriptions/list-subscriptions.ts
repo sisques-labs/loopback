@@ -5,7 +5,7 @@ import { getSNSClient } from "@/features/sns/lib/client";
 import type { Subscription } from "@/features/sns/types/sns";
 
 export async function listSubscriptionsByTopic(topicArn: string): Promise<Subscription[]> {
-  const client = getSNSClient();
+  const client = await getSNSClient();
   const res = await client.send(new ListSubscriptionsByTopicCommand({ TopicArn: topicArn }));
   return (res.Subscriptions ?? []).map((s) => ({
     subscriptionArn: s.SubscriptionArn ?? "",

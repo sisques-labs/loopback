@@ -120,7 +120,7 @@ describe("updateItemAction — UpdateCommand construction", () => {
   it("sends UpdateCommand with key attrs stripped and dynamic SET for non-key attrs (PK only)", async () => {
     const sendFn = vi.fn().mockResolvedValue({});
     const client = makeDocClient(sendFn);
-    vi.mocked(getDynamoDBDocumentClient).mockReturnValue(client);
+    vi.mocked(getDynamoDBDocumentClient).mockResolvedValue(client);
 
     await updateItemAction(
       idle,
@@ -161,7 +161,7 @@ describe("updateItemAction — UpdateCommand construction", () => {
   it("sends UpdateCommand with both PK and SK stripped (PK + SK table)", async () => {
     const sendFn = vi.fn().mockResolvedValue({});
     const client = makeDocClient(sendFn);
-    vi.mocked(getDynamoDBDocumentClient).mockReturnValue(client);
+    vi.mocked(getDynamoDBDocumentClient).mockResolvedValue(client);
 
     await updateItemAction(
       idle,
@@ -190,7 +190,7 @@ describe("updateItemAction — UpdateCommand construction", () => {
 
   it("calls revalidatePath after successful update", async () => {
     const sendFn = vi.fn().mockResolvedValue({});
-    vi.mocked(getDynamoDBDocumentClient).mockReturnValue(makeDocClient(sendFn));
+    vi.mocked(getDynamoDBDocumentClient).mockResolvedValue(makeDocClient(sendFn));
 
     await updateItemAction(
       idle,
@@ -206,7 +206,7 @@ describe("updateItemAction — UpdateCommand construction", () => {
   });
 
   it("returns success after successful update", async () => {
-    vi.mocked(getDynamoDBDocumentClient).mockReturnValue(
+    vi.mocked(getDynamoDBDocumentClient).mockResolvedValue(
       makeDocClient(async () => ({})),
     );
 
@@ -230,7 +230,7 @@ describe("updateItemAction — UpdateCommand construction", () => {
 describe("updateItemAction — empty non-key attrs guard", () => {
   it("returns success without sending when item has only key attrs", async () => {
     const sendFn = vi.fn().mockResolvedValue({});
-    vi.mocked(getDynamoDBDocumentClient).mockReturnValue(makeDocClient(sendFn));
+    vi.mocked(getDynamoDBDocumentClient).mockResolvedValue(makeDocClient(sendFn));
 
     const result = await updateItemAction(
       idle,
@@ -248,7 +248,7 @@ describe("updateItemAction — empty non-key attrs guard", () => {
 
   it("returns success without sending when PK+SK item has only key attrs", async () => {
     const sendFn = vi.fn().mockResolvedValue({});
-    vi.mocked(getDynamoDBDocumentClient).mockReturnValue(makeDocClient(sendFn));
+    vi.mocked(getDynamoDBDocumentClient).mockResolvedValue(makeDocClient(sendFn));
 
     const result = await updateItemAction(
       idle,
@@ -270,7 +270,7 @@ describe("updateItemAction — empty non-key attrs guard", () => {
 // ---------------------------------------------------------------------------
 describe("updateItemAction — SDK error handling", () => {
   it("returns error when SDK throws", async () => {
-    vi.mocked(getDynamoDBDocumentClient).mockReturnValue(
+    vi.mocked(getDynamoDBDocumentClient).mockResolvedValue(
       makeDocClient(async () => {
         throw new Error("ProvisionedThroughputExceededException");
       }),

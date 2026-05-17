@@ -12,7 +12,7 @@ export async function scanTable(
   startKey?: Record<string, AttributeValue>,
 ): Promise<ScanResult> {
   try {
-    const client = getDynamoDBClient();
+    const client = await getDynamoDBClient();
 
     const res = await client.send(
       new ScanCommand({

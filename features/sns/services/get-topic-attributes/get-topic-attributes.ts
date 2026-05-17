@@ -7,7 +7,7 @@ import { toFriendlyError } from "@/features/sns/lib/errors";
 
 export async function getTopicAttributes(topicArn: string): Promise<TopicAttributes> {
   try {
-    const client = getSNSClient();
+    const client = await getSNSClient();
     const { Attributes } = await client.send(
       new GetTopicAttributesCommand({ TopicArn: topicArn }),
     );

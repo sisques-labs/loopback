@@ -20,7 +20,7 @@ export async function deleteTopicAction(
   if (!topicArn) return { status: "error", message: dict.sns.validation.topicArnRequired };
 
   try {
-    const client = getSNSClient();
+    const client = await getSNSClient();
     await client.send(new DeleteTopicCommand({ TopicArn: topicArn }));
     revalidatePath("/sns", "layout");
     return { status: "success", data: undefined };

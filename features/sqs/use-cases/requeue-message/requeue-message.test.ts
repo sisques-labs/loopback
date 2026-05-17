@@ -60,7 +60,7 @@ describe("requeueMessageAction — success path", () => {
       capturedCommand = cmd;
       return {};
     });
-    vi.mocked(getSQSClient).mockReturnValue(client);
+    vi.mocked(getSQSClient).mockResolvedValue(client);
 
     const queueUrl = "https://localhost/000000000000/test-queue";
     const receiptHandle = "receipt-handle-xyz";
@@ -87,7 +87,7 @@ describe("requeueMessageAction — AWS error", () => {
     const client = makeSqsClient(async () => {
       throw awsError;
     });
-    vi.mocked(getSQSClient).mockReturnValue(client);
+    vi.mocked(getSQSClient).mockResolvedValue(client);
 
     const result = await requeueMessageAction(
       idle,

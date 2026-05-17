@@ -12,7 +12,7 @@ function nameFromArn(arn: string): string {
 
 export async function listTopics(): Promise<Topic[]> {
   try {
-    const client = getSNSClient();
+    const client = await getSNSClient();
 
     // 1. Page through ListTopics until NextToken is empty.
     const arns: string[] = [];

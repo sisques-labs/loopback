@@ -35,7 +35,7 @@ export async function invokeFunctionAction(
   }
 
   try {
-    const client = getLambdaClient();
+    const client = await getLambdaClient();
     const res = await client.send(
       new InvokeCommand({
         FunctionName: functionName,

@@ -30,7 +30,7 @@ describe("listTables", () => {
       if (cmd instanceof ListTablesCommand) return { TableNames: [] };
       throw new Error("unexpected command");
     });
-    vi.mocked(getDynamoDBClient).mockReturnValue(client);
+    vi.mocked(getDynamoDBClient).mockResolvedValue(client);
 
     const result = await listTables();
     expect(result).toEqual([]);
@@ -55,7 +55,7 @@ describe("listTables", () => {
       }
       throw new Error("unexpected command");
     });
-    vi.mocked(getDynamoDBClient).mockReturnValue(client);
+    vi.mocked(getDynamoDBClient).mockResolvedValue(client);
 
     const result = await listTables();
     expect(result).toHaveLength(1);
@@ -99,7 +99,7 @@ describe("listTables", () => {
       }
       throw new Error("unexpected command");
     });
-    vi.mocked(getDynamoDBClient).mockReturnValue(client);
+    vi.mocked(getDynamoDBClient).mockResolvedValue(client);
 
     const result = await listTables();
     expect(result[0].partitionKeyName).toBe("pk");
@@ -133,7 +133,7 @@ describe("listTables", () => {
       }
       throw new Error("unexpected command");
     });
-    vi.mocked(getDynamoDBClient).mockReturnValue(client);
+    vi.mocked(getDynamoDBClient).mockResolvedValue(client);
 
     const result = await listTables();
     expect(result).toHaveLength(2);
@@ -147,7 +147,7 @@ describe("listTables", () => {
       err.name = "ResourceNotFoundException";
       throw err;
     });
-    vi.mocked(getDynamoDBClient).mockReturnValue(client);
+    vi.mocked(getDynamoDBClient).mockResolvedValue(client);
 
     await expect(listTables()).rejects.toThrow();
   });
@@ -172,7 +172,7 @@ describe("listTables", () => {
       }
       throw new Error("unexpected command");
     });
-    vi.mocked(getDynamoDBClient).mockReturnValue(client);
+    vi.mocked(getDynamoDBClient).mockResolvedValue(client);
 
     const result = await listTables();
     expect(result[0].creationDateTime).toBe(creationDate.toISOString());
@@ -195,7 +195,7 @@ describe("listTables", () => {
       }
       throw new Error("unexpected command");
     });
-    vi.mocked(getDynamoDBClient).mockReturnValue(client);
+    vi.mocked(getDynamoDBClient).mockResolvedValue(client);
 
     const result = await listTables();
     expect(result[0].creationDateTime).toBeUndefined();
@@ -219,7 +219,7 @@ describe("listTables", () => {
       }
       throw new Error("unexpected command");
     });
-    vi.mocked(getDynamoDBClient).mockReturnValue(client);
+    vi.mocked(getDynamoDBClient).mockResolvedValue(client);
 
     const result = await listTables();
     expect(result[0].billingMode).toBe("PAY_PER_REQUEST");
@@ -242,7 +242,7 @@ describe("listTables", () => {
       }
       throw new Error("unexpected command");
     });
-    vi.mocked(getDynamoDBClient).mockReturnValue(client);
+    vi.mocked(getDynamoDBClient).mockResolvedValue(client);
 
     const result = await listTables();
     expect(result[0].billingMode).toBe("PROVISIONED");
@@ -266,7 +266,7 @@ describe("listTables", () => {
       }
       throw new Error("unexpected command");
     });
-    vi.mocked(getDynamoDBClient).mockReturnValue(client);
+    vi.mocked(getDynamoDBClient).mockResolvedValue(client);
 
     const result = await listTables();
     expect(result[0].gsiCount).toBe(2);
@@ -289,7 +289,7 @@ describe("listTables", () => {
       }
       throw new Error("unexpected command");
     });
-    vi.mocked(getDynamoDBClient).mockReturnValue(client);
+    vi.mocked(getDynamoDBClient).mockResolvedValue(client);
 
     const result = await listTables();
     expect(result[0].gsiCount).toBe(0);
@@ -313,7 +313,7 @@ describe("listTables", () => {
       }
       throw new Error("unexpected command");
     });
-    vi.mocked(getDynamoDBClient).mockReturnValue(client);
+    vi.mocked(getDynamoDBClient).mockResolvedValue(client);
 
     const result = await listTables();
     expect(result[0].gsiCount).toBe(0);

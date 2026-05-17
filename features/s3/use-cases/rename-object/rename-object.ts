@@ -19,7 +19,7 @@ export async function renameObjectAction(
   if (newKey.length > 1024) return { status: "error", message: "Key must not exceed 1024 characters." };
   if (newKey === oldKey) return { status: "error", message: "New key must be different from the current key." };
 
-  const client = getS3Client();
+  const client = await getS3Client();
 
   try {
     // AWS SDK v3 requires the CopySource to be URI-encoded (bucket + "/" + key)

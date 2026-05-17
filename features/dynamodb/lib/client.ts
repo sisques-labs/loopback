@@ -1,31 +1,31 @@
 import "server-only";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
+import { createAwsConfig } from "@/lib/aws/config";
 
-let _raw: DynamoDBClient | undefined;
-let _doc: DynamoDBDocumentClient | undefined;
-
-export function getDynamoDBClient(): DynamoDBClient {
-  if (_raw) return _raw;
-
-  _raw = new DynamoDBClient({
-    endpoint: process.env.AWS_ENDPOINT_URL,
-    region: process.env.AWS_REGION ?? "us-east-1",
-    credentials: {
-      accessKeyId: process.env.AWS_ACCESS_KEY_ID ?? "test",
-      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY ?? "test",
-    },
-  });
-
-  return _raw;
+/**
+ * Returns a fresh DynamoDBClient on every call.
+ *
+ * IMPORTANT: There is intentionally NO module-level singleton cache here.
+ * The endpoint is resolved from the httpOnly cookie on every request via
+ * createAwsConfig(), so that a UI-set endpoint override takes effect
+ * immediately without a process restart.
+ *
+ * Do NOT add a cache — that would reintroduce the stale-endpoint bug.
+ */
+export async function getDynamoDBClient(): Promise<DynamoDBClient> {
+  const config = await createAwsConfig();
+  return new DynamoDBClient(config);
 }
 
-export function getDynamoDBDocumentClient(): DynamoDBDocumentClient {
-  if (_doc) return _doc;
-
-  _doc = DynamoDBDocumentClient.from(getDynamoDBClient(), {
+/**
+ * Returns a fresh DynamoDBDocumentClient on every call.
+ *
+ * Same no-cache guarantee as getDynamoDBClient (see above).
+ */
+export async function getDynamoDBDocumentClient(): Promise<DynamoDBDocumentClient> {
+  const client = await getDynamoDBClient();
+  return DynamoDBDocumentClient.from(client, {
     marshallOptions: { removeUndefinedValues: true },
   });
-
-  return _doc;
 }

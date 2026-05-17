@@ -14,7 +14,7 @@ export async function queryTable(
   startKey?: Record<string, AttributeValue>,
 ): Promise<ScanResult> {
   try {
-    const client = getDynamoDBClient();
+    const client = await getDynamoDBClient();
 
     const expressionAttributeNames: Record<string, string> = { "#pk": pk.name };
     const expressionAttributeValues: Record<string, AttributeValue> = {
