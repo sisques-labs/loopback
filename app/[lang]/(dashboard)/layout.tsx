@@ -4,6 +4,7 @@ import { HeaderBreadcrumb } from "@/features/shared/components/header-breadcrumb
 import { MobileNavTrigger } from "@/features/shared/components/mobile-nav/mobile-nav-trigger";
 import { MobileNavDrawer } from "@/features/shared/components/mobile-nav/mobile-nav-drawer";
 import { UploadProgressModalMount } from "@/features/s3/components/upload-progress-modal/upload-progress-modal-mount";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { getDictionary } from "@/features/shared/i18n/get-dictionary";
 import { DEFAULT_LOCALE, isLocale, type Locale } from "@/features/shared/i18n/locale";
 
@@ -18,6 +19,7 @@ export default async function DashboardLayout({
   const locale: Locale = isLocale(lang) ? lang : DEFAULT_LOCALE;
   const dict = getDictionary(locale);
   const localePrefix = `/${locale}`;
+  const themeDict = dict.shared.themeToggle;
 
   return (
     <>
@@ -36,6 +38,7 @@ export default async function DashboardLayout({
                 dashboardLabel={dict.shared.sidebar.dashboard}
               />
             }
+            rightSlot={<ThemeToggle dict={themeDict} />}
           />
           <main className="flex-1 overflow-auto p-4 md:p-6">{children}</main>
         </div>
