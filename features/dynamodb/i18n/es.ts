@@ -151,6 +151,30 @@ const dict = {
     backToTables: "Volver a las tablas",
     retry: "Reintentar",
   },
+  seedDialog: {
+    trigger: "Importar datos",
+    title: "Importar datos",
+    description: "Importá ítems desde un archivo JSON o CSV a esta tabla.",
+    fileLabel: "Archivo de datos",
+    fileHint:
+      "Acepta .json (array de objetos) o .csv (fila de encabezados + filas de datos). Nota: CSV no soporta campos entre comillas con comas.",
+    overwriteLabel: "Sobreescribir ítems existentes",
+    overwriteHint:
+      "Desactivar no tiene efecto en la versión actual — los ítems siempre se sobreescriben por clave. Esta opción está reservada para un futuro modo de omisión si ya existe.",
+    fileSizeWarning:
+      "El archivo supera 500 KB. Subir payloads grandes puede ser lento o fallar. Considerá dividir el archivo.",
+    errorInvalidFile: "Tipo de archivo inválido. Seleccioná un archivo .json o .csv.",
+    errorEmptyArray: "El archivo contiene un array vacío. Agregá al menos un ítem.",
+    errorParseJson:
+      "No se pudo analizar el archivo como JSON. Asegurate de que sea un array JSON válido.",
+    errorParseCsv:
+      "El archivo CSV no tiene filas de datos. Agregá al menos una fila después del encabezado.",
+    successToast: "Se importaron {count} ítems exitosamente.",
+    errorPartialFail: "{failed} de {total} ítems no se pudieron importar.",
+    importing: "Importando…",
+    cancel: "Cancelar",
+    submit: "Importar",
+  },
 } as const satisfies DynamoDBDictTranslated;
 
 export default dict;
