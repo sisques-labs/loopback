@@ -6,7 +6,7 @@ import { toFriendlyError } from "@/features/sqs/lib/errors";
 
 export async function getQueueAttributes(queueUrl: string): Promise<Record<string, string>> {
   try {
-    const client = getSQSClient();
+    const client = await getSQSClient();
     const { Attributes } = await client.send(
       new GetQueueAttributesCommand({
         QueueUrl: queueUrl,

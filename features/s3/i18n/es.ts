@@ -44,6 +44,7 @@ const dict = {
     preview: "Vista previa",
     download: "Descargar",
     rename: "Renombrar",
+    metadata: "Metadatos",
     delete: "Eliminar",
     deleteTitle: "Eliminar objeto",
     deleteConfirm:
@@ -56,6 +57,19 @@ const dict = {
     tooLarge: "Archivo demasiado grande para previsualizar (máx. 1 MB).",
     downloadInstead: "Descargar en su lugar",
     error: "No se pudo cargar la vista previa.",
+  },
+  metadataDialog: {
+    title: "Metadatos del objeto",
+    loading: "Cargando metadatos…",
+    error: "No se pudieron cargar los metadatos.",
+    size: "Tamaño",
+    contentType: "Tipo de contenido",
+    etag: "ETag",
+    storageClass: "Clase de almacenamiento",
+    lastModified: "Última modificación",
+    customSection: "Metadatos personalizados",
+    noCustom: "Sin metadatos personalizados.",
+    notAvailable: "—",
   },
   renameObjectDialog: {
     title: "Renombrar objeto",

@@ -42,7 +42,7 @@ export async function putItemAction(
   }
 
   try {
-    const client = getDynamoDBDocumentClient();
+    const client = await getDynamoDBDocumentClient();
 
     await client.send(
       new PutCommand({

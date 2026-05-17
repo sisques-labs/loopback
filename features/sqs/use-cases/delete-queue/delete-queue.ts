@@ -20,7 +20,7 @@ export async function deleteQueueAction(
   if (!queueUrl) return { status: "error", message: dict.sqs.validation.queueUrlRequired };
 
   try {
-    const client = getSQSClient();
+    const client = await getSQSClient();
     await client.send(new DeleteQueueCommand({ QueueUrl: queueUrl }));
     revalidatePath("/sqs", "layout");
     return { status: "success", data: undefined };

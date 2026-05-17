@@ -58,6 +58,8 @@ const dict = {
       submitting: "Sending…",
       submit: "Send",
       successToast: "Message sent to {queue}.",
+      invalidJson: "Invalid JSON syntax.",
+      formatButton: "Format JSON",
     },
     receive: {
       trigger: "Receive messages",
@@ -67,6 +69,18 @@ const dict = {
       empty: "No messages returned (queue may be empty or messages are in flight).",
       messageIdLabel: "Message ID",
       submitting: "Receiving…",
+      requeue: {
+        requeue: "Requeue",
+        requeueing: "Requeueing…",
+        requeueSuccess: "Message requeued.",
+      },
+      attributesDialog: {
+        trigger: "View attributes",
+        title: "Message attributes",
+        systemSection: "System attributes",
+        customSection: "Message attributes",
+        close: "Close",
+      },
     },
     purge: {
       trigger: "Purge queue",
@@ -78,6 +92,7 @@ const dict = {
   },
   validation: {
     queueUrlRequired: "Queue URL is required.",
+    receiptHandleRequired: "Receipt handle is required.",
     messageRequired: "Message body cannot be empty.",
   },
   sdkErrors: {
@@ -87,6 +102,8 @@ const dict = {
     notAuthorized: "Not authorized to perform this SQS action.",
     endpointUnreachable: "Cannot connect to LocalStack at {endpoint}. Make sure it is running.",
     unknown: "An unexpected error occurred.",
+    receiptHandleInvalid:
+      "This message's visibility window expired — receive a new batch to retry.",
   },
   errors: {
     connectFailed: "Failed to connect to SQS",

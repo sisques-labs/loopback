@@ -10,10 +10,14 @@ import { getSQSClient } from "@/features/sqs/lib/client";
 import { toFriendlyError } from "@/features/sqs/lib/errors";
 import type { ActionState } from "@/features/shared/types/action-state";
 
+export type SqsMessageAttribute = { dataType: string; value: string };
+
 export type SqsReceivedMessageBrief = {
   messageId: string;
   body: string;
   receiptHandle: string;
+  attributes?: Record<string, string>;
+  messageAttributes?: Record<string, SqsMessageAttribute>;
 };
 
 const MAX_MESSAGES = 5;
@@ -33,7 +37,7 @@ export async function receiveMessagesAction(
   if (!queueUrl) return { status: "error", message: dict.sqs.validation.queueUrlRequired };
 
   try {
-    const client = getSQSClient();
+    const client = await getSQSClient();
     const out = await client.send(
       new ReceiveMessageCommand({
         QueueUrl: queueUrl,
@@ -44,11 +48,26 @@ export async function receiveMessagesAction(
       }),
     );
 
-    const messages: SqsReceivedMessageBrief[] = (out.Messages ?? []).map((m) => ({
-      messageId: m.MessageId ?? "(unknown)",
-      body: m.Body ?? "",
-      receiptHandle: m.ReceiptHandle ?? "",
-    }));
+    const messages: SqsReceivedMessageBrief[] = (out.Messages ?? []).map((m) => {
+      const sys = m.Attributes;
+      const customEntries = Object.entries(m.MessageAttributes ?? {}).map(
+        ([k, v]) =>
+          [
+            k,
+            {
+              dataType: v.DataType ?? "String",
+              value: v.StringValue ?? (v.BinaryValue ? "(binary)" : ""),
+            },
+          ] as const,
+      );
+      return {
+        messageId: m.MessageId ?? "(unknown)",
+        body: m.Body ?? "",
+        receiptHandle: m.ReceiptHandle ?? "",
+        ...(sys && Object.keys(sys).length > 0 ? { attributes: sys as Record<string, string> } : {}),
+        ...(customEntries.length > 0 ? { messageAttributes: Object.fromEntries(customEntries) } : {}),
+      };
+    });
 
     revalidatePath("/sqs", "layout");
     return { status: "success", data: { messages } };

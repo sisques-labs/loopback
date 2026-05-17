@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useEffect, useRef } from "react";
+import { useState, useActionState, useEffect } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,8 +10,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import { JsonTextarea } from "@/features/shared/components/json-textarea/json-textarea";
 import { updateItemAction } from "@/features/dynamodb/use-cases/update-item/update-item";
 import type { AppDict } from "@/features/shared/i18n/get-dictionary";
 import type { Locale } from "@/features/shared/i18n/locale";
@@ -28,8 +27,7 @@ type Props = {
   locale: Locale;
   open: boolean;
   onOpenChange: (open: boolean) => void;
-
-    closeLabel: string;
+  closeLabel: string;
 };
 
 function buildKeyObject(
@@ -42,18 +40,6 @@ function buildKeyObject(
     key[sortKeyName] = item[sortKeyName];
   }
   return key;
-}
-
-function buildNonKeyJson(
-  item: Record<string, unknown>,
-  partitionKeyName: string,
-  sortKeyName?: string,
-): string {
-  const keyNames = new Set([partitionKeyName, ...(sortKeyName ? [sortKeyName] : [])]);
-  const nonKey = Object.fromEntries(
-    Object.entries(item).filter(([k]) => !keyNames.has(k)),
-  );
-  return JSON.stringify(nonKey, null, 2);
 }
 
 function formatKeyValue(value: unknown): string {
@@ -72,9 +58,7 @@ export function EditItemDialog({
   open,
   onOpenChange, closeLabel}: Props) {
   const [state, formAction, pending] = useActionState(updateItemAction, INITIAL_STATE);
-
-  // We need a ref to close the dialog on success
-  const closeRef = useRef<(() => void) | null>(null);
+  const [itemJsonValid, setItemJsonValid] = useState(true);
 
   useEffect(() => {
     if (state.status === "success") {
@@ -116,14 +100,13 @@ export function EditItemDialog({
 
         <form action={formAction} className="flex flex-col gap-4">
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="edit-item-json">{dict.jsonLabel}</Label>
-            <Textarea
-              id="edit-item-json"
+            <JsonTextarea
+              key={JSON.stringify(keyObject)}
               name="itemJson"
+              label={dict.jsonLabel}
               defaultValue={initialItemJson}
               rows={10}
-              className="font-mono text-sm"
-              aria-invalid={state.status === "error" ? true : undefined}
+              onValidityChange={setItemJsonValid}
             />
             <p className="text-xs text-muted-foreground">{dict.jsonHint}</p>
             {state.status === "error" && (
@@ -146,7 +129,7 @@ export function EditItemDialog({
             </Button>
             <Button
               type="submit"
-              disabled={pending}
+              disabled={pending || !itemJsonValid}
               className="min-h-11 min-w-11 md:min-h-9 md:min-w-9"
             >
               {pending ? dict.saving : dict.submit}

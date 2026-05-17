@@ -7,7 +7,7 @@ import { toFriendlyError } from "@/lib/aws/errors";
 
 export async function headObject(bucket: string, key: string): Promise<S3Object | null> {
   try {
-    const client = getS3Client();
+    const client = await getS3Client();
     const res = await client.send(new HeadObjectCommand({ Bucket: bucket, Key: key }));
     return {
       key,
@@ -16,6 +16,7 @@ export async function headObject(bucket: string, key: string): Promise<S3Object 
       etag: res.ETag,
       storageClass: res.StorageClass,
       contentType: res.ContentType,
+      metadata: res.Metadata && Object.keys(res.Metadata).length > 0 ? res.Metadata : undefined,
     };
   } catch (err) {
     const friendly = toFriendlyError(err);

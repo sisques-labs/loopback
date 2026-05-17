@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useEffect, useRef } from "react";
+import { useState, useActionState, useEffect, useRef } from "react";
 import { toast } from "sonner";
 import { PlusIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -13,8 +13,7 @@ import {
   DialogTrigger,
   DialogClose,
 } from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import { JsonTextarea } from "@/features/shared/components/json-textarea/json-textarea";
 import { putItemAction } from "@/features/dynamodb/use-cases/put-item/put-item";
 import type { AppDict } from "@/features/shared/i18n/get-dictionary";
 import type { Locale } from "@/features/shared/i18n/locale";
@@ -37,8 +36,7 @@ type Props = {
   sortKeyName?: string;
   dict: AppDict["dynamodb"]["putItemDialog"];
   locale: Locale;
-
-    closeLabel: string;
+  closeLabel: string;
 };
 
 export function PutItemDialog({
@@ -49,6 +47,7 @@ export function PutItemDialog({
   locale, closeLabel}: Props) {
   const exampleJson = buildItemExampleJson(partitionKeyName, sortKeyName);
   const [state, formAction, pending] = useActionState(putItemAction, INITIAL_STATE);
+  const [itemJsonValid, setItemJsonValid] = useState(false);
   const closeRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
@@ -71,14 +70,12 @@ export function PutItemDialog({
         <p className="text-sm text-muted-foreground">{dict.description}</p>
         <form action={formAction} className="flex flex-col gap-4">
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="item-json">{dict.jsonLabel}</Label>
-            <Textarea
-              id="item-json"
+            <JsonTextarea
               name="itemJson"
+              label={dict.jsonLabel}
               placeholder={exampleJson}
               rows={8}
-              className="font-mono text-sm"
-              aria-invalid={state.status === "error" ? true : undefined}
+              onValidityChange={setItemJsonValid}
             />
             <p className="text-xs text-muted-foreground">{dict.jsonHint}</p>
             {state.status === "error" && (
@@ -93,7 +90,7 @@ export function PutItemDialog({
             <DialogClose ref={closeRef} render={<Button variant="outline" type="button" />}>
               {dict.cancel}
             </DialogClose>
-            <Button type="submit" disabled={pending}>
+            <Button type="submit" disabled={pending || !itemJsonValid}>
               {pending ? dict.saving : dict.submit}
             </Button>
           </DialogFooter>

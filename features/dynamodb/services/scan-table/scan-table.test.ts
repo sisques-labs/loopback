@@ -27,7 +27,7 @@ describe("scanTable", () => {
       }
       throw new Error("unexpected command");
     });
-    vi.mocked(getDynamoDBClient).mockReturnValue(client);
+    vi.mocked(getDynamoDBClient).mockResolvedValue(client);
 
     const result = await scanTable("users");
     expect(result.items).toHaveLength(1);
@@ -47,7 +47,7 @@ describe("scanTable", () => {
       }
       throw new Error("unexpected command");
     });
-    vi.mocked(getDynamoDBClient).mockReturnValue(client);
+    vi.mocked(getDynamoDBClient).mockResolvedValue(client);
 
     const result = await scanTable("users");
     expect(result.nextKey).not.toBeNull();
@@ -63,7 +63,7 @@ describe("scanTable", () => {
       }
       throw new Error("unexpected command");
     });
-    vi.mocked(getDynamoDBClient).mockReturnValue(client);
+    vi.mocked(getDynamoDBClient).mockResolvedValue(client);
 
     const result = await scanTable("empty-table");
     expect(result.items).toEqual([]);
@@ -81,7 +81,7 @@ describe("scanTable", () => {
       }
       throw new Error("unexpected command");
     });
-    vi.mocked(getDynamoDBClient).mockReturnValue(client);
+    vi.mocked(getDynamoDBClient).mockResolvedValue(client);
 
     await scanTable("users", startKey);
     expect(capturedInput).not.toBeNull();
@@ -98,7 +98,7 @@ describe("scanTable", () => {
       }
       throw new Error("unexpected command");
     });
-    vi.mocked(getDynamoDBClient).mockReturnValue(client);
+    vi.mocked(getDynamoDBClient).mockResolvedValue(client);
 
     await scanTable("users");
     expect(capturedInput!.Limit).toBe(50);
@@ -110,7 +110,7 @@ describe("scanTable", () => {
       err.name = "ResourceNotFoundException";
       throw err;
     });
-    vi.mocked(getDynamoDBClient).mockReturnValue(client);
+    vi.mocked(getDynamoDBClient).mockResolvedValue(client);
 
     await expect(scanTable("nonexistent")).rejects.toThrow();
   });

@@ -7,7 +7,7 @@ import { toFriendlyError } from "@/features/lambda/lib/errors";
 
 export async function getFunction(functionName: string): Promise<LambdaFunction> {
   try {
-    const client = getLambdaClient();
+    const client = await getLambdaClient();
     const res = await client.send(new GetFunctionCommand({ FunctionName: functionName }));
     const cfg = res.Configuration;
 

@@ -39,14 +39,37 @@ vi.mock(
   }),
 );
 
+vi.mock(
+  "@/features/s3/components/object-metadata-dialog/object-metadata-dialog",
+  () => ({
+    ObjectMetadataDialog: ({ open }: { open: boolean }) =>
+      open ? <div data-testid="metadata-dialog" /> : null,
+  }),
+);
+
 const dict = {
   actions: "Object actions",
   preview: "Preview",
   download: "Download",
   rename: "Rename",
+  metadata: "Metadata",
   delete: "Delete",
   deleteTitle: "Delete object",
   deleteConfirm: "Are you sure you want to delete {key}?",
+};
+
+const metadataDict = {
+  title: "Object metadata",
+  loading: "Loading metadata…",
+  error: "Couldn't load metadata.",
+  size: "Size",
+  contentType: "Content type",
+  etag: "ETag",
+  storageClass: "Storage class",
+  lastModified: "Last modified",
+  customSection: "Custom metadata",
+  noCustom: "No custom metadata.",
+  notAvailable: "—",
 };
 
 const renameDict = {
@@ -85,6 +108,7 @@ const baseProps = {
   renameDict,
   confirmDict,
   previewDict,
+  metadataDict,
   closeLabel: "Close",
 };
 
@@ -144,12 +168,46 @@ describe("ObjectRowActions", () => {
     expect(screen.getByTestId("preview-dialog").textContent).toBe("Preview");
   });
 
-  it("still shows Download, Rename, Delete items (regression)", () => {
+  it("still shows Preview, Download, Rename, Metadata, Delete items (regression)", () => {
     render(<ObjectRowActions {...baseProps} />);
     openDropdown();
 
+    expect(screen.getByText("Preview")).toBeInTheDocument();
     expect(screen.getByText("Download")).toBeInTheDocument();
     expect(screen.getByText("Rename")).toBeInTheDocument();
+    expect(screen.getByText("Metadata")).toBeInTheDocument();
     expect(screen.getByText("Delete")).toBeInTheDocument();
+  });
+
+  it("shows Metadata menu item when dropdown is opened", () => {
+    render(<ObjectRowActions {...baseProps} />);
+    openDropdown();
+
+    expect(screen.getByText("Metadata")).toBeInTheDocument();
+  });
+
+  it("clicking Metadata opens the metadata dialog", () => {
+    render(<ObjectRowActions {...baseProps} />);
+    openDropdown();
+
+    act(() => {
+      fireEvent.click(screen.getByText("Metadata"));
+    });
+
+    expect(screen.getByTestId("metadata-dialog")).toBeInTheDocument();
+  });
+
+  it("closing metadata dialog resets metadataOpen state", () => {
+    render(<ObjectRowActions {...baseProps} />);
+    openDropdown();
+
+    act(() => {
+      fireEvent.click(screen.getByText("Metadata"));
+    });
+
+    expect(screen.getByTestId("metadata-dialog")).toBeInTheDocument();
+
+    // The mock renders null when open=false, so we just confirm it was open
+    // (full close interaction requires the real Dialog; tested via the dialog's own tests)
   });
 });

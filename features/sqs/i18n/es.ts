@@ -64,6 +64,8 @@ const dict = {
       submitting: "Enviando…",
       submit: "Enviar",
       successToast: "Mensaje enviado a {queue}.",
+      invalidJson: "JSON con sintaxis inválida.",
+      formatButton: "Formatear JSON",
     },
     receive: {
       trigger: "Recibir mensajes",
@@ -73,6 +75,18 @@ const dict = {
       empty: "No hubo mensajes (cola vacía o mensajes en vuelo).",
       messageIdLabel: "ID de mensaje",
       submitting: "Recibiendo…",
+      requeue: {
+        requeue: "Reencolar",
+        requeueing: "Reencolando…",
+        requeueSuccess: "Mensaje reencolado.",
+      },
+      attributesDialog: {
+        trigger: "Ver atributos",
+        title: "Atributos del mensaje",
+        systemSection: "Atributos del sistema",
+        customSection: "Atributos del mensaje",
+        close: "Cerrar",
+      },
     },
     purge: {
       trigger: "Vaciar cola",
@@ -84,6 +98,7 @@ const dict = {
   },
   validation: {
     queueUrlRequired: "La URL de la cola es obligatoria.",
+    receiptHandleRequired: "El receipt handle es obligatorio.",
     messageRequired: "El cuerpo del mensaje no puede estar vacío.",
   },
   sdkErrors: {
@@ -93,6 +108,8 @@ const dict = {
     notAuthorized: "Sin autorización para realizar esta acción en SQS.",
     endpointUnreachable: "No se puede conectar a LocalStack en {endpoint}. Asegurate de que esté en ejecución.",
     unknown: "Ocurrió un error inesperado.",
+    receiptHandleInvalid:
+      "La ventana de visibilidad de este mensaje expiró — recibí un nuevo lote para reintentar.",
   },
   errors: {
     connectFailed: "No se pudo conectar a SQS",

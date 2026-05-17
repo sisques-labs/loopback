@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useEffect, useRef } from "react";
+import { useState, useActionState, useEffect, useRef } from "react";
 import { toast } from "sonner";
 import { SendIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -13,8 +13,7 @@ import {
   DialogTrigger,
   DialogClose,
 } from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import { JsonTextarea } from "@/features/shared/components/json-textarea/json-textarea";
 import { sendMessageAction } from "@/features/sqs/use-cases/send-message/send-message";
 import { t } from "@/features/shared/i18n/interpolate";
 import type { ActionState } from "@/features/shared/types/action-state";
@@ -29,12 +28,12 @@ type Props = {
   isFifo: boolean;
   dict: AppDict["sqs"]["queueDetail"]["sendMessage"];
   locale: Locale;
-
-    closeLabel: string;
+  closeLabel: string;
 };
 
-export function SendMessageDialog({ queueUrl, queueName, isFifo, dict, locale, closeLabel}: Props) {
+export function SendMessageDialog({ queueUrl, queueName, isFifo, dict, locale, closeLabel }: Props) {
   const [state, formAction, pending] = useActionState(sendMessageAction, INITIAL_STATE);
+  const [bodyValid, setBodyValid] = useState(false);
   const closeRef = useRef<HTMLButtonElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -59,24 +58,21 @@ export function SendMessageDialog({ queueUrl, queueName, isFifo, dict, locale, c
           <input type="hidden" name="queueUrl" value={queueUrl} />
           <input type="hidden" name="isFifo" value={String(isFifo)} />
           <input type="hidden" name="locale" value={locale} />
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="sqs-send-body">{dict.bodyLabel}</Label>
-            <Textarea
-              id="sqs-send-body"
-              name="body"
-              placeholder={dict.bodyPlaceholder}
-              required
-              aria-required="true"
-            />
-            {state.status === "error" && (
-              <p className="text-xs text-destructive">{state.message}</p>
-            )}
-          </div>
+          <JsonTextarea
+            name="body"
+            label={dict.bodyLabel}
+            placeholder={dict.bodyPlaceholder}
+            required
+            onValidityChange={setBodyValid}
+          />
+          {state.status === "error" && (
+            <p className="text-xs text-destructive">{state.message}</p>
+          )}
           <DialogFooter>
             <DialogClose ref={closeRef} render={<Button variant="outline" type="button" />}>
               {dict.cancel}
             </DialogClose>
-            <Button type="submit" disabled={pending}>
+            <Button type="submit" disabled={pending || !bodyValid}>
               {pending ? dict.submitting : dict.submit}
             </Button>
           </DialogFooter>

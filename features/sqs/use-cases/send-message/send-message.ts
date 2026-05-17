@@ -36,7 +36,7 @@ export async function sendMessageAction(
   }
 
   try {
-    const client = getSQSClient();
+    const client = await getSQSClient();
     await client.send(
       new SendMessageCommand({
         QueueUrl: queueUrl,

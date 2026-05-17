@@ -33,27 +33,47 @@ const dict = {
   notObject: "Not an object",
 };
 
+function renderDialog() {
+  render(
+    <PutItemDialog
+      tableName="my-table"
+      partitionKeyName="pk"
+      dict={dict}
+      locale="en"
+      closeLabel="Close"
+    />,
+  );
+  fireEvent.click(screen.getByRole("button", { name: /Put item/i }));
+}
+
 describe("PutItemDialog", () => {
   afterEach(() => {
     cleanup();
   });
 
   it("renders the shared Textarea primitive for item JSON", () => {
-    render(
-      <PutItemDialog
-        tableName="my-table"
-        partitionKeyName="pk"
-        dict={dict}
-        locale="en"
-        closeLabel="Close"
-      />,
-    );
-
-    fireEvent.click(screen.getByRole("button", { name: /Put item/i }));
+    renderDialog();
 
     expect(screen.getByLabelText("Item JSON")).toHaveAttribute(
       "data-slot",
       "textarea",
     );
+  });
+
+  it("renders the Format JSON button", () => {
+    renderDialog();
+
+    expect(screen.getByRole("button", { name: "Format JSON" })).toBeInTheDocument();
+  });
+
+  it("shows inline error and disables submit when invalid JSON is typed", () => {
+    renderDialog();
+
+    fireEvent.change(screen.getByLabelText("Item JSON"), {
+      target: { value: '{"bad"' },
+    });
+
+    expect(screen.getByText("Invalid JSON")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: dict.submit })).toBeDisabled();
   });
 });
