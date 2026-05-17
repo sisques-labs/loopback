@@ -16,9 +16,9 @@ type ChildStub = ReturnType<typeof spawn> & {
 };
 
 function makeChildStub(): ChildStub {
-  const child = new EventEmitter() as ChildStub;
-  child.stdout = new EventEmitter();
-  child.stderr = new EventEmitter();
+  const child = new EventEmitter() as unknown as ChildStub;
+  child.stdout = new EventEmitter() as unknown as ChildStub["stdout"];
+  child.stderr = new EventEmitter() as unknown as ChildStub["stderr"];
   child.kill = vi.fn().mockReturnValue(true);
   return child;
 }
