@@ -25,7 +25,7 @@ const mockClient = { send: mockSend };
 
 beforeEach(() => {
   vi.clearAllMocks();
-  (getS3Client as ReturnType<typeof vi.fn>).mockReturnValue(mockClient);
+  (getS3Client as ReturnType<typeof vi.fn>).mockResolvedValue(mockClient);
 });
 
 describe("headObject", () => {
