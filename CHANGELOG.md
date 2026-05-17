@@ -1,6 +1,46 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+## [0.5.0-alpha.0] - 2026-05-17
+
+### Bug Fixes
+- **sqs:** Address requeue verify warnings — validation key, parity test, tight assertions (058e810)
+- **tests:** Fix pre-existing TS type cast errors in terminal and nav-links tests (d093b7f)
+- **lint:** Resolve ESLint errors to pass pnpm lint (e61ef98)
+- **tests:** Update type casting in AWS config tests to resolve TypeScript errors (1722663)
+- **ci:** Run lint, test, and build without pnpm workspace filter (6bfc68f)
+
+### Features
+- **s3:** Expose headObject metadata and add metadata API route (9f98f95)
+- **s3:** Add ObjectMetadataDialog and wire metadata to row actions (22ebd80)
+- **sqs:** Add i18n keys and error mapping for requeue (4a5f7de)
+- **sqs:** Add requeue-message use-case (62dd658)
+- **sqs:** Extract MessageRow with per-row requeue action (6779428)
+- **sqs:** Add i18n keys for JSON message editor (b59e8af)
+- **sqs:** Add JSON validation and format button to send dialog (9934142)
+- **sqs:** Add message attributes viewer to receive panel (a5630e3)
+- **dynamodb:** Add seedItemsAction with BatchWriteCommand chunking and i18n (4d5a3eb)
+- **dynamodb:** Add SeedDialog component and wire to scan-table toolbar (595beb0)
+- **dynamodb:** Show selected filename and item count in SeedDialog (29413b3)
+- **dynamodb:** Add JSON editor to put/edit item dialogs (0d22d1b)
+- **config:** Add @aws-sdk/credential-providers dependency (33d77c2)
+- **config:** Add createAwsConfig helper and maskSecret utility (aabb83f)
+- **config:** Add i18n keys for config settings sections (4502039)
+- **config:** Refactor DynamoDB client to per-request async factory (c187267)
+- **config:** Refactor SQS client to per-request async factory (e6b2bb2)
+- **config:** Refactor SNS client to per-request async factory (84b07c8)
+- **config:** Refactor Lambda client to per-request async factory (6b262f3)
+- **config:** Refactor S3 client to per-request async factory (69b2b9f)
+- **config:** Add update-endpoint Server Action (7354138)
+- **config:** Add EndpointForm client component (ecd743a)
+- **config:** Add config read-only display sections (1a8199f)
+- **config:** Wire settings page with config sections (1318917)
+- **config:** Extract resolveCredentialSource to dedicated server-only module (33e570c)
+
+### Refactor
+- **dynamodb:** Move parseCSV to features/shared/utils/parse-csv (a8c3114)
+- **dynamodb:** Move chunk to features/shared/utils/chunk, make it sync (ff5dddd)
+- **config:** Use local AwsCredentials type instead of @aws-sdk/types (77719a4)
 ## [0.4.0-alpha.0] - 2026-05-16
 
 ### Bug Fixes
@@ -8,6 +48,9 @@ All notable changes to this project will be documented in this file.
 - **terminal:** Import tools inside NavLinks to avoid RSC serialization error (68770a5)
 - **terminal:** Send command as argv array to match route contract; disable xterm stdin (5c36c19)
 - **terminal:** Resolve CSS vars for xterm theme at runtime; echo command before run (d1d473c)
+
+### Chore
+- Release v0.4.0-alpha.0 (44adbfa)
 
 ### Features
 - **shared:** Add route breadcrumbs to dashboard header (e0d1f39)
