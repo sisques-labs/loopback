@@ -9,7 +9,7 @@ vi.mock("@/features/dynamodb/lib/client", () => ({
 import { BatchWriteCommand, type DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
 import { revalidatePath } from "next/cache";
 import { getDynamoDBDocumentClient } from "@/features/dynamodb/lib/client";
-import { chunk, seedItemsAction } from "./seed-items";
+import { seedItemsAction } from "./seed-items";
 import type { ActionState } from "@/features/shared/types/action-state";
 
 // ─── helpers ────────────────────────────────────────────────────────────────
@@ -32,43 +32,6 @@ const idle: ActionState<{ written: number; failed: number }> = { status: "idle" 
 
 beforeEach(() => {
   vi.clearAllMocks();
-});
-
-// ─── chunk() pure helper ─────────────────────────────────────────────────────
-
-describe("chunk()", () => {
-  it("splits 26 items into [25, 1] with default size", () => {
-    const items = Array.from({ length: 26 }, (_, i) => i);
-    const result = chunk(items);
-    expect(result).toHaveLength(2);
-    expect(result[0]).toHaveLength(25);
-    expect(result[1]).toHaveLength(1);
-  });
-
-  it("splits 60 items into [25, 25, 10] with default size", () => {
-    const items = Array.from({ length: 60 }, (_, i) => i);
-    const result = chunk(items);
-    expect(result).toHaveLength(3);
-    expect(result[0]).toHaveLength(25);
-    expect(result[1]).toHaveLength(25);
-    expect(result[2]).toHaveLength(10);
-  });
-
-  it("splits correctly with a custom size", () => {
-    const items = [1, 2, 3, 4, 5];
-    const result = chunk(items, 2);
-    expect(result).toHaveLength(3);
-    expect(result[0]).toEqual([1, 2]);
-    expect(result[1]).toEqual([3, 4]);
-    expect(result[2]).toEqual([5]);
-  });
-
-  it("returns a single chunk when items <= size", () => {
-    const items = [1, 2, 3];
-    const result = chunk(items, 25);
-    expect(result).toHaveLength(1);
-    expect(result[0]).toEqual([1, 2, 3]);
-  });
 });
 
 // ─── seedItemsAction — validation errors ────────────────────────────────────

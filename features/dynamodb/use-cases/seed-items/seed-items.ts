@@ -10,20 +10,9 @@ import {
   type Locale,
 } from "@/features/shared/i18n/locale";
 import type { ActionState } from "@/features/shared/types/action-state";
+import { chunk } from "@/features/shared/utils/chunk/chunk";
 import { BatchWriteCommand } from "@aws-sdk/lib-dynamodb";
 import { revalidatePath } from "next/cache";
-
-/**
- * Pure helper: split an array into chunks of at most `size` items.
- * Default size matches BatchWriteCommand hard limit of 25.
- */
-export async function chunk<T>(arr: T[], size = 25): Promise<T[][]> {
-  const result: T[][] = [];
-  for (let i = 0; i < arr.length; i += size) {
-    result.push(arr.slice(i, i + size));
-  }
-  return result;
-}
 
 export async function seedItemsAction(
   _prev: ActionState<{ written: number; failed: number }>,
@@ -59,7 +48,7 @@ export async function seedItemsAction(
 
   try {
     const client = getDynamoDBDocumentClient();
-    const chunks = await chunk(items as unknown[]);
+    const chunks = chunk(items as unknown[]);
 
     for (const chunkItems of chunks) {
       const requests = chunkItems.map((item) => ({
