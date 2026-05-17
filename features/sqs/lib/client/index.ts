@@ -1,19 +1,11 @@
 import "server-only";
 import { SQSClient } from "@aws-sdk/client-sqs";
+import { createAwsConfig } from "@/lib/aws/config";
 
-let _client: SQSClient | undefined;
-
-export function getSQSClient(): SQSClient {
-  if (_client) return _client;
-
-  _client = new SQSClient({
-    endpoint: process.env.AWS_ENDPOINT_URL,
-    region: process.env.AWS_REGION ?? "us-east-1",
-    credentials: {
-      accessKeyId: process.env.AWS_ACCESS_KEY_ID ?? "test",
-      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY ?? "test",
-    },
-  });
-
-  return _client;
+// No module-level singleton by design — createAwsConfig() is per-request so the
+// endpoint cookie override takes effect on every call. Rebuilding a thin SDK client
+// object is microseconds against LocalStack network latency.
+export async function getSQSClient(): Promise<SQSClient> {
+  const config = await createAwsConfig();
+  return new SQSClient(config);
 }
