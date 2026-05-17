@@ -43,6 +43,11 @@ const dict = {
     credentialSourceInstanceMetadata: "Metadatos de instancia",
     credentialSourceFallback: "Alternativa (test/test)",
     profileActiveLabel: "Perfil",
+    themeTitle: "Apariencia",
+    themeDescription: "Elige tu esquema de colores preferido.",
+    shortcutsTitle: "Atajos de teclado",
+    shortcutOpenPalette: "Abrir paleta de comandos",
+    shortcutCmdK: "⌘K / Ctrl+K",
   },
   dialog: {
     close: "Cerrar",
@@ -56,6 +61,24 @@ const dict = {
     label: "Idioma",
     en: "English",
     es: "Español",
+  },
+  themeToggle: {
+    system: "Sistema",
+    light: "Claro",
+    dark: "Oscuro",
+    themeToggle: "Cambiar tema",
+  },
+  commandPalette: {
+    title: "Paleta de comandos",
+    placeholder: "Buscar servicios, herramientas, acciones…",
+    empty: "Sin resultados.",
+    close: "Cerrar",
+    groupServices: "Servicios",
+    groupTools: "Herramientas",
+    groupActions: "Acciones",
+    actionSettings: "Ajustes",
+    actionToggleTheme: "Cambiar tema",
+    ariaLabel: "Paleta de comandos",
   },
 } as const satisfies SharedDictTranslated;
 

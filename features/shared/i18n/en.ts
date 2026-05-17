@@ -38,6 +38,11 @@ const dict = {
     credentialSourceInstanceMetadata: "Instance metadata",
     credentialSourceFallback: "Fallback (test/test)",
     profileActiveLabel: "Profile",
+    themeTitle: "Appearance",
+    themeDescription: "Choose your preferred color scheme.",
+    shortcutsTitle: "Keyboard Shortcuts",
+    shortcutOpenPalette: "Open command palette",
+    shortcutCmdK: "⌘K / Ctrl+K",
   },
   dialog: {
     close: "Close",
@@ -51,6 +56,24 @@ const dict = {
     label: "Language",
     en: "English",
     es: "Español",
+  },
+  themeToggle: {
+    system: "System",
+    light: "Light",
+    dark: "Dark",
+    themeToggle: "Toggle theme",
+  },
+  commandPalette: {
+    title: "Command Palette",
+    placeholder: "Search services, tools, actions…",
+    empty: "No results found.",
+    close: "Close",
+    groupServices: "Services",
+    groupTools: "Tools",
+    groupActions: "Actions",
+    actionSettings: "Settings",
+    actionToggleTheme: "Toggle theme",
+    ariaLabel: "Command palette",
   },
 } as const;
 

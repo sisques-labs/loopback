@@ -8,6 +8,9 @@ import { EndpointForm } from "@/features/config/components/endpoint-form/endpoin
 import { EnvVarsSection } from "@/features/config/components/env-vars-section/env-vars-section";
 import { CredentialsSection } from "@/features/config/components/credentials-section/credentials-section";
 import { ProfileSection } from "@/features/config/components/profile-section/profile-section";
+// ThemeToggle carries its own "use client" directive — Next.js creates the client boundary
+// at the import site, so direct import from a Server Component is safe.
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 export default async function SettingsPage({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = await params;
@@ -70,6 +73,8 @@ export default async function SettingsPage({ params }: { params: Promise<{ lang:
     profileActiveLabel: s.profileActiveLabel,
   };
 
+  const themeDict = dict.shared.themeToggle;
+
   return (
     <div className="mx-auto flex max-w-2xl flex-col gap-8">
       <h1 className="text-2xl font-semibold tracking-tight">{s.title}</h1>
@@ -82,6 +87,13 @@ export default async function SettingsPage({ params }: { params: Promise<{ lang:
           dict={dict.shared.localeSwitcher}
           hideLabel
         />
+      </section>
+
+      {/* Appearance section — ThemeToggle */}
+      <section className="flex flex-col gap-3 rounded-lg border bg-card p-4 shadow-sm md:p-6">
+        <h2 className="text-sm font-medium text-muted-foreground">{s.themeTitle}</h2>
+        <p className="text-sm text-muted-foreground">{s.themeDescription}</p>
+        <ThemeToggle dict={themeDict} />
       </section>
 
       {/* Endpoint section — editable */}
@@ -118,6 +130,15 @@ export default async function SettingsPage({ params }: { params: Promise<{ lang:
           profileName={profileName}
           dict={profileDict}
         />
+      </section>
+
+      {/* Keyboard Shortcuts — reference section */}
+      <section className="flex flex-col gap-3 rounded-lg border bg-card p-4 shadow-sm md:p-6">
+        <h2 className="text-sm font-medium text-muted-foreground">{s.shortcutsTitle}</h2>
+        <div className="flex items-center justify-between gap-2 text-sm">
+          <span>{s.shortcutOpenPalette}</span>
+          <kbd className="rounded bg-muted px-2 py-0.5 font-mono text-xs">{s.shortcutCmdK}</kbd>
+        </div>
       </section>
     </div>
   );
