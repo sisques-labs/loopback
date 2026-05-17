@@ -16,29 +16,10 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { seedItemsAction } from "@/features/dynamodb/use-cases/seed-items/seed-items";
+import { parseCSV } from "@/features/shared/utils/parse-csv/parse-csv";
 import type { AppDict } from "@/features/shared/i18n/get-dictionary";
 import type { Locale } from "@/features/shared/i18n/locale";
 import type { ActionState } from "@/features/shared/types/action-state";
-
-// ─── parseCSV pure helper (exported for unit tests) ──────────────────────────
-
-export function parseCSV(text: string): Record<string, string>[] {
-  const rows = text
-    .split(/\r?\n/)
-    .map((r) => r.split(",").map((cell) => cell.trim()));
-
-  const nonEmpty = rows.filter((r) => r.some((cell) => cell.length > 0));
-  if (nonEmpty.length < 2) return [];
-
-  const headers = nonEmpty[0];
-  return nonEmpty.slice(1).map((row) => {
-    const obj: Record<string, string> = {};
-    headers.forEach((header, i) => {
-      obj[header] = row[i] ?? "";
-    });
-    return obj;
-  });
-}
 
 // ─── SeedDialog state ─────────────────────────────────────────────────────────
 
