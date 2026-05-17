@@ -144,6 +144,28 @@ const dict = {
     backToTables: "Back to tables",
     retry: "Retry",
   },
+  seedDialog: {
+    trigger: "Seed data",
+    title: "Seed data",
+    description: "Import items from a JSON or CSV file into this table.",
+    fileLabel: "Data file",
+    fileHint:
+      "Accepts .json (array of objects) or .csv (header row + data rows). Note: CSV does not support quoted fields with commas.",
+    overwriteLabel: "Overwrite existing items",
+    overwriteHint:
+      "Uncheck has no effect in the current version — items are always overwritten by key. This option is reserved for a future skip-if-exists mode.",
+    fileSizeWarning:
+      "File exceeds 500 KB. Uploading large payloads may be slow or fail. Consider splitting the file.",
+    errorInvalidFile: "Invalid file type. Please select a .json or .csv file.",
+    errorEmptyArray: "The file contains an empty array. Add at least one item.",
+    errorParseJson: "Could not parse the file as JSON. Make sure it is a valid JSON array.",
+    errorParseCsv: "The CSV file has no data rows. Add at least one row after the header.",
+    successToast: "Imported {count} items successfully.",
+    errorPartialFail: "{failed} of {total} items failed to import.",
+    importing: "Importing…",
+    cancel: "Cancel",
+    submit: "Import",
+  },
 } as const;
 
 export default dict;
