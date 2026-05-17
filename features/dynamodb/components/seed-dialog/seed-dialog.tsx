@@ -2,7 +2,7 @@
 
 import { useActionState, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
-import { DatabaseIcon } from "lucide-react";
+import { CheckCircle2Icon, DatabaseIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -49,6 +49,7 @@ type SeedState = {
   items: unknown[] | null;
   parseError: string | null;
   oversized: boolean;
+  fileName: string | null;
 };
 
 const INITIAL_SEED_STATE: SeedState = {
@@ -56,6 +57,7 @@ const INITIAL_SEED_STATE: SeedState = {
   items: null,
   parseError: null,
   oversized: false,
+  fileName: null,
 };
 
 const INITIAL_ACTION_STATE: ActionState<{ written: number; failed: number }> = {
@@ -103,6 +105,7 @@ export function SeedDialog({ tableName, dict, locale, closeLabel }: Props) {
         items: null,
         parseError: dict.errorInvalidFile,
         oversized: false,
+        fileName: file.name,
       });
       return;
     }
@@ -120,6 +123,7 @@ export function SeedDialog({ tableName, dict, locale, closeLabel }: Props) {
           items: null,
           parseError: dict.errorParseJson,
           oversized,
+          fileName: file.name,
         });
         return;
       }
@@ -130,6 +134,7 @@ export function SeedDialog({ tableName, dict, locale, closeLabel }: Props) {
           items: null,
           parseError: dict.errorParseJson,
           oversized,
+          fileName: file.name,
         });
         return;
       }
@@ -140,11 +145,12 @@ export function SeedDialog({ tableName, dict, locale, closeLabel }: Props) {
           items: null,
           parseError: dict.errorEmptyArray,
           oversized,
+          fileName: file.name,
         });
         return;
       }
 
-      setSeedState({ phase: "ready", items: parsed, parseError: null, oversized });
+      setSeedState({ phase: "ready", items: parsed, parseError: null, oversized, fileName: file.name });
       return;
     }
 
@@ -156,11 +162,12 @@ export function SeedDialog({ tableName, dict, locale, closeLabel }: Props) {
         items: null,
         parseError: dict.errorParseCsv,
         oversized,
+        fileName: file.name,
       });
       return;
     }
 
-    setSeedState({ phase: "ready", items: rows, parseError: null, oversized });
+    setSeedState({ phase: "ready", items: rows, parseError: null, oversized, fileName: file.name });
   }
 
   const isSubmitDisabled =
@@ -209,6 +216,14 @@ export function SeedDialog({ tableName, dict, locale, closeLabel }: Props) {
               {dict.fileLabel}
             </Button>
             <p className="text-xs text-muted-foreground">{dict.fileHint}</p>
+
+            {seedState.phase === "ready" && seedState.fileName && seedState.items && (
+              <div className="flex items-center gap-1.5 text-xs text-emerald-600">
+                <CheckCircle2Icon className="h-3.5 w-3.5 shrink-0" />
+                <span className="truncate font-medium">{seedState.fileName}</span>
+                <span className="shrink-0 text-muted-foreground">— {seedState.items.length} items</span>
+              </div>
+            )}
 
             {seedState.oversized && (
               <p className="text-xs text-amber-600">{dict.fileSizeWarning}</p>

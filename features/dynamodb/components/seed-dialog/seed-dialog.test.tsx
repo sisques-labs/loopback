@@ -228,6 +228,31 @@ describe("SeedDialog", () => {
     });
   });
 
+  it("shows filename and item count indicator after valid file selection", async () => {
+    render(
+      <SeedDialog tableName="my-table" dict={dict} locale="en" closeLabel="Close" />,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: /Seed data/i }));
+
+    await waitFor(() => {
+      expect(screen.getByRole("dialog")).toBeInTheDocument();
+    });
+
+    const validJson = new File(
+      ['[{"pk":"1"},{"pk":"2"},{"pk":"3"}]'],
+      "seeds.json",
+      { type: "application/json" },
+    );
+    const fileInput = document.querySelector("input[type='file']") as HTMLInputElement;
+    fireEvent.change(fileInput, { target: { files: [validJson] } });
+
+    await waitFor(() => {
+      expect(screen.getByText("seeds.json")).toBeInTheDocument();
+      expect(screen.getByText(/3 items/)).toBeInTheDocument();
+    });
+  });
+
   it("shows overwriteHint when overwrite checkbox is unchecked", async () => {
     render(
       <SeedDialog tableName="my-table" dict={dict} locale="en" closeLabel="Close" />,
