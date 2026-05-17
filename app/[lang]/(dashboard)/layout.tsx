@@ -7,6 +7,7 @@ import { UploadProgressModalMount } from "@/features/s3/components/upload-progre
 // ThemeToggle carries its own "use client" directive and a mounted guard — Next.js creates
 // the client boundary at the import site, so direct import from a Server Component is safe.
 import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { DashboardClientShell } from "@/features/shared/components/dashboard-client-shell/dashboard-client-shell";
 import { getDictionary } from "@/features/shared/i18n/get-dictionary";
 import { DEFAULT_LOCALE, isLocale, type Locale } from "@/features/shared/i18n/locale";
 
@@ -22,6 +23,7 @@ export default async function DashboardLayout({
   const dict = getDictionary(locale);
   const localePrefix = `/${locale}`;
   const themeDict = dict.shared.themeToggle;
+  const paletteDict = dict.shared.commandPalette;
 
   return (
     <>
@@ -51,6 +53,7 @@ export default async function DashboardLayout({
         localePrefix={localePrefix}
       />
       <UploadProgressModalMount dict={dict.s3.uploadProgress} />
+      <DashboardClientShell paletteDict={paletteDict} localePrefix={localePrefix} />
     </>
   );
 }
