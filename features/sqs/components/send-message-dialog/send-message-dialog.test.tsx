@@ -27,7 +27,7 @@ const dict = {
   submitting: "Sending…",
   submit: "Send",
   successToast: "Message sent to {queue}.",
-  invalidJson: "Invalid JSON syntax.",
+  invalidJson: "Invalid JSON",
   formatButton: "Format JSON",
 };
 
@@ -115,4 +115,5 @@ describe("SendMessageDialog", () => {
     const formatBtn = screen.getByRole("button", { name: dict.formatButton });
     expect(formatBtn).toHaveAttribute("type", "button");
   });
+
 });
