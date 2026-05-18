@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import { LocaleSwitcher } from "@/features/shared/components/locale-switcher/locale-switcher";
 import { getDictionary } from "@/features/shared/i18n/get-dictionary";
 import { DEFAULT_LOCALE, isLocale, type Locale } from "@/features/shared/i18n/locale";
-import { ENDPOINT_COOKIE_NAME, REGION_COOKIE_NAME, ACTIVE_PROFILE_COOKIE_NAME, maskSecret } from "@/lib/aws/config";
+import { ENDPOINT_COOKIE_NAME, REGION_COOKIE_NAME, ACTIVE_PROFILE_COOKIE_NAME, PROFILES_COOKIE_NAME, maskSecret } from "@/lib/aws/config";
 import { parseProfilesCookie, parseActiveProfileCookie } from "@/lib/aws/profiles";
 import { resolveCredentialSource } from "@/features/config/lib/credential-source";
 import { EndpointForm } from "@/features/config/components/endpoint-form/endpoint-form";
@@ -28,7 +28,7 @@ export default async function SettingsPage({ params }: { params: Promise<{ lang:
 
   // Region override — active profile's region takes precedence over standalone cookie
   const profilesCookieRaw = store.get(ACTIVE_PROFILE_COOKIE_NAME)?.value;
-  const profiles = parseProfilesCookie(store.get("aws-profiles")?.value);
+  const profiles = parseProfilesCookie(store.get(PROFILES_COOKIE_NAME)?.value);
   const activeProfile = parseActiveProfileCookie(profilesCookieRaw, profiles);
   const hasActiveProfile = activeProfile !== null;
   const currentRegion =
