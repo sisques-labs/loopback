@@ -1,6 +1,20 @@
 import { cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi, beforeEach } from "vitest";
+
+// Mock server actions
+const mockExportProfilesAction = vi.fn();
+const mockImportProfilesAction = vi.fn();
+
+vi.mock(
+  "@/features/config/use-cases/export-profiles/export-profiles",
+  () => ({ exportProfilesAction: (...args: unknown[]) => mockExportProfilesAction(...args) }),
+);
+
+vi.mock(
+  "@/features/config/use-cases/import-profiles/import-profiles",
+  () => ({ importProfilesAction: (...args: unknown[]) => mockImportProfilesAction(...args) }),
+);
 
 // Mock child components to isolate ProfileList logic
 vi.mock("@/features/config/components/profile-card/profile-card", () => ({
@@ -60,6 +74,13 @@ const dict = {
   profileCapReached: "Maximum of 10 profiles reached",
   profileInvalidEndpoint: "Must be a valid absolute URL",
   profileInvalidRegion: "Must be a valid AWS region",
+  profileExport: "Export profiles",
+  profileImport: "Import profiles",
+  profileImportSuccess: "{{count}} profile(s) imported",
+  profileImportTruncated: "Imported {{count}} profile(s). {{skipped}} skipped (cap reached or duplicates).",
+  profileImportNoValidProfiles: "No valid profiles found in file",
+  profileImportFileTooLarge: "File too large or wrong format",
+  profileImportError: "Invalid file format",
 };
 
 afterEach(() => {
@@ -160,5 +181,115 @@ describe("ProfileList — empty state", () => {
     );
 
     expect(screen.getByText("0/10 profiles")).toBeInTheDocument();
+  });
+});
+
+describe("ProfileList — export button", () => {
+  let createObjectURL: ReturnType<typeof vi.fn>;
+  let revokeObjectURL: ReturnType<typeof vi.fn>;
+  let originalCreateObjectURL: typeof URL.createObjectURL;
+  let originalRevokeObjectURL: typeof URL.revokeObjectURL;
+
+  beforeEach(() => {
+    createObjectURL = vi.fn(() => "blob:mock-url");
+    revokeObjectURL = vi.fn();
+    originalCreateObjectURL = URL.createObjectURL;
+    originalRevokeObjectURL = URL.revokeObjectURL;
+    URL.createObjectURL = createObjectURL;
+    URL.revokeObjectURL = revokeObjectURL;
+  });
+
+  afterEach(() => {
+    URL.createObjectURL = originalCreateObjectURL;
+    URL.revokeObjectURL = originalRevokeObjectURL;
+  });
+
+  it("export button is visible when profiles exist", () => {
+    render(<ProfileList profiles={profiles} activeProfileId={null} dict={dict} />);
+    expect(screen.getByRole("button", { name: dict.profileExport })).toBeInTheDocument();
+  });
+
+  it("export button is visible when no profiles exist (empty state)", () => {
+    render(<ProfileList profiles={[]} activeProfileId={null} dict={dict} />);
+    expect(screen.getByRole("button", { name: dict.profileExport })).toBeInTheDocument();
+  });
+
+  it("clicking export calls exportProfilesAction", async () => {
+    const user = userEvent.setup();
+    mockExportProfilesAction.mockResolvedValue({ status: "success", data: "[]" });
+
+    render(<ProfileList profiles={profiles} activeProfileId={null} dict={dict} />);
+
+    await user.click(screen.getByRole("button", { name: dict.profileExport }));
+
+    expect(mockExportProfilesAction).toHaveBeenCalledOnce();
+  });
+
+  it("clicking export triggers a file download via createObjectURL", async () => {
+    const user = userEvent.setup();
+    mockExportProfilesAction.mockResolvedValue({ status: "success", data: "[]" });
+
+    render(<ProfileList profiles={profiles} activeProfileId={null} dict={dict} />);
+
+    await user.click(screen.getByRole("button", { name: dict.profileExport }));
+
+    expect(createObjectURL).toHaveBeenCalledOnce();
+  });
+});
+
+describe("ProfileList — import button", () => {
+  it("import button is visible when profiles exist", () => {
+    render(<ProfileList profiles={profiles} activeProfileId={null} dict={dict} />);
+    expect(screen.getByRole("button", { name: dict.profileImport })).toBeInTheDocument();
+  });
+
+  it("import button is visible in empty state", () => {
+    render(<ProfileList profiles={[]} activeProfileId={null} dict={dict} />);
+    expect(screen.getByRole("button", { name: dict.profileImport })).toBeInTheDocument();
+  });
+
+  it("import button is disabled when at MAX_PROFILES cap", () => {
+    const atCapProfiles = Array.from({ length: MAX_PROFILES }, (_, i) => ({
+      id: `id-${i}`,
+      name: `profile-${i}`,
+      endpoint: "http://localhost:4566",
+      region: "us-east-1",
+    }));
+
+    render(<ProfileList profiles={atCapProfiles} activeProfileId={null} dict={dict} />);
+
+    expect(screen.getByRole("button", { name: dict.profileImport })).toBeDisabled();
+  });
+
+  it("shows success message after successful import", async () => {
+    const user = userEvent.setup();
+    mockImportProfilesAction.mockResolvedValue({
+      status: "success",
+      data: { imported: 2, skipped: 0 },
+    });
+
+    render(<ProfileList profiles={profiles} activeProfileId={null} dict={dict} />);
+
+    const fileInput = document.querySelector("input[type='file']") as HTMLInputElement;
+    const file = new File(['[{"id":"a","name":"dev","endpoint":"http://localhost","region":"us-east-1"}]'], "profiles.json", { type: "application/json" });
+    await user.upload(fileInput, file);
+
+    expect(await screen.findByText(/2 profile\(s\) imported/i)).toBeInTheDocument();
+  });
+
+  it("shows error message when import fails (invalid JSON)", async () => {
+    const user = userEvent.setup();
+    mockImportProfilesAction.mockResolvedValue({
+      status: "error",
+      message: "Invalid file format",
+    });
+
+    render(<ProfileList profiles={profiles} activeProfileId={null} dict={dict} />);
+
+    const fileInput = document.querySelector("input[type='file']") as HTMLInputElement;
+    const file = new File(["not json"], "bad.json", { type: "application/json" });
+    await user.upload(fileInput, file);
+
+    expect(await screen.findByText(/Invalid file format/i)).toBeInTheDocument();
   });
 });
