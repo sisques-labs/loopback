@@ -74,3 +74,14 @@ export async function updateProfileAction(
   revalidatePath("/", "layout");
   return { status: "success", data: undefined };
 }
+
+export async function updateProfileFormAction(
+  prev: ActionState,
+  formData: FormData,
+): Promise<ActionState> {
+  const id = (formData.get("id") as string | null) ?? "";
+  const name = (formData.get("name") as string | null) ?? "";
+  const endpoint = (formData.get("endpoint") as string | null) ?? "";
+  const region = (formData.get("region") as string | null) ?? "";
+  return updateProfileAction(prev, { id, name, endpoint, region });
+}
