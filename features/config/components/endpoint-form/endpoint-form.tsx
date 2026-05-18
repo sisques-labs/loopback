@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { updateEndpointAction } from "@/features/config/use-cases/update-endpoint/update-endpoint";
+import { ActionFeedback } from "@/features/shared/components/action-feedback/action-feedback";
 import type { ActionState } from "@/features/shared/types/action-state";
 
 const INITIAL_STATE: ActionState = { status: "idle" };
@@ -30,9 +31,7 @@ export function EndpointForm({ currentEndpoint, dict }: Props) {
   return (
     <div className="flex flex-col gap-4">
       {state.status === "success" && (
-        <p className="rounded-md bg-green-50 px-3 py-2 text-sm text-green-700 dark:bg-green-950 dark:text-green-300">
-          {dict.endpointSuccess}
-        </p>
+        <ActionFeedback variant="success" message={dict.endpointSuccess} />
       )}
 
       <form action={formAction} className="flex flex-col gap-3">

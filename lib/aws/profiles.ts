@@ -59,3 +59,35 @@ export function parseActiveProfileCookie(
 export function serializeProfiles(profiles: Profile[]): string {
   return JSON.stringify(profiles);
 }
+
+/**
+ * Returns true if the given string is a valid absolute URL, false otherwise.
+ */
+export function isValidEndpointUrl(value: string): boolean {
+  try {
+    new URL(value);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Returns true if the given name is already taken by another profile.
+ * Pass `ignoreId` to skip the profile with that ID (used during updates
+ * to allow keeping the same name).
+ */
+export function nameExists(profiles: Profile[], name: string, ignoreId?: string): boolean {
+  return profiles.some((p) => (ignoreId ? p.id !== ignoreId : true) && p.name === name);
+}
+
+export function isValidProfile(item: unknown): item is Profile {
+  if (typeof item !== "object" || item === null) return false;
+  const obj = item as Record<string, unknown>;
+  return (
+    typeof obj.id === "string" && obj.id !== "" &&
+    typeof obj.name === "string" && obj.name !== "" &&
+    typeof obj.endpoint === "string" && obj.endpoint !== "" &&
+    typeof obj.region === "string" && obj.region !== ""
+  );
+}
