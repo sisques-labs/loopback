@@ -2,9 +2,11 @@ import { cookies } from "next/headers";
 import { LocaleSwitcher } from "@/features/shared/components/locale-switcher/locale-switcher";
 import { getDictionary } from "@/features/shared/i18n/get-dictionary";
 import { DEFAULT_LOCALE, isLocale, type Locale } from "@/features/shared/i18n/locale";
-import { ENDPOINT_COOKIE_NAME, maskSecret } from "@/lib/aws/config";
+import { ENDPOINT_COOKIE_NAME, REGION_COOKIE_NAME, ACTIVE_PROFILE_COOKIE_NAME, maskSecret } from "@/lib/aws/config";
+import { parseProfilesCookie, parseActiveProfileCookie } from "@/lib/aws/profiles";
 import { resolveCredentialSource } from "@/features/config/lib/credential-source";
 import { EndpointForm } from "@/features/config/components/endpoint-form/endpoint-form";
+import { RegionForm } from "@/features/config/components/region-form/region-form";
 import { EnvVarsSection } from "@/features/config/components/env-vars-section/env-vars-section";
 import { CredentialsSection } from "@/features/config/components/credentials-section/credentials-section";
 import { ProfileSection } from "@/features/config/components/profile-section/profile-section";
@@ -18,10 +20,21 @@ export default async function SettingsPage({ params }: { params: Promise<{ lang:
   const dict = getDictionary(locale);
   const s = dict.shared.settings;
 
-  // Read cookie for endpoint override
+  // Read cookies
   const store = await cookies();
   const cookieEndpoint = store.get(ENDPOINT_COOKIE_NAME)?.value ?? "";
   const currentEndpoint = cookieEndpoint || process.env.AWS_ENDPOINT_URL?.trim() || "";
+
+  // Region override — active profile's region takes precedence over standalone cookie
+  const profilesCookieRaw = store.get(ACTIVE_PROFILE_COOKIE_NAME)?.value;
+  const profiles = parseProfilesCookie(store.get("aws-profiles")?.value);
+  const activeProfile = parseActiveProfileCookie(profilesCookieRaw, profiles);
+  const hasActiveProfile = activeProfile !== null;
+  const currentRegion =
+    activeProfile?.region ??
+    store.get(REGION_COOKIE_NAME)?.value ??
+    process.env.AWS_REGION ??
+    "us-east-1";
 
   // Read env vars for display (server-only — never passed to client components)
   const region = process.env.AWS_REGION ?? "us-east-1";
@@ -45,6 +58,17 @@ export default async function SettingsPage({ params }: { params: Promise<{ lang:
     endpointSaving: s.endpointSaving,
     endpointSuccess: s.endpointSuccess,
     endpointInvalidUrl: s.endpointInvalidUrl,
+  };
+
+  const regionDict = {
+    regionInputLabel: s.regionInputLabel,
+    regionDescription: s.regionDescription,
+    regionPlaceholder: s.regionPlaceholder,
+    regionSave: s.regionSave,
+    regionSaving: s.regionSaving,
+    regionSuccess: s.regionSuccess,
+    regionInvalid: s.regionInvalid,
+    regionProfileActiveInfo: s.regionProfileActiveInfo,
   };
 
   const envVarsDict = {
@@ -100,6 +124,16 @@ export default async function SettingsPage({ params }: { params: Promise<{ lang:
       <section className="flex flex-col gap-3 rounded-lg border bg-card p-4 shadow-sm md:p-6">
         <h2 className="text-sm font-medium text-muted-foreground">{s.endpointSectionTitle}</h2>
         <EndpointForm currentEndpoint={currentEndpoint} dict={endpointDict} />
+      </section>
+
+      {/* Region section — editable */}
+      <section className="flex flex-col gap-3 rounded-lg border bg-card p-4 shadow-sm md:p-6">
+        <h2 className="text-sm font-medium text-muted-foreground">{s.regionSectionTitle}</h2>
+        <RegionForm
+          currentRegion={currentRegion}
+          hasActiveProfile={hasActiveProfile}
+          dict={regionDict}
+        />
       </section>
 
       {/* Environment Variables — read-only */}
