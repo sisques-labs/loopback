@@ -115,7 +115,7 @@ export function ProfileList({ profiles, activeProfileId, dict }: Props) {
       }
       setImportFeedback({ kind: "success", message });
     } else {
-      setImportFeedback({ kind: "error", message: result.message });
+      setImportFeedback({ kind: "error", message: result.message ?? dict.profileImportError });
     }
 
     // Reset input so the same file can be re-selected
