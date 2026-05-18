@@ -8,6 +8,7 @@ import { LogsPanel } from "@/features/logs/components/logs-panel/logs-panel";
 import { cn } from "@/lib/utils";
 import type { LogsDict } from "@/features/logs/i18n/en";
 import type { WidenStringLiterals } from "@/features/shared/i18n/widen-literals";
+import { formatElapsed } from "@/features/shared/utils/format-elapsed/format-elapsed";
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -17,15 +18,6 @@ type LogViewerShellProps = {
   dict: LogViewerShellDict;
   services: string[];
 };
-
-// ── Helpers ──────────────────────────────────────────────────────────────────
-
-function formatElapsed(lastUpdatedAt: number): string {
-  const seconds = Math.floor((Date.now() - lastUpdatedAt) / 1000);
-  if (seconds < 60) return `${seconds}s`;
-  const minutes = Math.floor(seconds / 60);
-  return `${minutes}m`;
-}
 
 // ── Component ────────────────────────────────────────────────────────────────
 
