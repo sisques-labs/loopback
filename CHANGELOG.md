@@ -1,6 +1,64 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+## [0.6.0-alpha.0] - 2026-05-18
+
+### Bug Fixes
+- **core:** Address PR-1 verify warnings (4ecdb39)
+- **core:** Resolve lint, TS, and build errors in PR-2 files (8c14025)
+- **test:** Update tinykeys mock from default to named export (b0a0661)
+- **logs:** Annotate DescribeLogGroups response for production build (8e312d9)
+- **config:** Enforce max 64 chars on profile name in server actions (48b2289)
+- **config:** Use profileImportError dict key as error message fallback (8b456be)
+- **config:** Narrow ActionState type before accessing message in ProfileList (bbfc75e)
+
+### Chore
+- **tests:** Enhance test imports and add linting command (2ebd9a8)
+- **package:** Add codegraph commands to package.json for initialization and indexing (2ce0e36)
+- **package:** Add codegraph commands to package.json for initialization and indexing (973e864)
+
+### Features
+- Add tinykeys dep, themeToggle/commandPalette i18n keys, and usePaletteStore (529e66e)
+- Add cycleTheme utility (system→light→dark→system) (3f64453)
+- Add ThemeToggle component, tests, and wire into DashboardLayout header (9945737)
+- Add useAppShortcuts hook with tinykeys $mod+K binding (439384c)
+- Add CommandPalette component with filter, keyboard nav, and tests (9b29fe3)
+- Add DashboardClientShell island with useAppShortcuts and CommandPalette (f2093cc)
+- Wire DashboardClientShell into layout, update settings page, add i18n keys and integration tests (59c99b7)
+- **observability:** Add Criteria pattern foundation and log utilities (5999b45)
+- **observability:** Add CloudWatch Logs server layer (6d6c0da)
+- **observability:** Add Zustand log store with polling and auto-scroll (5980104)
+- **observability:** Add i18n, services registry entry, and shadcn components (fd46adf)
+- **observability:** Add CloudWatch Logs UI components and route (646a676)
+- **config:** Add Profile parser utilities (0a81df0)
+- **config:** Add AWS regions registry (cc82340)
+- **config:** Extend createAwsConfig with 4-tier precedence chain (7797816)
+- **config:** Add region i18n keys (6441b95)
+- **config:** Add updateRegionAction (79d2b20)
+- **config:** Add RegionForm component (9062177)
+- **config:** Integrate region selector into settings page (53284d3)
+- **config:** Add profile i18n keys (b007cfa)
+- **config:** Add createProfileAction (24acc9c)
+- **config:** Add updateProfileAction (07d97d5)
+- **config:** Add deleteProfileAction (e05b980)
+- **config:** Add activate and deactivate profile actions (0202070)
+- **config:** Add ProfileCard component (e3ad868)
+- **config:** Add ProfileForm component (92d6d00)
+- **config:** Add ProfileList component (6109006)
+- **config:** Integrate profile list into settings page (6250f45)
+- **config:** Add import/export i18n keys (dd03209)
+- **config:** Add export and import profile actions (ffc525b)
+- **config:** Add import/export UI to ProfileList (fb0c9e9)
+
+### Refactor
+- **logs:** Colocate lib modules in per-folder files (0201cab)
+- **logs:** Extract timestamp formatting utility (63a5468)
+- **logs:** Move elapsed time formatting to shared utils (bdc173c)
+- **logs:** Move useLogsStore into logs feature (a6aa4d4)
+- **config:** Extract shared profile validation helpers (5161ace)
+- **config:** Use PROFILES_COOKIE_NAME constant in settings page (d412362)
+- **shared:** Extract ActionFeedback component and downloadJson utility (89b755b)
+- **config:** Move isValidProfile to profiles.ts and updateProfileFormAction to update-profile.ts (957c952)
 ## [0.5.0-alpha.0] - 2026-05-17
 
 ### Bug Fixes
@@ -9,6 +67,10 @@ All notable changes to this project will be documented in this file.
 - **lint:** Resolve ESLint errors to pass pnpm lint (e61ef98)
 - **tests:** Update type casting in AWS config tests to resolve TypeScript errors (1722663)
 - **ci:** Run lint, test, and build without pnpm workspace filter (6bfc68f)
+
+### Chore
+- **ci:** Add Dependabot config targeting dev (711317e)
+- Release v0.5.0-alpha.0 (6d12a76)
 
 ### Features
 - **s3:** Expose headObject metadata and add metadata API route (9f98f95)
