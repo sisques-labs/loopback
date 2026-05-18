@@ -21,7 +21,7 @@ export type AwsClientConfig = {
  * and falls back to static test credentials if the chain throws.
  *
  * NOTE: The fallback is intentional — this tool targets local dev against
- * LocalStack where "test/test" is the canonical default.
+ * a configured AWS endpoint where "test/test" is the canonical default.
  */
 function nodeChainWithTestFallback(): () => Promise<AwsCredentials> {
   const chain = fromNodeProviderChain();

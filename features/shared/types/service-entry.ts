@@ -1,7 +1,7 @@
 import type { LucideIcon } from "lucide-react";
 
 export type ServiceEntry = {
-  slug: "s3" | "sqs" | "dynamodb" | "lambda" | "sns";
+  slug: "s3" | "sqs" | "dynamodb" | "lambda" | "sns" | "cloudwatch-logs";
   label: string;
   icon: LucideIcon;
   href: string;
