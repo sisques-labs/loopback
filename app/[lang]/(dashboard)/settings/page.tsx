@@ -2,11 +2,12 @@ import { cookies } from "next/headers";
 import { LocaleSwitcher } from "@/features/shared/components/locale-switcher/locale-switcher";
 import { getDictionary } from "@/features/shared/i18n/get-dictionary";
 import { DEFAULT_LOCALE, isLocale, type Locale } from "@/features/shared/i18n/locale";
-import { ENDPOINT_COOKIE_NAME, REGION_COOKIE_NAME, ACTIVE_PROFILE_COOKIE_NAME, maskSecret } from "@/lib/aws/config";
+import { ENDPOINT_COOKIE_NAME, REGION_COOKIE_NAME, ACTIVE_PROFILE_COOKIE_NAME, PROFILES_COOKIE_NAME, maskSecret } from "@/lib/aws/config";
 import { parseProfilesCookie, parseActiveProfileCookie } from "@/lib/aws/profiles";
 import { resolveCredentialSource } from "@/features/config/lib/credential-source";
 import { EndpointForm } from "@/features/config/components/endpoint-form/endpoint-form";
 import { RegionForm } from "@/features/config/components/region-form/region-form";
+import { ProfileList } from "@/features/config/components/profile-list/profile-list";
 import { EnvVarsSection } from "@/features/config/components/env-vars-section/env-vars-section";
 import { CredentialsSection } from "@/features/config/components/credentials-section/credentials-section";
 import { ProfileSection } from "@/features/config/components/profile-section/profile-section";
@@ -27,7 +28,7 @@ export default async function SettingsPage({ params }: { params: Promise<{ lang:
 
   // Region override — active profile's region takes precedence over standalone cookie
   const profilesCookieRaw = store.get(ACTIVE_PROFILE_COOKIE_NAME)?.value;
-  const profiles = parseProfilesCookie(store.get("aws-profiles")?.value);
+  const profiles = parseProfilesCookie(store.get(PROFILES_COOKIE_NAME)?.value);
   const activeProfile = parseActiveProfileCookie(profilesCookieRaw, profiles);
   const hasActiveProfile = activeProfile !== null;
   const currentRegion =
@@ -69,6 +70,41 @@ export default async function SettingsPage({ params }: { params: Promise<{ lang:
     regionSuccess: s.regionSuccess,
     regionInvalid: s.regionInvalid,
     regionProfileActiveInfo: s.regionProfileActiveInfo,
+  };
+
+  const activeProfileId = activeProfile?.id ?? null;
+
+  const profileListDict = {
+    profilesSectionTitle: s.profilesSectionTitle,
+    profilesCounter: s.profilesCounter,
+    profileAdd: s.profileAdd,
+    profileEmpty: s.profileEmpty,
+    profileNameLabel: s.profileNameLabel,
+    profileNamePlaceholder: s.profileNamePlaceholder,
+    profileEndpointLabel: s.profileEndpointLabel,
+    profileEndpointPlaceholder: s.profileEndpointPlaceholder,
+    profileRegionLabel: s.profileRegionLabel,
+    profileSave: s.profileSave,
+    profileEdit: s.profileEdit,
+    profileDelete: s.profileDelete,
+    profileActivate: s.profileActivate,
+    profileDeactivate: s.profileDeactivate,
+    profileActiveBadge: s.profileActiveBadge,
+    profileDeleteActive: s.profileDeleteActive,
+    profileDeleteConfirm: s.profileDeleteConfirm,
+    profileCreateSuccess: s.profileCreateSuccess,
+    profileUpdateSuccess: s.profileUpdateSuccess,
+    profileNameDuplicate: s.profileNameDuplicate,
+    profileCapReached: s.profileCapReached,
+    profileInvalidEndpoint: s.profileInvalidEndpoint,
+    profileInvalidRegion: s.profileInvalidRegion,
+    profileExport: s.profileExport,
+    profileImport: s.profileImport,
+    profileImportSuccess: s.profileImportSuccess,
+    profileImportTruncated: s.profileImportTruncated,
+    profileImportNoValidProfiles: s.profileImportNoValidProfiles,
+    profileImportFileTooLarge: s.profileImportFileTooLarge,
+    profileImportError: s.profileImportError,
   };
 
   const envVarsDict = {
@@ -133,6 +169,16 @@ export default async function SettingsPage({ params }: { params: Promise<{ lang:
           currentRegion={currentRegion}
           hasActiveProfile={hasActiveProfile}
           dict={regionDict}
+        />
+      </section>
+
+      {/* Profiles section — CRUD */}
+      <section className="flex flex-col gap-3 rounded-lg border bg-card p-4 shadow-sm md:p-6">
+        <h2 className="text-sm font-medium text-muted-foreground">{s.profilesSectionTitle}</h2>
+        <ProfileList
+          profiles={profiles}
+          activeProfileId={activeProfileId}
+          dict={profileListDict}
         />
       </section>
 
