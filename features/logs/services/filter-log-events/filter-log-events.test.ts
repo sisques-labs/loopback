@@ -4,19 +4,19 @@ vi.mock("server-only", () => ({}));
 vi.mock("@/lib/aws/config", () => ({
   createAwsConfig: vi.fn(),
 }));
-vi.mock("@/features/logs/lib/client", () => ({
+vi.mock("@/features/logs/lib/client/client", () => ({
   getCloudWatchLogsClient: vi.fn(),
 }));
-vi.mock("@/features/logs/lib/level", () => ({
+vi.mock("@/features/logs/lib/level/level", () => ({
   detectLevel: vi.fn(() => "info"),
 }));
-vi.mock("@/features/logs/lib/service-map", () => ({
+vi.mock("@/features/logs/lib/service-map/service-map", () => ({
   mapLogGroupToService: vi.fn(() => "lambda"),
 }));
 
-import { getCloudWatchLogsClient } from "@/features/logs/lib/client";
-import { detectLevel } from "@/features/logs/lib/level";
-import { mapLogGroupToService } from "@/features/logs/lib/service-map";
+import { getCloudWatchLogsClient } from "@/features/logs/lib/client/client";
+import { detectLevel } from "@/features/logs/lib/level/level";
+import { mapLogGroupToService } from "@/features/logs/lib/service-map/service-map";
 import { filterLogEvents } from "./filter-log-events";
 
 const mockSend = vi.fn();

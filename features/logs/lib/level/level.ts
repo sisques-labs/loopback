@@ -1,4 +1,4 @@
-import type { LogLevel } from "./criteria/types";
+import type { LogLevel } from "@/features/logs/lib/types/types";
 
 export function detectLevel(message: string): LogLevel {
   const m = /\b(ERROR|ERR|FATAL|WARN(?:ING)?|INFO|DEBUG|TRACE)\b/i.exec(message);

@@ -4,11 +4,11 @@ vi.mock("server-only", () => ({}));
 vi.mock("@/lib/aws/config", () => ({
   createAwsConfig: vi.fn(),
 }));
-vi.mock("@/features/logs/lib/client", () => ({
+vi.mock("@/features/logs/lib/client/client", () => ({
   getCloudWatchLogsClient: vi.fn(),
 }));
 
-import { getCloudWatchLogsClient } from "@/features/logs/lib/client";
+import { getCloudWatchLogsClient } from "@/features/logs/lib/client/client";
 import { listLogGroups } from "./list-log-groups";
 
 const mockSend = vi.fn();

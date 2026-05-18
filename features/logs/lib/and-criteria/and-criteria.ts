@@ -1,4 +1,4 @@
-import type { LogCriteria, LogEntry } from "./types";
+import type { LogCriteria, LogEntry } from "@/features/logs/lib/types/types";
 
 export class AndCriteria implements LogCriteria {
   constructor(private readonly criteria: LogCriteria[]) {}

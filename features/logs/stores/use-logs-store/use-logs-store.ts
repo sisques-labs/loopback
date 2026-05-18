@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { LogEntry, LogFilters } from "@/features/logs/lib/criteria/types";
+import type { LogEntry, LogFilters } from "@/features/logs/lib/types/types";
 import { getLogEventsAction } from "@/features/logs/use-cases/get-log-events";
 
 // ── Constants ──────────────────────────────────────────────────────────────

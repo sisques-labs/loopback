@@ -10,7 +10,7 @@ vi.mock("@/features/logs/services/filter-log-events/filter-log-events", () => ({
 
 import { filterLogEvents } from "@/features/logs/services/filter-log-events/filter-log-events";
 import { getLogEventsAction } from "./get-log-events";
-import type { LogEntry } from "@/features/logs/lib/criteria/types";
+import type { LogEntry } from "@/features/logs/lib/types/types";
 
 const makeEntry = (id: string): LogEntry => ({
   id,

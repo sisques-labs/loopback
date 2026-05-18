@@ -1,10 +1,10 @@
 import "server-only";
 
 import { FilterLogEventsCommand } from "@aws-sdk/client-cloudwatch-logs";
-import { getCloudWatchLogsClient } from "@/features/logs/lib/client";
-import { detectLevel } from "@/features/logs/lib/level";
-import { mapLogGroupToService } from "@/features/logs/lib/service-map";
-import type { LogEntry } from "@/features/logs/lib/criteria/types";
+import { getCloudWatchLogsClient } from "@/features/logs/lib/client/client";
+import { detectLevel } from "@/features/logs/lib/level/level";
+import { mapLogGroupToService } from "@/features/logs/lib/service-map/service-map";
+import type { LogEntry } from "@/features/logs/lib/types/types";
 
 export type FilterLogEventsParams = {
   logGroupName?: string;
