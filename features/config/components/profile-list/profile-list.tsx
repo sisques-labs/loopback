@@ -115,7 +115,8 @@ export function ProfileList({ profiles, activeProfileId, dict }: Props) {
       }
       setImportFeedback({ kind: "success", message });
     } else {
-      setImportFeedback({ kind: "error", message: result.message ?? dict.profileImportError });
+      const errorMsg = result.status === "error" ? result.message : undefined;
+      setImportFeedback({ kind: "error", message: errorMsg ?? dict.profileImportError });
     }
 
     // Reset input so the same file can be re-selected
