@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
 import type { LogEntry, LogLevel } from "@/features/logs/lib/types/types";
+import { formatTimestamp } from "@/features/shared/utils/format-timestamp/format-timestamp";
 import type { LogsDict } from "@/features/logs/i18n/en";
 import type { WidenStringLiterals } from "@/features/shared/i18n/widen-literals";
 
@@ -20,15 +21,6 @@ const levelStyles: Record<LogLevel, string> = {
   error: "bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300",
   unknown: "bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400",
 };
-
-function formatTimestamp(epoch: number): string {
-  return new Date(epoch).toLocaleTimeString(undefined, {
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-    hour12: false,
-  });
-}
 
 // ── Component ────────────────────────────────────────────────────────────────
 
