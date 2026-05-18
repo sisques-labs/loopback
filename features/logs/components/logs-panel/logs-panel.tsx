@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef } from "react";
-import { useLogsStore } from "@/features/shared/stores/use-logs-store";
+import { useLogsStore } from "@/features/logs/stores/use-logs-store/use-logs-store";
 import { buildCriteria } from "@/features/logs/lib/build-criteria/build-criteria";
 import { LogRow } from "@/features/logs/components/log-row/log-row";
 import { cn } from "@/lib/utils";

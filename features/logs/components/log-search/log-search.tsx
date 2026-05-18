@@ -1,6 +1,6 @@
 "use client";
 
-import { useLogsStore } from "@/features/shared/stores/use-logs-store";
+import { useLogsStore } from "@/features/logs/stores/use-logs-store/use-logs-store";
 import type { LogsDict } from "@/features/logs/i18n/en";
 import type { WidenStringLiterals } from "@/features/shared/i18n/widen-literals";
 

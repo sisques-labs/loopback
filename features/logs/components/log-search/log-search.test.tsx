@@ -7,7 +7,7 @@ import type { LogsDict } from "@/features/logs/i18n/en";
 
 const mockSetFilter = vi.fn();
 
-vi.mock("@/features/shared/stores/use-logs-store", () => ({
+vi.mock("@/features/logs/stores/use-logs-store/use-logs-store", () => ({
   useLogsStore: vi.fn(() => ({
     filters: { service: "", level: "all", text: "" },
     setFilter: mockSetFilter,

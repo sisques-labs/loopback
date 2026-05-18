@@ -22,7 +22,7 @@ const storeState = {
   setAutoScroll: mockSetAutoScroll,
 };
 
-vi.mock("@/features/shared/stores/use-logs-store", () => ({
+vi.mock("@/features/logs/stores/use-logs-store/use-logs-store", () => ({
   useLogsStore: vi.fn(() => storeState),
 }));
 

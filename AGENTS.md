@@ -6,7 +6,7 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 ## Client UI state
 
-Use **Zustand** stores under `features/shared/stores/` for shared client UI state (e.g. mobile nav open/close). Prefer stores over React Context for that kind of global UI state.
+Use **Zustand** stores under `features/shared/stores/` for shared client UI state (e.g. mobile nav open/close). Prefer stores over React Context for that kind of global UI state. Feature-specific client state (e.g. CloudWatch Logs polling) belongs under that feature, e.g. `features/logs/stores/`.
 
 ## Responsive UI
 

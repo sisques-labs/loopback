@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { useLogsStore } from "@/features/shared/stores/use-logs-store";
+import { useLogsStore } from "@/features/logs/stores/use-logs-store/use-logs-store";
 import { LogsToolbar } from "@/features/logs/components/logs-toolbar/logs-toolbar";
 import { LogSearch } from "@/features/logs/components/log-search/log-search";
 import { LogsPanel } from "@/features/logs/components/logs-panel/logs-panel";
