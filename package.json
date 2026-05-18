@@ -8,15 +8,19 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "lint:fix": "eslint --fix",
     "test": "pnpm exec vitest run",
     "prepare": "husky",
     "changelog": "pnpm dlx git-cliff -o CHANGELOG.md",
-    "changelog:preview": "pnpm dlx git-cliff --unreleased --strip header"
+    "changelog:preview": "pnpm dlx git-cliff --unreleased --strip header",
+    "codegraph:init": "codegraph init -i",
+    "codegraph:index": "codegraph index"
   },
   "lint-staged": {
     "**/*.{ts,tsx}": "eslint --fix"
   },
   "dependencies": {
+    "@aws-sdk/client-cloudwatch-logs": "^3.1048.0",
     "@aws-sdk/client-dynamodb": "^3.1047.0",
     "@aws-sdk/client-lambda": "^3.1046.0",
     "@aws-sdk/client-s3": "^3.1045.0",
@@ -40,6 +44,7 @@
     "shadcn": "^4.7.0",
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.6.0",
+    "tinykeys": "^3.0.0",
     "tw-animate-css": "^1.4.0",
     "zustand": "^5.0.13"
   },
@@ -47,6 +52,7 @@
     "@tailwindcss/postcss": "^4",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
