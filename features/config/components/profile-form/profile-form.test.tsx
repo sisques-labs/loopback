@@ -6,6 +6,7 @@ vi.mock("@/features/config/use-cases/create-profile/create-profile", () => ({
 }));
 vi.mock("@/features/config/use-cases/update-profile/update-profile", () => ({
   updateProfileAction: vi.fn(),
+  updateProfileFormAction: vi.fn(),
 }));
 
 const mockUseActionState = vi.fn();

@@ -7,6 +7,7 @@ import { PROFILES_COOKIE_NAME } from "@/lib/aws/config";
 import {
   parseProfilesCookie,
   serializeProfiles,
+  isValidProfile,
   MAX_PROFILES,
 } from "@/lib/aws/profiles";
 import type { Profile } from "@/lib/aws/profiles";
@@ -20,17 +21,6 @@ const COOKIE_OPTIONS = {
   path: "/",
   maxAge: 60 * 60 * 24 * 365,
 };
-
-function isValidProfile(item: unknown): item is Profile {
-  if (typeof item !== "object" || item === null) return false;
-  const obj = item as Record<string, unknown>;
-  return (
-    typeof obj.id === "string" && obj.id !== "" &&
-    typeof obj.name === "string" && obj.name !== "" &&
-    typeof obj.endpoint === "string" && obj.endpoint !== "" &&
-    typeof obj.region === "string" && obj.region !== ""
-  );
-}
 
 export async function importProfilesAction(
   json: string,

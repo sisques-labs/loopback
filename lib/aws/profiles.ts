@@ -80,3 +80,14 @@ export function isValidEndpointUrl(value: string): boolean {
 export function nameExists(profiles: Profile[], name: string, ignoreId?: string): boolean {
   return profiles.some((p) => (ignoreId ? p.id !== ignoreId : true) && p.name === name);
 }
+
+export function isValidProfile(item: unknown): item is Profile {
+  if (typeof item !== "object" || item === null) return false;
+  const obj = item as Record<string, unknown>;
+  return (
+    typeof obj.id === "string" && obj.id !== "" &&
+    typeof obj.name === "string" && obj.name !== "" &&
+    typeof obj.endpoint === "string" && obj.endpoint !== "" &&
+    typeof obj.region === "string" && obj.region !== ""
+  );
+}
