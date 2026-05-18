@@ -34,6 +34,9 @@ export async function createProfileAction(
   if (name === "") {
     return { status: "error", message: "Profile name is required" };
   }
+  if (name.length > 64) {
+    return { status: "error", message: "Profile name must be 64 characters or fewer" };
+  }
 
   // Validate endpoint
   if (!isValidEndpointUrl(endpoint)) {

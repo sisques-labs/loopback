@@ -32,6 +32,14 @@ export async function updateProfileAction(
   const trimmedEndpoint = endpoint.trim();
   const trimmedRegion = region.trim();
 
+  // Validate name length
+  if (trimmedName.length === 0) {
+    return { status: "error", message: "Profile name is required" };
+  }
+  if (trimmedName.length > 64) {
+    return { status: "error", message: "Profile name must be 64 characters or fewer" };
+  }
+
   // Validate endpoint
   if (!isValidEndpointUrl(trimmedEndpoint)) {
     return { status: "error", message: "Must be a valid absolute URL" };

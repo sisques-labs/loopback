@@ -174,6 +174,20 @@ describe("updateProfileAction — validation errors", () => {
     expect(result.status).toBe("error");
   });
 
+  it("returns error for name exceeding 64 characters", async () => {
+    const store = makeCookieStore([profileDev]);
+    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+
+    const result = await updateProfileAction(idle, {
+      id: "dev-id",
+      name: "a".repeat(65),
+      endpoint: "http://localhost:4566",
+      region: "us-east-1",
+    });
+
+    expect(result.status).toBe("error");
+  });
+
   it("returns error for invalid endpoint URL", async () => {
     const store = makeCookieStore([profileDev]);
     vi.mocked(cookies).mockResolvedValue(store as CookieStore);

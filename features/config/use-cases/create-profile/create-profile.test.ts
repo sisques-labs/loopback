@@ -123,6 +123,18 @@ describe("createProfileAction — validation errors", () => {
     expect(result.status).toBe("error");
   });
 
+  it("returns error for name exceeding 64 characters", async () => {
+    const store = makeCookieStore(undefined);
+    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+
+    const result = await createProfileAction(
+      idle,
+      buildFormData({ ...validInput, name: "a".repeat(65) }),
+    );
+
+    expect(result.status).toBe("error");
+  });
+
   it("returns error for invalid endpoint URL", async () => {
     const store = makeCookieStore(undefined);
     vi.mocked(cookies).mockResolvedValue(store as CookieStore);
