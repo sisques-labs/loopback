@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { updateRegionAction } from "@/features/config/use-cases/update-region/update-region";
 import { AWS_REGIONS } from "@/lib/aws/regions";
+import { ActionFeedback } from "@/features/shared/components/action-feedback/action-feedback";
 import type { ActionState } from "@/features/shared/types/action-state";
 
 const INITIAL_STATE: ActionState = { status: "idle" };
@@ -32,15 +33,11 @@ export function RegionForm({ currentRegion, hasActiveProfile, dict }: Props) {
   return (
     <div className="flex flex-col gap-4">
       {hasActiveProfile && (
-        <p className="rounded-md bg-blue-50 px-3 py-2 text-sm text-blue-700 dark:bg-blue-950 dark:text-blue-300">
-          {dict.regionProfileActiveInfo}
-        </p>
+        <ActionFeedback variant="info" message={dict.regionProfileActiveInfo} />
       )}
 
       {state.status === "success" && (
-        <p className="rounded-md bg-green-50 px-3 py-2 text-sm text-green-700 dark:bg-green-950 dark:text-green-300">
-          {dict.regionSuccess}
-        </p>
+        <ActionFeedback variant="success" message={dict.regionSuccess} />
       )}
 
       <form action={formAction} className="flex flex-col gap-3">

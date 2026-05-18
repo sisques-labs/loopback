@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { createProfileAction } from "@/features/config/use-cases/create-profile/create-profile";
 import { updateProfileAction } from "@/features/config/use-cases/update-profile/update-profile";
 import { AWS_REGIONS } from "@/lib/aws/regions";
+import { ActionFeedback } from "@/features/shared/components/action-feedback/action-feedback";
 import type { ActionState } from "@/features/shared/types/action-state";
 import type { Profile } from "@/lib/aws/profiles";
 
@@ -56,9 +57,7 @@ export function ProfileForm({ mode, profile, dict, onSuccess }: Props) {
   return (
     <div className="flex flex-col gap-4">
       {state.status === "success" && (
-        <p className="rounded-md bg-green-50 px-3 py-2 text-sm text-green-700 dark:bg-green-950 dark:text-green-300">
-          {successMessage}
-        </p>
+        <ActionFeedback variant="success" message={successMessage} />
       )}
 
       <form action={formAction} className="flex flex-col gap-3">

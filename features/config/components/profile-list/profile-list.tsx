@@ -8,6 +8,8 @@ import { MAX_PROFILES } from "@/lib/aws/profiles";
 import type { Profile } from "@/lib/aws/profiles";
 import { exportProfilesAction } from "@/features/config/use-cases/export-profiles/export-profiles";
 import { importProfilesAction } from "@/features/config/use-cases/import-profiles/import-profiles";
+import { ActionFeedback } from "@/features/shared/components/action-feedback/action-feedback";
+import { downloadJson } from "@/lib/utils";
 
 type ProfileListDict = {
   profilesSectionTitle: string;
@@ -82,14 +84,7 @@ export function ProfileList({ profiles, activeProfileId, dict }: Props) {
   async function handleExport() {
     const result = await exportProfilesAction();
     if (result.status !== "success") return;
-
-    const blob = new Blob([result.data], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "loopback-profiles.json";
-    a.click();
-    URL.revokeObjectURL(url);
+    downloadJson("loopback-profiles.json", result.data);
   }
 
   function handleImportClick() {
@@ -193,11 +188,7 @@ export function ProfileList({ profiles, activeProfileId, dict }: Props) {
 
       {/* Import feedback */}
       {importFeedback && (
-        <p
-          className={`text-sm ${importFeedback.kind === "success" ? "text-green-600 dark:text-green-400" : "text-destructive"}`}
-        >
-          {importFeedback.message}
-        </p>
+        <ActionFeedback variant={importFeedback.kind} message={importFeedback.message} />
       )}
 
       {formState.open && formState.mode === "create" && (
