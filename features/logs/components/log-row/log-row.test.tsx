@@ -1,6 +1,6 @@
 import { render, screen, cleanup } from "@testing-library/react";
 import { describe, it, expect, afterEach } from "vitest";
-import type { LogEntry } from "@/features/logs/lib/criteria/types";
+import type { LogEntry } from "@/features/logs/lib/types/types";
 import type { LogsDict } from "@/features/logs/i18n/en";
 import { LogRow } from "./log-row";
 

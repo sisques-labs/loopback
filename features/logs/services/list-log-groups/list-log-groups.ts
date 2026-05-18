@@ -4,7 +4,7 @@ import {
   DescribeLogGroupsCommand,
   type DescribeLogGroupsCommandOutput,
 } from "@aws-sdk/client-cloudwatch-logs";
-import { getCloudWatchLogsClient } from "@/features/logs/lib/client";
+import { getCloudWatchLogsClient } from "@/features/logs/lib/client/client";
 
 export async function listLogGroups(): Promise<string[]> {
   const client = await getCloudWatchLogsClient();

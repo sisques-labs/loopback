@@ -8,7 +8,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useLogsStore } from "@/features/shared/stores/use-logs-store";
-import type { LogLevel } from "@/features/logs/lib/criteria/types";
+import type { LogLevel } from "@/features/logs/lib/types/types";
 import type { LogsDict } from "@/features/logs/i18n/en";
 import type { WidenStringLiterals } from "@/features/shared/i18n/widen-literals";
 

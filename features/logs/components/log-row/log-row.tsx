@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import type { LogEntry, LogLevel } from "@/features/logs/lib/criteria/types";
+import type { LogEntry, LogLevel } from "@/features/logs/lib/types/types";
 import type { LogsDict } from "@/features/logs/i18n/en";
 import type { WidenStringLiterals } from "@/features/shared/i18n/widen-literals";
 

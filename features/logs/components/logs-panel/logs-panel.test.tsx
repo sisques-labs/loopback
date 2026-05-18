@@ -4,7 +4,7 @@ import { describe, it, expect, vi, afterEach, beforeEach } from "vitest";
 
 // jsdom does not implement scrollIntoView — mock it globally for these tests
 Element.prototype.scrollIntoView = vi.fn();
-import type { LogEntry, LogFilters } from "@/features/logs/lib/criteria/types";
+import type { LogEntry, LogFilters } from "@/features/logs/lib/types/types";
 import type { LogsDict } from "@/features/logs/i18n/en";
 
 // ── Mock useLogsStore ────────────────────────────────────────────────────────
