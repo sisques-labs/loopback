@@ -12,20 +12,39 @@ vi.mock("@aws-sdk/credential-providers", () => ({
 
 import { fromNodeProviderChain } from "@aws-sdk/credential-providers";
 import { cookies } from "next/headers";
-import { createAwsConfig, ENDPOINT_COOKIE_NAME, maskSecret } from "./config";
+import {
+  createAwsConfig,
+  ENDPOINT_COOKIE_NAME,
+  maskSecret,
+  REGION_COOKIE_NAME,
+  PROFILES_COOKIE_NAME,
+  ACTIVE_PROFILE_COOKIE_NAME,
+} from "./config";
 
 type CookieStore = Awaited<ReturnType<typeof cookies>>;
 type CredentialProvider = ReturnType<typeof fromNodeProviderChain>;
 
-function makeCookieStore(cookieValue?: string) {
+type CookieMap = Partial<Record<string, string>>;
+
+function makeCookieStore(cookieMap?: CookieMap) {
+  // Support legacy single-string signature for backward compat with existing tests
   return {
     get: vi.fn((name: string) => {
-      if (name === ENDPOINT_COOKIE_NAME && cookieValue !== undefined) {
-        return { value: cookieValue };
-      }
-      return undefined;
+      if (!cookieMap) return undefined;
+      const val = cookieMap[name];
+      return val !== undefined ? { value: val } : undefined;
     }),
   };
+}
+
+/** Builds a credential mock that resolves successfully */
+function makeChainProvider(
+  accessKeyId = "from-chain",
+  secretAccessKey = "chain-secret",
+) {
+  return vi
+    .fn()
+    .mockResolvedValue({ accessKeyId, secretAccessKey }) as CredentialProvider;
 }
 
 beforeEach(() => {
@@ -62,7 +81,9 @@ describe("createAwsConfig — endpoint resolution", () => {
   it("uses cookie value when cookie is set (cookie wins over env var)", async () => {
     process.env.AWS_ENDPOINT_URL = "http://localhost:4566";
     vi.mocked(cookies).mockResolvedValue(
-      makeCookieStore("http://cookie-endpoint:9000") as unknown as CookieStore,
+      makeCookieStore({
+        [ENDPOINT_COOKIE_NAME]: "http://cookie-endpoint:9000",
+      }) as unknown as CookieStore,
     );
 
     const mockProvider = vi.fn().mockResolvedValue({
@@ -183,6 +204,110 @@ describe("createAwsConfig — credentials resolution", () => {
     expect((resolvedCreds as { secretAccessKey: string }).secretAccessKey).toBe(
       "test",
     );
+  });
+});
+
+describe("createAwsConfig — 4-tier precedence chain", () => {
+  const profileDev = {
+    id: "profile-1",
+    name: "dev",
+    endpoint: "http://profile-endpoint:4566",
+    region: "ap-northeast-1",
+  };
+
+  it("Tier 1: active profile wins over all standalone cookies and env vars", async () => {
+    process.env.AWS_ENDPOINT_URL = "http://env-endpoint:4566";
+    process.env.AWS_REGION = "us-west-2";
+    vi.mocked(cookies).mockResolvedValue(
+      makeCookieStore({
+        [PROFILES_COOKIE_NAME]: JSON.stringify([profileDev]),
+        [ACTIVE_PROFILE_COOKIE_NAME]: "profile-1",
+        [ENDPOINT_COOKIE_NAME]: "http://standalone-endpoint:9000",
+        [REGION_COOKIE_NAME]: "eu-central-1",
+      }) as unknown as CookieStore,
+    );
+    vi.mocked(fromNodeProviderChain).mockReturnValue(makeChainProvider());
+
+    const config = await createAwsConfig();
+
+    expect(config.endpoint).toBe("http://profile-endpoint:4566");
+    expect(config.region).toBe("ap-northeast-1");
+  });
+
+  it("Tier 1 + orphaned standalone: active profile wins when endpoint cookie also set", async () => {
+    vi.mocked(cookies).mockResolvedValue(
+      makeCookieStore({
+        [PROFILES_COOKIE_NAME]: JSON.stringify([profileDev]),
+        [ACTIVE_PROFILE_COOKIE_NAME]: "profile-1",
+        [ENDPOINT_COOKIE_NAME]: "http://standalone-endpoint:9000",
+      }) as unknown as CookieStore,
+    );
+    vi.mocked(fromNodeProviderChain).mockReturnValue(makeChainProvider());
+
+    const config = await createAwsConfig();
+
+    expect(config.endpoint).toBe("http://profile-endpoint:4566");
+    expect(config.region).toBe("ap-northeast-1");
+  });
+
+  it("Tier 2: region cookie used when no active profile", async () => {
+    process.env.AWS_ENDPOINT_URL = "http://env-endpoint:4566";
+    vi.mocked(cookies).mockResolvedValue(
+      makeCookieStore({
+        [REGION_COOKIE_NAME]: "eu-west-1",
+      }) as unknown as CookieStore,
+    );
+    vi.mocked(fromNodeProviderChain).mockReturnValue(makeChainProvider());
+
+    const config = await createAwsConfig();
+
+    expect(config.region).toBe("eu-west-1");
+    expect(config.endpoint).toBe("http://env-endpoint:4566");
+  });
+
+  it("Tier 3: endpoint cookie used when no active profile and no region cookie", async () => {
+    process.env.AWS_REGION = "us-east-2";
+    vi.mocked(cookies).mockResolvedValue(
+      makeCookieStore({
+        [ENDPOINT_COOKIE_NAME]: "http://standalone-endpoint:9000",
+      }) as unknown as CookieStore,
+    );
+    vi.mocked(fromNodeProviderChain).mockReturnValue(makeChainProvider());
+
+    const config = await createAwsConfig();
+
+    expect(config.endpoint).toBe("http://standalone-endpoint:9000");
+    expect(config.region).toBe("us-east-2");
+  });
+
+  it("malformed profiles cookie: treats as no active profile and falls through", async () => {
+    vi.mocked(cookies).mockResolvedValue(
+      makeCookieStore({
+        [PROFILES_COOKIE_NAME]: "invalid-json",
+        [ACTIVE_PROFILE_COOKIE_NAME]: "profile-1",
+        [ENDPOINT_COOKIE_NAME]: "http://standalone-endpoint:9000",
+      }) as unknown as CookieStore,
+    );
+    vi.mocked(fromNodeProviderChain).mockReturnValue(makeChainProvider());
+
+    const config = await createAwsConfig();
+
+    expect(config.endpoint).toBe("http://standalone-endpoint:9000");
+  });
+
+  it("active profile ID not found in profiles: falls through to standalone cookies", async () => {
+    vi.mocked(cookies).mockResolvedValue(
+      makeCookieStore({
+        [PROFILES_COOKIE_NAME]: JSON.stringify([profileDev]),
+        [ACTIVE_PROFILE_COOKIE_NAME]: "ghost-id",
+        [ENDPOINT_COOKIE_NAME]: "http://standalone-endpoint:9000",
+      }) as unknown as CookieStore,
+    );
+    vi.mocked(fromNodeProviderChain).mockReturnValue(makeChainProvider());
+
+    const config = await createAwsConfig();
+
+    expect(config.endpoint).toBe("http://standalone-endpoint:9000");
   });
 });
 
