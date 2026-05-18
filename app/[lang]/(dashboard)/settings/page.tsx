@@ -98,6 +98,13 @@ export default async function SettingsPage({ params }: { params: Promise<{ lang:
     profileCapReached: s.profileCapReached,
     profileInvalidEndpoint: s.profileInvalidEndpoint,
     profileInvalidRegion: s.profileInvalidRegion,
+    profileExport: s.profileExport,
+    profileImport: s.profileImport,
+    profileImportSuccess: s.profileImportSuccess,
+    profileImportTruncated: s.profileImportTruncated,
+    profileImportNoValidProfiles: s.profileImportNoValidProfiles,
+    profileImportFileTooLarge: s.profileImportFileTooLarge,
+    profileImportError: s.profileImportError,
   };
 
   const envVarsDict = {

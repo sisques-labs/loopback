@@ -1,11 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ProfileCard } from "@/features/config/components/profile-card/profile-card";
 import { ProfileForm } from "@/features/config/components/profile-form/profile-form";
 import { MAX_PROFILES } from "@/lib/aws/profiles";
 import type { Profile } from "@/lib/aws/profiles";
+import { exportProfilesAction } from "@/features/config/use-cases/export-profiles/export-profiles";
+import { importProfilesAction } from "@/features/config/use-cases/import-profiles/import-profiles";
+import { ActionFeedback } from "@/features/shared/components/action-feedback/action-feedback";
+import { downloadJson } from "@/lib/utils";
 
 type ProfileListDict = {
   profilesSectionTitle: string;
@@ -31,12 +35,24 @@ type ProfileListDict = {
   profileCapReached: string;
   profileInvalidEndpoint: string;
   profileInvalidRegion: string;
+  profileExport: string;
+  profileImport: string;
+  profileImportSuccess: string;
+  profileImportTruncated: string;
+  profileImportNoValidProfiles: string;
+  profileImportFileTooLarge: string;
+  profileImportError: string;
 };
 
 type FormState =
   | { open: false }
   | { open: true; mode: "create" }
   | { open: true; mode: "edit"; profile: Profile };
+
+type ImportFeedback =
+  | { kind: "success"; message: string }
+  | { kind: "error"; message: string }
+  | null;
 
 type Props = {
   profiles: Profile[];
@@ -46,6 +62,8 @@ type Props = {
 
 export function ProfileList({ profiles, activeProfileId, dict }: Props) {
   const [formState, setFormState] = useState<FormState>({ open: false });
+  const [importFeedback, setImportFeedback] = useState<ImportFeedback>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const atCap = profiles.length >= MAX_PROFILES;
 
@@ -61,6 +79,43 @@ export function ProfileList({ profiles, activeProfileId, dict }: Props) {
 
   function handleFormSuccess() {
     setFormState({ open: false });
+  }
+
+  async function handleExport() {
+    const result = await exportProfilesAction();
+    if (result.status !== "success") return;
+    downloadJson("loopback-profiles.json", result.data);
+  }
+
+  function handleImportClick() {
+    fileInputRef.current?.click();
+  }
+
+  async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const text = await file.text();
+    const result = await importProfilesAction(text);
+
+    if (result.status === "success") {
+      const { imported, skipped } = result.data as { imported: number; skipped: number };
+      let message: string;
+      if (skipped > 0) {
+        message = dict.profileImportTruncated
+          .replace("{{count}}", String(imported))
+          .replace("{{skipped}}", String(skipped));
+      } else {
+        message = dict.profileImportSuccess.replace("{{count}}", String(imported));
+      }
+      setImportFeedback({ kind: "success", message });
+    } else {
+      const errorMsg = result.status === "error" ? result.message : undefined;
+      setImportFeedback({ kind: "error", message: errorMsg ?? dict.profileImportError });
+    }
+
+    // Reset input so the same file can be re-selected
+    if (fileInputRef.current) fileInputRef.current.value = "";
   }
 
   const profileCardDict = {
@@ -91,16 +146,50 @@ export function ProfileList({ profiles, activeProfileId, dict }: Props) {
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between gap-2">
         <span className="text-sm text-muted-foreground">{counter}</span>
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          disabled={atCap}
-          onClick={handleCreate}
-        >
-          {dict.profileAdd}
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={handleExport}
+          >
+            {dict.profileExport}
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            disabled={atCap}
+            onClick={handleImportClick}
+          >
+            {dict.profileImport}
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            disabled={atCap}
+            onClick={handleCreate}
+          >
+            {dict.profileAdd}
+          </Button>
+        </div>
       </div>
+
+      {/* Hidden file input for import */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept=".json"
+        className="hidden"
+        onChange={handleFileChange}
+        aria-hidden="true"
+      />
+
+      {/* Import feedback */}
+      {importFeedback && (
+        <ActionFeedback variant={importFeedback.kind} message={importFeedback.message} />
+      )}
 
       {formState.open && formState.mode === "create" && (
         <ProfileForm
