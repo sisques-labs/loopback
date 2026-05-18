@@ -7,6 +7,7 @@ import { parseProfilesCookie, parseActiveProfileCookie } from "@/lib/aws/profile
 import { resolveCredentialSource } from "@/features/config/lib/credential-source";
 import { EndpointForm } from "@/features/config/components/endpoint-form/endpoint-form";
 import { RegionForm } from "@/features/config/components/region-form/region-form";
+import { ProfileList } from "@/features/config/components/profile-list/profile-list";
 import { EnvVarsSection } from "@/features/config/components/env-vars-section/env-vars-section";
 import { CredentialsSection } from "@/features/config/components/credentials-section/credentials-section";
 import { ProfileSection } from "@/features/config/components/profile-section/profile-section";
@@ -71,6 +72,34 @@ export default async function SettingsPage({ params }: { params: Promise<{ lang:
     regionProfileActiveInfo: s.regionProfileActiveInfo,
   };
 
+  const activeProfileId = activeProfile?.id ?? null;
+
+  const profileListDict = {
+    profilesSectionTitle: s.profilesSectionTitle,
+    profilesCounter: s.profilesCounter,
+    profileAdd: s.profileAdd,
+    profileEmpty: s.profileEmpty,
+    profileNameLabel: s.profileNameLabel,
+    profileNamePlaceholder: s.profileNamePlaceholder,
+    profileEndpointLabel: s.profileEndpointLabel,
+    profileEndpointPlaceholder: s.profileEndpointPlaceholder,
+    profileRegionLabel: s.profileRegionLabel,
+    profileSave: s.profileSave,
+    profileEdit: s.profileEdit,
+    profileDelete: s.profileDelete,
+    profileActivate: s.profileActivate,
+    profileDeactivate: s.profileDeactivate,
+    profileActiveBadge: s.profileActiveBadge,
+    profileDeleteActive: s.profileDeleteActive,
+    profileDeleteConfirm: s.profileDeleteConfirm,
+    profileCreateSuccess: s.profileCreateSuccess,
+    profileUpdateSuccess: s.profileUpdateSuccess,
+    profileNameDuplicate: s.profileNameDuplicate,
+    profileCapReached: s.profileCapReached,
+    profileInvalidEndpoint: s.profileInvalidEndpoint,
+    profileInvalidRegion: s.profileInvalidRegion,
+  };
+
   const envVarsDict = {
     envVarsTitle: s.envVarsTitle,
     envVarsEndpointLabel: s.envVarsEndpointLabel,
@@ -133,6 +162,16 @@ export default async function SettingsPage({ params }: { params: Promise<{ lang:
           currentRegion={currentRegion}
           hasActiveProfile={hasActiveProfile}
           dict={regionDict}
+        />
+      </section>
+
+      {/* Profiles section — CRUD */}
+      <section className="flex flex-col gap-3 rounded-lg border bg-card p-4 shadow-sm md:p-6">
+        <h2 className="text-sm font-medium text-muted-foreground">{s.profilesSectionTitle}</h2>
+        <ProfileList
+          profiles={profiles}
+          activeProfileId={activeProfileId}
+          dict={profileListDict}
         />
       </section>
 
