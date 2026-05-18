@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
-import type { LogEntry } from "./types";
-import { ServiceCriteria } from "./service-criteria";
-import { LevelCriteria } from "./level-criteria";
-import { TextCriteria } from "./text-criteria";
+import type { LogEntry } from "@/features/logs/lib/types/types";
 import { AndCriteria } from "./and-criteria";
+import { LevelCriteria } from "@/features/logs/lib/level-criteria/level-criteria";
+import { ServiceCriteria } from "@/features/logs/lib/service-criteria/service-criteria";
+import { TextCriteria } from "@/features/logs/lib/text-criteria/text-criteria";
 
 function makeEntry(overrides: Partial<LogEntry> = {}): LogEntry {
   return {

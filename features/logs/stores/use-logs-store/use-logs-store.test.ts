@@ -1,5 +1,5 @@
 import { describe, beforeEach, afterEach, expect, it, vi } from "vitest";
-import type { LogEntry } from "@/features/logs/lib/criteria/types";
+import type { LogEntry } from "@/features/logs/lib/types/types";
 
 // Mock the server action — must come before importing the store
 vi.mock("@/features/logs/use-cases/get-log-events", () => ({

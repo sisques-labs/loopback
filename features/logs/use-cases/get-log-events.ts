@@ -2,7 +2,7 @@
 
 import "server-only";
 import { filterLogEvents } from "@/features/logs/services/filter-log-events/filter-log-events";
-import type { LogEntry } from "@/features/logs/lib/criteria/types";
+import type { LogEntry } from "@/features/logs/lib/types/types";
 import type { ActionState } from "@/features/shared/types/action-state";
 
 export type LogEventsInput = {
