@@ -12,7 +12,9 @@
     "test": "pnpm exec vitest run",
     "prepare": "husky",
     "changelog": "pnpm dlx git-cliff -o CHANGELOG.md",
-    "changelog:preview": "pnpm dlx git-cliff --unreleased --strip header"
+    "changelog:preview": "pnpm dlx git-cliff --unreleased --strip header",
+    "codegraph:init": "codegraph init -i",
+    "codegraph:index": "codegraph index"
   },
   "lint-staged": {
     "**/*.{ts,tsx}": "eslint --fix"
