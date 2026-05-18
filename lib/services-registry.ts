@@ -1,4 +1,4 @@
-import { Database, FunctionSquare, MessageSquare, Rss, Server } from "lucide-react";
+import { Database, FunctionSquare, MessageSquare, Rss, ScrollText, Server } from "lucide-react";
 import type { ServiceEntry } from "@/features/shared/types/service-entry";
 
 export const services: ServiceEntry[] = [
@@ -35,6 +35,13 @@ export const services: ServiceEntry[] = [
     label: "SNS",
     icon: Rss,
     href: "/sns",
+    status: "enabled",
+  },
+  {
+    slug: "cloudwatch-logs",
+    label: "CloudWatch Logs",
+    icon: ScrollText,
+    href: "/cloudwatch-logs",
     status: "enabled",
   },
 ];

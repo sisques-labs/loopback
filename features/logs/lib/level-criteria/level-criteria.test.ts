@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { LogEntry, LogLevel } from "./types";
+import type { LogEntry, LogLevel } from "@/features/logs/lib/types/types";
 import { LevelCriteria } from "./level-criteria";
 
 function makeEntry(overrides: Partial<LogEntry> = {}): LogEntry {
