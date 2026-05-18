@@ -4,7 +4,7 @@ import "server-only";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { PROFILES_COOKIE_NAME } from "@/lib/aws/config";
-import { parseProfilesCookie, serializeProfiles } from "@/lib/aws/profiles";
+import { parseProfilesCookie, serializeProfiles, isValidEndpointUrl, nameExists } from "@/lib/aws/profiles";
 import { AWS_REGIONS } from "@/lib/aws/regions";
 import type { ActionState } from "@/features/shared/types/action-state";
 
@@ -33,9 +33,7 @@ export async function updateProfileAction(
   const trimmedRegion = region.trim();
 
   // Validate endpoint
-  try {
-    new URL(trimmedEndpoint);
-  } catch {
+  if (!isValidEndpointUrl(trimmedEndpoint)) {
     return { status: "error", message: "Must be a valid absolute URL" };
   }
 
@@ -54,7 +52,7 @@ export async function updateProfileAction(
   }
 
   // Check for name conflict with OTHER profiles (ignore self)
-  if (profiles.some((p) => p.id !== id && p.name === trimmedName)) {
+  if (nameExists(profiles, trimmedName, id)) {
     return { status: "error", message: "A profile with this name already exists" };
   }
 

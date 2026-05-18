@@ -3,10 +3,12 @@ import "server-only";
 
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
-import { PROFILES_COOKIE_NAME, ACTIVE_PROFILE_COOKIE_NAME } from "@/lib/aws/config";
+import { PROFILES_COOKIE_NAME } from "@/lib/aws/config";
 import {
   parseProfilesCookie,
   serializeProfiles,
+  isValidEndpointUrl,
+  nameExists,
   MAX_PROFILES,
 } from "@/lib/aws/profiles";
 import { AWS_REGIONS } from "@/lib/aws/regions";
@@ -34,9 +36,7 @@ export async function createProfileAction(
   }
 
   // Validate endpoint
-  try {
-    new URL(endpoint);
-  } catch {
+  if (!isValidEndpointUrl(endpoint)) {
     return { status: "error", message: "Must be a valid absolute URL" };
   }
 
@@ -54,7 +54,7 @@ export async function createProfileAction(
   }
 
   // Check duplicate name
-  if (profiles.some((p) => p.name === name)) {
+  if (nameExists(profiles, name)) {
     return { status: "error", message: "A profile with this name already exists" };
   }
 
