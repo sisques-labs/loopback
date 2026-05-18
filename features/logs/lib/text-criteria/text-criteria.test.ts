@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { LogEntry } from "./types";
+import type { LogEntry } from "@/features/logs/lib/types/types";
 import { TextCriteria } from "./text-criteria";
 
 function makeEntry(overrides: Partial<LogEntry> = {}): LogEntry {
