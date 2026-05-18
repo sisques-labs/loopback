@@ -1,6 +1,9 @@
 import "server-only";
 
-import { DescribeLogGroupsCommand } from "@aws-sdk/client-cloudwatch-logs";
+import {
+  DescribeLogGroupsCommand,
+  type DescribeLogGroupsCommandOutput,
+} from "@aws-sdk/client-cloudwatch-logs";
 import { getCloudWatchLogsClient } from "@/features/logs/lib/client";
 
 export async function listLogGroups(): Promise<string[]> {
@@ -9,7 +12,7 @@ export async function listLogGroups(): Promise<string[]> {
   let nextToken: string | undefined = undefined;
 
   do {
-    const res = await client.send(
+    const res: DescribeLogGroupsCommandOutput = await client.send(
       new DescribeLogGroupsCommand({ nextToken }),
     );
 
