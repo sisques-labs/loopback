@@ -1,8 +1,15 @@
 import "server-only";
 import { cookies } from "next/headers";
 import { fromNodeProviderChain } from "@aws-sdk/credential-providers";
+import {
+  parseProfilesCookie,
+  parseActiveProfileCookie,
+} from "./profiles";
 
 export const ENDPOINT_COOKIE_NAME = "aws-endpoint-override";
+export const REGION_COOKIE_NAME = "aws-region-override";
+export const PROFILES_COOKIE_NAME = "aws-profiles";
+export const ACTIVE_PROFILE_COOKIE_NAME = "aws-active-profile";
 
 export type AwsCredentials = {
   accessKeyId: string;
@@ -39,28 +46,55 @@ function nodeChainWithTestFallback(): () => Promise<AwsCredentials> {
   };
 }
 
+/** Returns the cookie string value if it is non-empty after trimming, else undefined. */
+function cookieString(value: string | undefined): string | undefined {
+  return value && value.trim() !== "" ? value : undefined;
+}
+
 /**
  * Creates a fresh AWS client config on every call.
  *
  * IMPORTANT: There is intentionally NO module-level cache here.
- * The endpoint is read from the httpOnly cookie on each request so that
- * an endpoint override set via the Settings UI takes effect immediately
- * without requiring a process restart.
+ * Config is read from httpOnly cookies on each request so that changes
+ * made via the Settings UI take effect immediately without a process restart.
+ *
+ * Precedence (highest wins):
+ *   1. Active profile  → endpoint + region
+ *   2. `aws-region-override` cookie → region only
+ *   3. `aws-endpoint-override` cookie → endpoint only
+ *   4. AWS_ENDPOINT_URL / AWS_REGION env vars → defaults
  */
 export async function createAwsConfig(): Promise<AwsClientConfig> {
   const store = await cookies();
-  const cookieValue = store.get(ENDPOINT_COOKIE_NAME)?.value;
+
+  const profiles = parseProfilesCookie(
+    store.get(PROFILES_COOKIE_NAME)?.value,
+  );
+  const activeProfile = parseActiveProfileCookie(
+    store.get(ACTIVE_PROFILE_COOKIE_NAME)?.value,
+    profiles,
+  );
 
   let endpoint: string | undefined;
-  if (cookieValue && cookieValue.trim() !== "") {
-    endpoint = cookieValue;
-  } else if (process.env.AWS_ENDPOINT_URL) {
-    endpoint = process.env.AWS_ENDPOINT_URL;
+  let region: string;
+
+  if (activeProfile) {
+    // Tier 1: active profile wins — provides both endpoint and region
+    endpoint = activeProfile.endpoint;
+    region = activeProfile.region;
   } else {
-    endpoint = undefined;
+    // Tier 2: region cookie (region only); Tier 4 fallback: env var or default
+    region =
+      cookieString(store.get(REGION_COOKIE_NAME)?.value) ??
+      process.env.AWS_REGION ??
+      "us-east-1";
+
+    // Tier 3: endpoint cookie; Tier 4 fallback: env var
+    endpoint =
+      cookieString(store.get(ENDPOINT_COOKIE_NAME)?.value) ??
+      process.env.AWS_ENDPOINT_URL;
   }
 
-  const region = process.env.AWS_REGION ?? "us-east-1";
   const credentials = nodeChainWithTestFallback();
 
   return { endpoint, region, credentials };
