@@ -1,4 +1,4 @@
-import { BucketTable } from "@/features/s3/components/bucket-table/bucket-table";
+import { S3ListShell } from "@/features/s3/components/s3-list-shell/s3-list-shell";
 import { CreateBucketDialog } from "@/features/s3/components/create-bucket-dialog/create-bucket-dialog";
 import { listBuckets } from "@/features/s3/services/list-buckets/list-buckets";
 import { getDictionary } from "@/features/shared/i18n/get-dictionary";
@@ -20,34 +20,21 @@ export default async function S3Page({ params }: Props) {
   const localePrefix = `/${locale}`;
   const buckets = await listBuckets();
 
-  if (buckets.length === 0) {
-    return (
-      <div className="flex flex-col items-start gap-4">
-        <div className="flex w-full min-w-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
-          <div className="min-w-0">
-            <h1 className="text-xl font-semibold break-words">{s3.page.title}</h1>
-            <p className="mt-1 text-sm text-muted-foreground">{s3.page.empty}</p>
-          </div>
-          <CreateBucketDialog dict={s3.createBucketDialog}  closeLabel={shared.dialog.close}/>
-        </div>
-      </div>
-    );
-  }
+  const shellDict = {
+    bucketTable: s3.bucketTable,
+    bucketRowActions: s3.bucketRowActions,
+    confirmDialog: shared.confirmDialog,
+    page: s3.page,
+    dialog: shared.dialog,
+  };
 
   return (
     <div className="flex flex-col gap-4">
       <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
         <h1 className="text-xl font-semibold break-words">{s3.page.title}</h1>
-        <CreateBucketDialog dict={s3.createBucketDialog}  closeLabel={shared.dialog.close}/>
+        <CreateBucketDialog dict={s3.createBucketDialog} closeLabel={shared.dialog.close} />
       </div>
-      <BucketTable
-        buckets={buckets}
-        dict={s3.bucketTable}
-        localePrefix={localePrefix}
-        rowActionsDict={s3.bucketRowActions}
-        confirmDict={shared.confirmDialog}
-        closeLabel={shared.dialog.close}
-      />
+      <S3ListShell initialItems={buckets} dict={shellDict} localePrefix={localePrefix} />
     </div>
   );
 }

@@ -119,9 +119,16 @@ const dict = {
     groupServices: "Servicios",
     groupTools: "Herramientas",
     groupActions: "Acciones",
+    groupResources: "Recursos",
+    searchLoading: "Cargando recursos…",
+    searchEmpty: "No se encontraron recursos.",
     actionSettings: "Ajustes",
     actionToggleTheme: "Cambiar tema",
     ariaLabel: "Paleta de comandos",
+  },
+  resourceExplorer: {
+    refreshing: "Actualizando…",
+    updatedAt: "Actualizado {time}",
   },
 } as const satisfies SharedDictTranslated;
 

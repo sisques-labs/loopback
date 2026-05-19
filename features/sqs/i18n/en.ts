@@ -2,6 +2,8 @@ const dict = {
   page: {
     title: "SQS Queues",
     empty: "No queues found in this account.",
+    filterPlaceholder: "Filter by name",
+    filterEmpty: "No queues match your filter.",
   },
   queueTable: {
     name: "Name",

@@ -38,7 +38,7 @@ beforeEach(() => {
 describe("updateRegionAction — valid region", () => {
   it("returns success for a valid region", async () => {
     const store = makeCookieStore();
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     const result = await updateRegionAction(idle, buildFormData({ region: "us-east-1" }));
 
@@ -47,7 +47,7 @@ describe("updateRegionAction — valid region", () => {
 
   it("sets aws-region-override cookie with the given region value", async () => {
     const store = makeCookieStore();
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     await updateRegionAction(idle, buildFormData({ region: "us-west-2" }));
 
@@ -61,7 +61,7 @@ describe("updateRegionAction — valid region", () => {
 
   it("calls revalidatePath on success", async () => {
     const store = makeCookieStore();
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     await updateRegionAction(idle, buildFormData({ region: "eu-west-1" }));
 
@@ -70,7 +70,7 @@ describe("updateRegionAction — valid region", () => {
 
   it("accepts all valid AWS_REGIONS values", async () => {
     const store = makeCookieStore();
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     const result = await updateRegionAction(idle, buildFormData({ region: "ap-northeast-1" }));
 
@@ -81,7 +81,7 @@ describe("updateRegionAction — valid region", () => {
 describe("updateRegionAction — validation errors", () => {
   it("returns error for an empty string", async () => {
     const store = makeCookieStore();
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     const result = await updateRegionAction(idle, buildFormData({ region: "" }));
 
@@ -90,7 +90,7 @@ describe("updateRegionAction — validation errors", () => {
 
   it("returns error for an unknown region code", async () => {
     const store = makeCookieStore();
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     const result = await updateRegionAction(idle, buildFormData({ region: "xx-invalid-1" }));
 
@@ -99,7 +99,7 @@ describe("updateRegionAction — validation errors", () => {
 
   it("does NOT set cookie on validation error", async () => {
     const store = makeCookieStore();
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     await updateRegionAction(idle, buildFormData({ region: "" }));
 
@@ -108,7 +108,7 @@ describe("updateRegionAction — validation errors", () => {
 
   it("does NOT call revalidatePath on validation error", async () => {
     const store = makeCookieStore();
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     await updateRegionAction(idle, buildFormData({ region: "" }));
 
