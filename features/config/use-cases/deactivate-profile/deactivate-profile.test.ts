@@ -44,7 +44,7 @@ beforeEach(() => {
 describe("deactivateProfileAction — success", () => {
   it("returns success when a profile is active", async () => {
     const store = makeCookieStore([profileDev], "dev-id");
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     const result = await deactivateProfileAction();
 
@@ -53,7 +53,7 @@ describe("deactivateProfileAction — success", () => {
 
   it("deletes the aws-active-profile cookie", async () => {
     const store = makeCookieStore([profileDev], "dev-id");
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     await deactivateProfileAction();
 
@@ -62,7 +62,7 @@ describe("deactivateProfileAction — success", () => {
 
   it("calls revalidatePath on success", async () => {
     const store = makeCookieStore([profileDev], "dev-id");
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     await deactivateProfileAction();
 
@@ -71,7 +71,7 @@ describe("deactivateProfileAction — success", () => {
 
   it("succeeds even when no profile was active", async () => {
     const store = makeCookieStore([profileDev]);
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     const result = await deactivateProfileAction();
 
@@ -80,7 +80,7 @@ describe("deactivateProfileAction — success", () => {
 
   it("still deletes the cookie even when no profile was active", async () => {
     const store = makeCookieStore([profileDev]);
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     await deactivateProfileAction();
 
@@ -89,7 +89,7 @@ describe("deactivateProfileAction — success", () => {
 
   it("calls revalidatePath even when no profile was active", async () => {
     const store = makeCookieStore([]);
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     await deactivateProfileAction();
 

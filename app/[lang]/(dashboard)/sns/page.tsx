@@ -1,4 +1,4 @@
-import { TopicTable } from "@/features/sns/components/topic-table/topic-table";
+import { SNSListShell } from "@/features/sns/components/sns-list-shell/sns-list-shell";
 import { CreateTopicDialog } from "@/features/sns/components/create-topic-dialog/create-topic-dialog";
 import { listTopics } from "@/features/sns/services/list-topics/list-topics";
 import { getDictionary } from "@/features/shared/i18n/get-dictionary";
@@ -20,35 +20,26 @@ export default async function SNSPage({ params }: Props) {
   const localePrefix = `/${locale}`;
   const topics = await listTopics();
 
-  if (topics.length === 0) {
-    return (
-      <div className="flex flex-col items-start gap-4">
-        <div className="flex w-full min-w-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
-          <div className="min-w-0">
-            <h1 className="text-xl font-semibold break-words">{sns.page.title}</h1>
-            <p className="mt-1 text-sm text-muted-foreground">{sns.page.empty}</p>
-          </div>
-          <CreateTopicDialog dict={sns.createTopicDialog} locale={locale}  closeLabel={shared.dialog.close}/>
-        </div>
-      </div>
-    );
-  }
+  const shellDict = {
+    topicTable: sns.topicTable,
+    topicRowActions: sns.topicRowActions,
+    confirmDialog: shared.confirmDialog,
+    publishDialog: sns.publishDialog,
+    page: sns.page,
+    dialog: shared.dialog,
+  };
 
   return (
     <div className="flex flex-col gap-4">
       <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
         <h1 className="text-xl font-semibold break-words">{sns.page.title}</h1>
-        <CreateTopicDialog dict={sns.createTopicDialog} locale={locale}  closeLabel={shared.dialog.close}/>
+        <CreateTopicDialog dict={sns.createTopicDialog} locale={locale} closeLabel={shared.dialog.close} />
       </div>
-      <TopicTable
-        topics={topics}
-        dict={sns.topicTable}
-        rowActionsDict={sns.topicRowActions}
-        confirmDict={shared.confirmDialog}
-        publishDict={sns.publishDialog}
+      <SNSListShell
+        initialItems={topics}
+        dict={shellDict}
         localePrefix={localePrefix}
         locale={locale}
-        closeLabel={shared.dialog.close}
       />
     </div>
   );

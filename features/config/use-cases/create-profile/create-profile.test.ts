@@ -51,7 +51,7 @@ beforeEach(() => {
 describe("createProfileAction — success", () => {
   it("returns success for valid input with empty profiles list", async () => {
     const store = makeCookieStore(undefined);
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     const result = await createProfileAction(idle, buildFormData(validInput));
 
@@ -60,7 +60,7 @@ describe("createProfileAction — success", () => {
 
   it("sets aws-profiles cookie with the new profile appended", async () => {
     const store = makeCookieStore(undefined);
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     await createProfileAction(idle, buildFormData(validInput));
 
@@ -73,7 +73,7 @@ describe("createProfileAction — success", () => {
 
   it("assigns a UUID as the profile id", async () => {
     const store = makeCookieStore(undefined);
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     await createProfileAction(idle, buildFormData(validInput));
 
@@ -89,7 +89,7 @@ describe("createProfileAction — success", () => {
       { id: "existing-id", name: "staging", endpoint: "http://staging:4566", region: "eu-west-1" },
     ];
     const store = makeCookieStore(serializeProfiles(existing));
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     await createProfileAction(idle, buildFormData(validInput));
 
@@ -102,7 +102,7 @@ describe("createProfileAction — success", () => {
 
   it("calls revalidatePath on success", async () => {
     const store = makeCookieStore(undefined);
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     await createProfileAction(idle, buildFormData(validInput));
 
@@ -113,7 +113,7 @@ describe("createProfileAction — success", () => {
 describe("createProfileAction — validation errors", () => {
   it("returns error for empty name", async () => {
     const store = makeCookieStore(undefined);
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     const result = await createProfileAction(
       idle,
@@ -125,7 +125,7 @@ describe("createProfileAction — validation errors", () => {
 
   it("returns error for name exceeding 64 characters", async () => {
     const store = makeCookieStore(undefined);
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     const result = await createProfileAction(
       idle,
@@ -137,7 +137,7 @@ describe("createProfileAction — validation errors", () => {
 
   it("returns error for invalid endpoint URL", async () => {
     const store = makeCookieStore(undefined);
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     const result = await createProfileAction(
       idle,
@@ -149,7 +149,7 @@ describe("createProfileAction — validation errors", () => {
 
   it("returns error for invalid region", async () => {
     const store = makeCookieStore(undefined);
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     const result = await createProfileAction(
       idle,
@@ -164,7 +164,7 @@ describe("createProfileAction — validation errors", () => {
       { id: "existing-id", name: "dev", endpoint: "http://localhost:4566", region: "us-east-1" },
     ];
     const store = makeCookieStore(serializeProfiles(existing));
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     const result = await createProfileAction(idle, buildFormData(validInput));
 
@@ -176,7 +176,7 @@ describe("createProfileAction — validation errors", () => {
       { id: "existing-id", name: "dev", endpoint: "http://localhost:4566", region: "us-east-1" },
     ];
     const store = makeCookieStore(serializeProfiles(existing));
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     await createProfileAction(idle, buildFormData(validInput));
 
@@ -191,7 +191,7 @@ describe("createProfileAction — validation errors", () => {
       region: "us-east-1",
     }));
     const store = makeCookieStore(serializeProfiles(existing));
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     const result = await createProfileAction(
       idle,
@@ -203,7 +203,7 @@ describe("createProfileAction — validation errors", () => {
 
   it("does NOT call revalidatePath on validation error", async () => {
     const store = makeCookieStore(undefined);
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     await createProfileAction(idle, buildFormData({ ...validInput, name: "" }));
 

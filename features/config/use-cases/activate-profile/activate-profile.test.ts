@@ -51,7 +51,7 @@ beforeEach(() => {
 describe("activateProfileAction — success", () => {
   it("returns success when activating an existing profile", async () => {
     const store = makeCookieStore([profileDev, profileStaging]);
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     const result = await activateProfileAction("dev-id");
 
@@ -60,7 +60,7 @@ describe("activateProfileAction — success", () => {
 
   it("sets aws-active-profile cookie to the given profile ID", async () => {
     const store = makeCookieStore([profileDev, profileStaging]);
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     await activateProfileAction("dev-id");
 
@@ -73,7 +73,7 @@ describe("activateProfileAction — success", () => {
 
   it("calls revalidatePath on success", async () => {
     const store = makeCookieStore([profileDev]);
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     await activateProfileAction("dev-id");
 
@@ -82,7 +82,7 @@ describe("activateProfileAction — success", () => {
 
   it("can switch from one active profile to another", async () => {
     const store = makeCookieStore([profileDev, profileStaging], "dev-id");
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     const result = await activateProfileAction("staging-id");
 
@@ -98,7 +98,7 @@ describe("activateProfileAction — success", () => {
 describe("activateProfileAction — error cases", () => {
   it("returns error for non-existent profile ID", async () => {
     const store = makeCookieStore([profileDev]);
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     const result = await activateProfileAction("nonexistent-id");
 
@@ -107,7 +107,7 @@ describe("activateProfileAction — error cases", () => {
 
   it("does NOT set cookie for non-existent profile", async () => {
     const store = makeCookieStore([profileDev]);
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     await activateProfileAction("nonexistent-id");
 
@@ -116,7 +116,7 @@ describe("activateProfileAction — error cases", () => {
 
   it("does NOT call revalidatePath for non-existent profile", async () => {
     const store = makeCookieStore([profileDev]);
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     await activateProfileAction("nonexistent-id");
 

@@ -51,7 +51,7 @@ beforeEach(() => {
 describe("deleteProfileAction — success (inactive profile)", () => {
   it("returns success when deleting an inactive profile", async () => {
     const store = makeCookieStore([profileDev, profileStaging]);
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     const result = await deleteProfileAction("dev-id");
 
@@ -60,7 +60,7 @@ describe("deleteProfileAction — success (inactive profile)", () => {
 
   it("removes the profile from the cookie", async () => {
     const store = makeCookieStore([profileDev, profileStaging]);
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     await deleteProfileAction("dev-id");
 
@@ -71,7 +71,7 @@ describe("deleteProfileAction — success (inactive profile)", () => {
 
   it("preserves remaining profiles", async () => {
     const store = makeCookieStore([profileDev, profileStaging]);
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     await deleteProfileAction("dev-id");
 
@@ -83,7 +83,7 @@ describe("deleteProfileAction — success (inactive profile)", () => {
 
   it("does NOT touch aws-active-profile cookie when deleted profile is not active", async () => {
     const store = makeCookieStore([profileDev, profileStaging], "staging-id");
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     await deleteProfileAction("dev-id");
 
@@ -92,7 +92,7 @@ describe("deleteProfileAction — success (inactive profile)", () => {
 
   it("calls revalidatePath on success", async () => {
     const store = makeCookieStore([profileDev]);
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     await deleteProfileAction("dev-id");
 
@@ -103,7 +103,7 @@ describe("deleteProfileAction — success (inactive profile)", () => {
 describe("deleteProfileAction — active profile protection", () => {
   it("returns error when trying to delete the active profile", async () => {
     const store = makeCookieStore([profileDev, profileStaging], "dev-id");
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     const result = await deleteProfileAction("dev-id");
 
@@ -112,7 +112,7 @@ describe("deleteProfileAction — active profile protection", () => {
 
   it("does NOT delete when profile is active", async () => {
     const store = makeCookieStore([profileDev, profileStaging], "dev-id");
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     await deleteProfileAction("dev-id");
 
@@ -121,7 +121,7 @@ describe("deleteProfileAction — active profile protection", () => {
 
   it("does NOT call revalidatePath when profile is active", async () => {
     const store = makeCookieStore([profileDev], "dev-id");
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     await deleteProfileAction("dev-id");
 
@@ -132,7 +132,7 @@ describe("deleteProfileAction — active profile protection", () => {
 describe("deleteProfileAction — error cases", () => {
   it("returns error for non-existent profile ID", async () => {
     const store = makeCookieStore([profileDev]);
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     const result = await deleteProfileAction("nonexistent-id");
 
@@ -141,7 +141,7 @@ describe("deleteProfileAction — error cases", () => {
 
   it("does NOT modify cookie for non-existent profile", async () => {
     const store = makeCookieStore([profileDev]);
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     await deleteProfileAction("nonexistent-id");
 

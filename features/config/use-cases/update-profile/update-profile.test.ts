@@ -54,7 +54,7 @@ beforeEach(() => {
 describe("updateProfileAction — success", () => {
   it("returns success when updating an existing profile", async () => {
     const store = makeCookieStore([profileDev, profileStaging]);
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     const result = await updateProfileAction(idle, {
       id: "dev-id",
@@ -68,7 +68,7 @@ describe("updateProfileAction — success", () => {
 
   it("updates the profile fields in the cookie", async () => {
     const store = makeCookieStore([profileDev, profileStaging]);
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     await updateProfileAction(idle, {
       id: "dev-id",
@@ -87,7 +87,7 @@ describe("updateProfileAction — success", () => {
 
   it("preserves other profiles unchanged", async () => {
     const store = makeCookieStore([profileDev, profileStaging]);
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     await updateProfileAction(idle, {
       id: "dev-id",
@@ -104,7 +104,7 @@ describe("updateProfileAction — success", () => {
 
   it("calls revalidatePath on success", async () => {
     const store = makeCookieStore([profileDev]);
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     await updateProfileAction(idle, {
       id: "dev-id",
@@ -118,7 +118,7 @@ describe("updateProfileAction — success", () => {
 
   it("allows renaming a profile to its own current name (no self-conflict)", async () => {
     const store = makeCookieStore([profileDev]);
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     const result = await updateProfileAction(idle, {
       id: "dev-id",
@@ -134,7 +134,7 @@ describe("updateProfileAction — success", () => {
 describe("updateProfileAction — validation errors", () => {
   it("returns error for non-existent profile ID", async () => {
     const store = makeCookieStore([profileDev]);
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     const result = await updateProfileAction(idle, {
       id: "nonexistent-id",
@@ -148,7 +148,7 @@ describe("updateProfileAction — validation errors", () => {
 
   it("does NOT modify cookie for non-existent profile", async () => {
     const store = makeCookieStore([profileDev]);
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     await updateProfileAction(idle, {
       id: "nonexistent-id",
@@ -162,7 +162,7 @@ describe("updateProfileAction — validation errors", () => {
 
   it("returns error when new name conflicts with another existing profile", async () => {
     const store = makeCookieStore([profileDev, profileStaging]);
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     const result = await updateProfileAction(idle, {
       id: "dev-id",
@@ -176,7 +176,7 @@ describe("updateProfileAction — validation errors", () => {
 
   it("returns error for name exceeding 64 characters", async () => {
     const store = makeCookieStore([profileDev]);
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     const result = await updateProfileAction(idle, {
       id: "dev-id",
@@ -190,7 +190,7 @@ describe("updateProfileAction — validation errors", () => {
 
   it("returns error for invalid endpoint URL", async () => {
     const store = makeCookieStore([profileDev]);
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     const result = await updateProfileAction(idle, {
       id: "dev-id",
@@ -204,7 +204,7 @@ describe("updateProfileAction — validation errors", () => {
 
   it("returns error for invalid region", async () => {
     const store = makeCookieStore([profileDev]);
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     const result = await updateProfileAction(idle, {
       id: "dev-id",
@@ -218,7 +218,7 @@ describe("updateProfileAction — validation errors", () => {
 
   it("does NOT call revalidatePath on validation error", async () => {
     const store = makeCookieStore([profileDev]);
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     await updateProfileAction(idle, {
       id: "nonexistent-id",
