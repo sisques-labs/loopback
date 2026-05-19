@@ -1,4 +1,4 @@
-import { QueueTable } from "@/features/sqs/components/queue-table/queue-table";
+import { SQSListShell } from "@/features/sqs/components/sqs-list-shell/sqs-list-shell";
 import { CreateQueueDialog } from "@/features/sqs/components/create-queue-dialog/create-queue-dialog";
 import { listQueues } from "@/features/sqs/services/list-queues/list-queues";
 import { getDictionary } from "@/features/shared/i18n/get-dictionary";
@@ -20,35 +20,21 @@ export default async function SQSPage({ params }: Props) {
   const localePrefix = `/${locale}`;
   const queues = await listQueues();
 
-  if (queues.length === 0) {
-    return (
-      <div className="flex flex-col items-start gap-4">
-        <div className="flex w-full min-w-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
-          <div className="min-w-0">
-            <h1 className="text-xl font-semibold wrap-break-word">{sqs.page.title}</h1>
-            <p className="mt-1 text-sm text-muted-foreground">{sqs.page.empty}</p>
-          </div>
-          <CreateQueueDialog dict={sqs.createQueueDialog} locale={locale}  closeLabel={shared.dialog.close}/>
-        </div>
-      </div>
-    );
-  }
+  const shellDict = {
+    queueTable: sqs.queueTable,
+    queueRowActions: sqs.queueRowActions,
+    confirmDialog: shared.confirmDialog,
+    page: sqs.page,
+    dialog: shared.dialog,
+  };
 
   return (
     <div className="flex flex-col gap-4">
       <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
         <h1 className="text-xl font-semibold wrap-break-word">{sqs.page.title}</h1>
-        <CreateQueueDialog dict={sqs.createQueueDialog} locale={locale}  closeLabel={shared.dialog.close}/>
+        <CreateQueueDialog dict={sqs.createQueueDialog} locale={locale} closeLabel={shared.dialog.close} />
       </div>
-      <QueueTable
-        queues={queues}
-        dict={sqs.queueTable}
-        rowActionsDict={sqs.queueRowActions}
-        confirmDict={shared.confirmDialog}
-        localePrefix={localePrefix}
-        locale={locale}
-        closeLabel={shared.dialog.close}
-      />
+      <SQSListShell initialItems={queues} dict={shellDict} localePrefix={localePrefix} locale={locale} />
     </div>
   );
 }

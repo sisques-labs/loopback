@@ -2,6 +2,8 @@ const dict = {
   page: {
     title: "S3 Buckets",
     empty: "No buckets found in this account.",
+    filterPlaceholder: "Filter by name",
+    filterEmpty: "No buckets match your filter.",
   },
   bucketDetail: {
     back: "Back to buckets",

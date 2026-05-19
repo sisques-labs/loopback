@@ -114,9 +114,16 @@ const dict = {
     groupServices: "Services",
     groupTools: "Tools",
     groupActions: "Actions",
+    groupResources: "Resources",
+    searchLoading: "Loading resources…",
+    searchEmpty: "No resources found.",
     actionSettings: "Settings",
     actionToggleTheme: "Toggle theme",
     ariaLabel: "Command palette",
+  },
+  resourceExplorer: {
+    refreshing: "Refreshing…",
+    updatedAt: "Updated {time}",
   },
 } as const;
 

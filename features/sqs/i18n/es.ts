@@ -7,6 +7,8 @@ const dict = {
   page: {
     title: "Colas SQS",
     empty: "No hay colas en esta cuenta.",
+    filterPlaceholder: "Filtrar por nombre",
+    filterEmpty: "Ninguna cola coincide con el filtro.",
   },
   queueTable: {
     name: "Nombre",
