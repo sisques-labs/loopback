@@ -38,7 +38,7 @@ beforeEach(() => {
 describe("updateEndpointAction — validation errors", () => {
   it("returns error for a non-URL string", async () => {
     const store = makeCookieStore();
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     const result = await updateEndpointAction(idle, buildFormData({ endpoint: "not-a-url" }));
 
@@ -47,7 +47,7 @@ describe("updateEndpointAction — validation errors", () => {
 
   it("returns error for a relative path", async () => {
     const store = makeCookieStore();
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     const result = await updateEndpointAction(idle, buildFormData({ endpoint: "/local" }));
 
@@ -56,7 +56,7 @@ describe("updateEndpointAction — validation errors", () => {
 
   it("does NOT call revalidatePath on validation error", async () => {
     const store = makeCookieStore();
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     await updateEndpointAction(idle, buildFormData({ endpoint: "not-a-url" }));
 
@@ -65,7 +65,7 @@ describe("updateEndpointAction — validation errors", () => {
 
   it("does NOT set cookie on validation error", async () => {
     const store = makeCookieStore();
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     await updateEndpointAction(idle, buildFormData({ endpoint: "not-a-url" }));
 
@@ -76,7 +76,7 @@ describe("updateEndpointAction — validation errors", () => {
 describe("updateEndpointAction — valid URL", () => {
   it("returns success for a valid http URL", async () => {
     const store = makeCookieStore();
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     const result = await updateEndpointAction(
       idle,
@@ -88,7 +88,7 @@ describe("updateEndpointAction — valid URL", () => {
 
   it("sets cookie with httpOnly: true for a valid URL", async () => {
     const store = makeCookieStore();
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     await updateEndpointAction(idle, buildFormData({ endpoint: "http://localhost:4566" }));
 
@@ -101,7 +101,7 @@ describe("updateEndpointAction — valid URL", () => {
 
   it("calls revalidatePath on success", async () => {
     const store = makeCookieStore();
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     await updateEndpointAction(idle, buildFormData({ endpoint: "http://localhost:4566" }));
 
@@ -112,7 +112,7 @@ describe("updateEndpointAction — valid URL", () => {
 describe("updateEndpointAction — clear flow (empty string)", () => {
   it("returns success when endpoint is empty string", async () => {
     const store = makeCookieStore();
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     const result = await updateEndpointAction(idle, buildFormData({ endpoint: "" }));
 
@@ -121,7 +121,7 @@ describe("updateEndpointAction — clear flow (empty string)", () => {
 
   it("deletes cookie when endpoint is empty string", async () => {
     const store = makeCookieStore();
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     await updateEndpointAction(idle, buildFormData({ endpoint: "" }));
 
@@ -131,7 +131,7 @@ describe("updateEndpointAction — clear flow (empty string)", () => {
 
   it("calls revalidatePath when endpoint is cleared", async () => {
     const store = makeCookieStore();
-    vi.mocked(cookies).mockResolvedValue(store as CookieStore);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
 
     await updateEndpointAction(idle, buildFormData({ endpoint: "" }));
 

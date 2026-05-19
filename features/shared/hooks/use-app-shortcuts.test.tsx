@@ -2,10 +2,14 @@ import { describe, beforeEach, afterEach, expect, it, vi } from "vitest";
 import { renderHook, cleanup } from "@testing-library/react";
 import { usePaletteStore } from "@/features/shared/stores/use-palette-store";
 
+type ShortcutBindings = Record<string, (event: KeyboardEvent) => void>;
+
 // Use vi.hoisted so variables are available inside vi.mock factory
 const { mockUnsubscribe, mockTinykeys } = vi.hoisted(() => {
   const mockUnsubscribe = vi.fn();
-  const mockTinykeys = vi.fn(() => mockUnsubscribe);
+  const mockTinykeys = vi.fn(
+    (_target: Window, _bindings: ShortcutBindings) => mockUnsubscribe,
+  );
   return { mockUnsubscribe, mockTinykeys };
 });
 
@@ -15,6 +19,11 @@ vi.mock("tinykeys", () => ({
 
 // Import AFTER mocks are defined
 import { useAppShortcuts } from "./use-app-shortcuts";
+
+function getShortcutBindings(): ShortcutBindings {
+  expect(mockTinykeys).toHaveBeenCalled();
+  return mockTinykeys.mock.calls[0][1];
+}
 
 describe("useAppShortcuts", () => {
   beforeEach(() => {
@@ -46,9 +55,7 @@ describe("useAppShortcuts", () => {
     renderHook(() => useAppShortcuts());
     expect(mockTinykeys).toHaveBeenCalledTimes(1);
 
-    // Extract the handler registered for $mod+KeyK
-    const bindings = mockTinykeys.mock.calls[0][1];
-    const handler = bindings["$mod+KeyK"];
+    const handler = getShortcutBindings()["$mod+KeyK"];
     expect(handler).toBeDefined();
 
     // Simulate keydown on a non-input element (body)
@@ -62,8 +69,7 @@ describe("useAppShortcuts", () => {
   it("does NOT call store toggle when target is an input element", () => {
     renderHook(() => useAppShortcuts());
 
-    const bindings = mockTinykeys.mock.calls[0][1];
-    const handler = bindings["$mod+KeyK"];
+    const handler = getShortcutBindings()["$mod+KeyK"];
 
     const input = document.createElement("input");
     const event = new KeyboardEvent("keydown", { key: "k", metaKey: true });
@@ -76,8 +82,7 @@ describe("useAppShortcuts", () => {
   it("does NOT call store toggle when target is a textarea element", () => {
     renderHook(() => useAppShortcuts());
 
-    const bindings = mockTinykeys.mock.calls[0][1];
-    const handler = bindings["$mod+KeyK"];
+    const handler = getShortcutBindings()["$mod+KeyK"];
 
     const textarea = document.createElement("textarea");
     const event = new KeyboardEvent("keydown", { key: "k", metaKey: true });
