@@ -125,6 +125,7 @@ const dict = {
     actionSettings: "Ajustes",
     actionToggleTheme: "Cambiar tema",
     actionLoadDemoData: "Cargar datos de demo",
+    actionResetEnvironment: "Reiniciar entorno",
     ariaLabel: "Paleta de comandos",
   },
   resourceExplorer: {

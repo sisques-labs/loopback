@@ -48,6 +48,7 @@ const dict = {
     successTitle: "Entorno reiniciado",
     errorTitle: "Error al reiniciar",
     noResources: "No se encontraron recursos.",
+    warningText: "Esto eliminará TODOS los recursos de tu entorno local. Esta acción no se puede deshacer.",
   },
   confirmDialog: {
     title: "Reiniciar entorno",

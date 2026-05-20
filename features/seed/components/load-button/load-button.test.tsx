@@ -31,6 +31,14 @@ const dict = {
   errorTitle: "Load failed",
 };
 
+const resultsDict = {
+  tableTitle: "Results",
+  service: "Service",
+  created: "Created",
+  skipped: "Skipped",
+  failed: "Failed",
+};
+
 afterEach(() => {
   cleanup();
   mockState = { status: "idle" };
@@ -39,26 +47,26 @@ afterEach(() => {
 
 describe("LoadButton — no preset selected", () => {
   it("is disabled when no preset is selected", () => {
-    render(<LoadButton selectedPreset={undefined} dict={dict} />);
+    render(<LoadButton selectedPreset={undefined} dict={dict} resultsDict={resultsDict} />);
     const btn = screen.getByRole("button");
     expect(btn).toBeDisabled();
   });
 
   it("shows noPresetSelected hint when no preset is selected", () => {
-    render(<LoadButton selectedPreset={undefined} dict={dict} />);
+    render(<LoadButton selectedPreset={undefined} dict={dict} resultsDict={resultsDict} />);
     expect(screen.getByText("Select a preset to continue")).toBeInTheDocument();
   });
 });
 
 describe("LoadButton — preset selected", () => {
   it("is enabled when a preset is selected", () => {
-    render(<LoadButton selectedPreset={"ecommerce" as PresetSlug} dict={dict} />);
+    render(<LoadButton selectedPreset={"ecommerce" as PresetSlug} dict={dict} resultsDict={resultsDict} />);
     const btn = screen.getByRole("button");
     expect(btn).not.toBeDisabled();
   });
 
   it("shows the button label when preset is selected", () => {
-    render(<LoadButton selectedPreset={"ecommerce" as PresetSlug} dict={dict} />);
+    render(<LoadButton selectedPreset={"ecommerce" as PresetSlug} dict={dict} resultsDict={resultsDict} />);
     expect(screen.getByText("Load preset")).toBeInTheDocument();
   });
 });
@@ -66,7 +74,7 @@ describe("LoadButton — preset selected", () => {
 describe("LoadButton — pending state", () => {
   it("shows loading text and is disabled when pending", () => {
     mockPending = true;
-    render(<LoadButton selectedPreset={"ecommerce" as PresetSlug} dict={dict} />);
+    render(<LoadButton selectedPreset={"ecommerce" as PresetSlug} dict={dict} resultsDict={resultsDict} />);
     const btn = screen.getByRole("button");
     expect(btn).toBeDisabled();
     expect(screen.getByText("Loading…")).toBeInTheDocument();
@@ -87,7 +95,7 @@ describe("LoadButton — success state", () => {
         ],
       },
     };
-    render(<LoadButton selectedPreset={"ecommerce" as PresetSlug} dict={dict} />);
+    render(<LoadButton selectedPreset={"ecommerce" as PresetSlug} dict={dict} resultsDict={resultsDict} />);
     // Should show results
     expect(screen.getByText("Preset loaded")).toBeInTheDocument();
   });
@@ -96,14 +104,14 @@ describe("LoadButton — success state", () => {
 describe("LoadButton — error state", () => {
   it("shows error title on error state", () => {
     mockState = { status: "error", message: "Something went wrong" };
-    render(<LoadButton selectedPreset={"ecommerce" as PresetSlug} dict={dict} />);
+    render(<LoadButton selectedPreset={"ecommerce" as PresetSlug} dict={dict} resultsDict={resultsDict} />);
     expect(screen.getByText("Load failed")).toBeInTheDocument();
   });
 });
 
 describe("LoadButton — has 44px touch target", () => {
   it("button has min-h-11 class for mobile touch target", () => {
-    render(<LoadButton selectedPreset={"ecommerce" as PresetSlug} dict={dict} />);
+    render(<LoadButton selectedPreset={"ecommerce" as PresetSlug} dict={dict} resultsDict={resultsDict} />);
     const btn = screen.getByRole("button");
     expect(btn.className).toContain("min-h-11");
   });
