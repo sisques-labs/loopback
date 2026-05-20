@@ -20,6 +20,8 @@ import enSeed from "@/features/seed/i18n/en";
 import esSeed from "@/features/seed/i18n/es";
 import enTimeline from "@/features/timeline/i18n/en";
 import esTimeline from "@/features/timeline/i18n/es";
+import enSnapshots from "@/features/snapshots/i18n/en";
+import esSnapshots from "@/features/snapshots/i18n/es";
 import type { Locale } from "./locale";
 import type { WidenStringLiterals } from "./widen-literals";
 
@@ -35,6 +37,7 @@ export type AppDict = {
   logs: WidenStringLiterals<typeof enLogs>;
   seed: WidenStringLiterals<typeof enSeed>;
   timeline: WidenStringLiterals<typeof enTimeline>;
+  snapshots: WidenStringLiterals<typeof enSnapshots>;
 };
 
 const dictionaries: Record<Locale, AppDict> = {
@@ -50,6 +53,7 @@ const dictionaries: Record<Locale, AppDict> = {
     logs: enLogs,
     seed: enSeed,
     timeline: enTimeline,
+    snapshots: enSnapshots,
   },
   es: {
     shared: esShared,
@@ -63,6 +67,7 @@ const dictionaries: Record<Locale, AppDict> = {
     logs: esLogs,
     seed: esSeed,
     timeline: esTimeline,
+    snapshots: esSnapshots,
   },
 };
 
