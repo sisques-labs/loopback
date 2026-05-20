@@ -61,6 +61,21 @@ export type SnapshotDocument = {
   s3: S3BucketSnapshot[];
 };
 
+// ── Create report ─────────────────────────────────────────────────────
+
+export type SnapshotServiceResult = {
+  service: "dynamodb" | "sqs" | "s3";
+  status: "success" | "skipped" | "failed";
+  count: number;
+  warning?: string;
+  error?: string;
+};
+
+export type SnapshotCreateReport = {
+  document: SnapshotDocument;
+  results: SnapshotServiceResult[];
+};
+
 // ── Restore report ────────────────────────────────────────────────────
 
 export type RestoreResourceResult = {

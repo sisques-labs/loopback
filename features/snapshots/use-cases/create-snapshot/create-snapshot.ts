@@ -10,13 +10,17 @@ import { captureDynamoDB } from "@/features/snapshots/services/capture-dynamodb/
 import { captureSQS } from "@/features/snapshots/services/capture-sqs/capture-sqs";
 import { captureS3 } from "@/features/snapshots/services/capture-s3/capture-s3";
 import type { ActionState } from "@/features/shared/types/action-state";
-import type { SnapshotDocument } from "@/features/snapshots/lib/types/snapshot";
+import type {
+  SnapshotDocument,
+  SnapshotCreateReport,
+  SnapshotServiceResult,
+} from "@/features/snapshots/lib/types/snapshot";
 import { createAwsConfig } from "@/lib/aws/config";
 
 export async function createSnapshotAction(
-  _prev: ActionState<SnapshotDocument>,
+  _prev: ActionState<SnapshotCreateReport>,
   _formData: FormData,
-): Promise<ActionState<SnapshotDocument>> {
+): Promise<ActionState<SnapshotCreateReport>> {
   const [dynClient, sqsClient, s3Client] = await Promise.all([
     getDynamoDBClient(),
     getSQSClient(),
@@ -46,6 +50,25 @@ export async function createSnapshotAction(
   const sqsQueues = sqsResult.status === "fulfilled" ? sqsResult.value : [];
   const s3Buckets = s3Result.status === "fulfilled" ? s3Result.value : [];
 
+  const results: SnapshotServiceResult[] = [
+    dynamoResult.status === "fulfilled"
+      ? {
+          service: "dynamodb",
+          status: "success",
+          count: dynamoResult.value.tables.length,
+          warning: dynamoResult.value.warnings.length
+            ? dynamoResult.value.warnings.join("; ")
+            : undefined,
+        }
+      : { service: "dynamodb", status: "failed", count: 0, error: String(dynamoResult.reason) },
+    sqsResult.status === "fulfilled"
+      ? { service: "sqs", status: "success", count: sqsResult.value.length }
+      : { service: "sqs", status: "failed", count: 0, error: String(sqsResult.reason) },
+    s3Result.status === "fulfilled"
+      ? { service: "s3", status: "success", count: s3Result.value.length }
+      : { service: "s3", status: "failed", count: 0, error: String(s3Result.reason) },
+  ];
+
   // Resolve endpoint from config for informational purposes
   let endpoint = "unknown";
   try {
@@ -55,7 +78,7 @@ export async function createSnapshotAction(
     // non-critical
   }
 
-  const doc: SnapshotDocument = {
+  const document: SnapshotDocument = {
     version: "1",
     createdAt: new Date().toISOString(),
     endpoint,
@@ -66,5 +89,5 @@ export async function createSnapshotAction(
 
   revalidatePath("/snapshots");
 
-  return { status: "success", data: doc };
+  return { status: "success", data: { document, results } };
 }

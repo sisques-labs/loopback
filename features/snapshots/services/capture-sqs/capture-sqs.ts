@@ -14,7 +14,6 @@ const VOLATILE_ATTRS = new Set([
   "ApproximateNumberOfMessagesDelayed",
   "LastModifiedTimestamp",
   "CreatedTimestamp",
-  "QueueArn",
 ]);
 
 export async function captureSQS(

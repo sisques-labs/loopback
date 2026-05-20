@@ -38,9 +38,9 @@ import { captureSQS } from "@/features/snapshots/services/capture-sqs/capture-sq
 import { captureS3 } from "@/features/snapshots/services/capture-s3/capture-s3";
 import { createSnapshotAction } from "./create-snapshot";
 import type { ActionState } from "@/features/shared/types/action-state";
-import type { SnapshotDocument } from "@/features/snapshots/lib/types/snapshot";
+import type { SnapshotCreateReport } from "@/features/snapshots/lib/types/snapshot";
 
-const IDLE: ActionState<SnapshotDocument> = { status: "idle" };
+const IDLE: ActionState<SnapshotCreateReport> = { status: "idle" };
 const EMPTY_FORM = new FormData();
 
 function mockDynamoResult(tables = 0) {
@@ -64,11 +64,13 @@ describe("createSnapshotAction — all services succeed", () => {
 
     expect(result.status).toBe("success");
     if (result.status === "success") {
-      expect(result.data.version).toBe("1");
-      expect(result.data.createdAt).toBeTruthy();
-      expect(result.data.dynamodb).toHaveLength(1);
-      expect(result.data.sqs).toHaveLength(1);
-      expect(result.data.s3).toHaveLength(1);
+      expect(result.data.document.version).toBe("1");
+      expect(result.data.document.createdAt).toBeTruthy();
+      expect(result.data.document.dynamodb).toHaveLength(1);
+      expect(result.data.document.sqs).toHaveLength(1);
+      expect(result.data.document.s3).toHaveLength(1);
+      expect(result.data.results).toHaveLength(3);
+      expect(result.data.results.every((r) => r.status === "success")).toBe(true);
     }
   });
 
@@ -76,9 +78,9 @@ describe("createSnapshotAction — all services succeed", () => {
     const result = await createSnapshotAction(IDLE, EMPTY_FORM);
 
     if (result.status === "success") {
-      expect(() => new Date(result.data.createdAt)).not.toThrow();
-      expect(new Date(result.data.createdAt).toISOString()).toBe(
-        result.data.createdAt,
+      expect(() => new Date(result.data.document.createdAt)).not.toThrow();
+      expect(new Date(result.data.document.createdAt).toISOString()).toBe(
+        result.data.document.createdAt,
       );
     }
   });
@@ -95,9 +97,11 @@ describe("createSnapshotAction — one service fails (partial)", () => {
     // Partial success: other services should still be included
     expect(result.status).toBe("success");
     if (result.status === "success") {
-      expect(result.data.dynamodb).toHaveLength(2);
-      expect(result.data.sqs).toHaveLength(0); // failed → empty
-      expect(result.data.s3).toHaveLength(1);
+      expect(result.data.document.dynamodb).toHaveLength(2);
+      expect(result.data.document.sqs).toHaveLength(0); // failed → empty
+      expect(result.data.document.s3).toHaveLength(1);
+      const sqsServiceResult = result.data.results.find((r) => r.service === "sqs");
+      expect(sqsServiceResult?.status).toBe("failed");
     }
   });
 
@@ -110,9 +114,11 @@ describe("createSnapshotAction — one service fails (partial)", () => {
 
     expect(result.status).toBe("success");
     if (result.status === "success") {
-      expect(result.data.dynamodb).toHaveLength(0);
-      expect(result.data.sqs).toHaveLength(1);
-      expect(result.data.s3).toHaveLength(1);
+      expect(result.data.document.dynamodb).toHaveLength(0);
+      expect(result.data.document.sqs).toHaveLength(1);
+      expect(result.data.document.s3).toHaveLength(1);
+      const dynServiceResult = result.data.results.find((r) => r.service === "dynamodb");
+      expect(dynServiceResult?.status).toBe("failed");
     }
   });
 });

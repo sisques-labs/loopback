@@ -126,7 +126,8 @@ describe("captureSQS", () => {
     expect(attrs).not.toHaveProperty("ApproximateNumberOfMessagesDelayed");
     expect(attrs).not.toHaveProperty("CreatedTimestamp");
     expect(attrs).not.toHaveProperty("LastModifiedTimestamp");
-    expect(attrs).not.toHaveProperty("QueueArn");
+    // QueueArn is captured (informational — stripped on restore)
+    expect(attrs).toHaveProperty("QueueArn");
     // Non-volatile attrs must be kept
     expect(attrs.VisibilityTimeout).toBe("30");
     expect(attrs.MessageRetentionPeriod).toBe("345600");
