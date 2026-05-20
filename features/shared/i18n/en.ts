@@ -119,11 +119,16 @@ const dict = {
     searchEmpty: "No resources found.",
     actionSettings: "Settings",
     actionToggleTheme: "Toggle theme",
+    actionLoadDemoData: "Load demo data",
+    actionResetEnvironment: "Reset environment",
     ariaLabel: "Command palette",
   },
   resourceExplorer: {
     refreshing: "Refreshing…",
     updatedAt: "Updated {time}",
+  },
+  tools: {
+    seed: "Demo Data",
   },
 } as const;
 
