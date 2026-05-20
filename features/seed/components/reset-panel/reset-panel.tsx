@@ -17,6 +17,7 @@ export type ResetPanelDict = {
   successTitle: string;
   errorTitle: string;
   noResources: string;
+  warningText: string;
 };
 
 const INITIAL_STATE: ActionState<ResetReport> = { status: "idle" };
@@ -71,7 +72,7 @@ export function ResetPanel({ dict, resultsDict }: Props) {
           </div>
 
           <p className="text-sm text-destructive font-medium">
-            This will delete ALL resources in your local environment. This action cannot be undone.
+            {dict.warningText}
           </p>
 
           <form action={formAction}>

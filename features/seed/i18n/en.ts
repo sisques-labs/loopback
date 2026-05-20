@@ -43,6 +43,7 @@ const dict = {
     successTitle: "Environment reset",
     errorTitle: "Reset failed",
     noResources: "No resources found.",
+    warningText: "This will delete ALL resources in your local environment. This action cannot be undone.",
   },
   confirmDialog: {
     title: "Reset environment",
