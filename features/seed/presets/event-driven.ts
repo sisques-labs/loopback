@@ -2,6 +2,8 @@ import type { Preset } from "./schema";
 
 export const eventDrivenPreset: Preset = {
   slug: "event-driven",
+  name: "Event-Driven",
+  description: "Event bus queues, routing topics, and processor functions",
   s3: [],
   sqs: [
     { name: "loopback-event-ingestion" },

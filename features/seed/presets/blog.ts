@@ -2,6 +2,9 @@ import type { Preset } from "./schema";
 
 export const blogPreset: Preset = {
   slug: "blog",
+  name: "Blog",
+  description:
+    "Content bucket, posts table, notifications topic, and publishing function",
   s3: [{ name: "loopback-blog-assets" }],
   sqs: [{ name: "loopback-blog-comments" }],
   dynamodb: [

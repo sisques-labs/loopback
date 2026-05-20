@@ -166,3 +166,42 @@ describe("PRESETS — preset slug field", () => {
     }
   });
 });
+
+describe("PRESETS — name and description fields", () => {
+  it("each PRESET entry has a non-empty name string", () => {
+    const slugs: PresetSlug[] = ["ecommerce", "blog", "event-driven"];
+    for (const slug of slugs) {
+      expect(typeof PRESETS[slug].name).toBe("string");
+      expect(PRESETS[slug].name.length).toBeGreaterThan(0);
+    }
+  });
+
+  it("each PRESET entry has a non-empty description string", () => {
+    const slugs: PresetSlug[] = ["ecommerce", "blog", "event-driven"];
+    for (const slug of slugs) {
+      expect(typeof PRESETS[slug].description).toBe("string");
+      expect(PRESETS[slug].description.length).toBeGreaterThan(0);
+    }
+  });
+
+  it("ecommerce preset has correct name and description", () => {
+    expect(PRESETS["ecommerce"].name).toBe("E-Commerce");
+    expect(PRESETS["ecommerce"].description).toBe(
+      "Products catalog, orders queue, inventory table, and fulfillment function",
+    );
+  });
+
+  it("blog preset has correct name and description", () => {
+    expect(PRESETS["blog"].name).toBe("Blog");
+    expect(PRESETS["blog"].description).toBe(
+      "Content bucket, posts table, notifications topic, and publishing function",
+    );
+  });
+
+  it("event-driven preset has correct name and description", () => {
+    expect(PRESETS["event-driven"].name).toBe("Event-Driven");
+    expect(PRESETS["event-driven"].description).toBe(
+      "Event bus queues, routing topics, and processor functions",
+    );
+  });
+});

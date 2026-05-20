@@ -10,6 +10,8 @@ export type PresetSlug = "ecommerce" | "blog" | "event-driven";
 
 export type Preset = {
   slug: PresetSlug;
+  name: string;
+  description: string;
   s3: S3Resource[];
   sqs: SQSResource[];
   dynamodb: DynamoDBResource[];

@@ -2,6 +2,9 @@ import type { Preset } from "./schema";
 
 export const ecommercePreset: Preset = {
   slug: "ecommerce",
+  name: "E-Commerce",
+  description:
+    "Products catalog, orders queue, inventory table, and fulfillment function",
   s3: [
     { name: "loopback-ecommerce-products" },
     { name: "loopback-ecommerce-media" },
