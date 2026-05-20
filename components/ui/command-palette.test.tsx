@@ -47,6 +47,7 @@ const dict = {
   searchEmpty: "No resources found.",
   actionSettings: "Settings",
   actionToggleTheme: "Toggle theme",
+  actionLoadDemoData: "Load demo data",
   ariaLabel: "Command palette",
 };
 
@@ -243,5 +244,38 @@ describe("CommandPalette", () => {
     // Last item should be the resource item
     const lastOption = allOptions[allOptions.length - 1];
     expect(lastOption).toHaveTextContent("alpha-bucket");
+  });
+});
+
+// ── Load demo data palette action ─────────────────────────────────────────────
+describe("CommandPalette — Load demo data action", () => {
+  it("shows 'Load demo data' in the actions group", () => {
+    renderPalette(true);
+    const matches = screen.getAllByText(dict.actionLoadDemoData);
+    expect(matches.length).toBeGreaterThan(0);
+  });
+
+  it("filtering by 'load demo' shows the Load demo data action", async () => {
+    renderPalette(true);
+    const input = screen.getByRole("searchbox");
+    await userEvent.type(input, "load demo");
+    const matches = screen.getAllByText(dict.actionLoadDemoData);
+    expect(matches.length).toBeGreaterThan(0);
+  });
+
+  it("clicking 'Load demo data' navigates to /en/seed and closes palette", async () => {
+    renderPalette(true);
+    // Filter to isolate the action item
+    const input = screen.getByRole("searchbox");
+    await userEvent.type(input, "load demo");
+    // Click the first option with the action label
+    const options = screen.getAllByRole("option");
+    const actionOption = options.find((el) =>
+      el.textContent?.includes(dict.actionLoadDemoData),
+    );
+    expect(actionOption).toBeTruthy();
+    await userEvent.click(actionOption!);
+    expect(mockPush).toHaveBeenCalledWith("/en/seed");
+    expect(usePaletteStore.getState().open).toBe(false);
   });
 });

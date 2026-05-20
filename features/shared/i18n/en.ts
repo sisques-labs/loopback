@@ -119,6 +119,7 @@ const dict = {
     searchEmpty: "No resources found.",
     actionSettings: "Settings",
     actionToggleTheme: "Toggle theme",
+    actionLoadDemoData: "Load demo data",
     ariaLabel: "Command palette",
   },
   resourceExplorer: {
