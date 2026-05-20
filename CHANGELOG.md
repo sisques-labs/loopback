@@ -1,6 +1,32 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+## [0.8.0-alpha.0] - 2026-05-20
+
+### Bug Fixes
+- **seed:** Add name and description fields to Preset type and preset data (bc1f1ad)
+- **seed:** Pass i18n results dict to ResultsTable instead of hardcoded English strings (e5dcc73)
+- **seed:** Wire warningText i18n key in ResetPanel (7a39843)
+- **seed:** Add explicit types to fix tsc pre-push errors (526063e)
+- **seed:** Add missing command palette dict keys in shell test (f2ffb36)
+
+### Features
+- **seed:** Add foundation, preset definitions, i18n and lambda delete-function (ae35c74)
+- **seed:** Add per-service seed helpers and loadDemoDatasetAction (618f460)
+- **seed:** Add PresetPicker, LoadButton, ResultsTable components and wire /seed page (a48ffe1)
+- **seed:** Add ResetPanel component with dry-run preview and confirm flow (55db72a)
+- **seed:** Wire ResetPanel into /seed page and add Reset environment to command palette (b4101f5)
+
+### Refactor
+- **lambda:** Remove index.ts from delete-function use-case (7d35421)
+- **seed:** Move lib helpers to own subdirs, remove index.ts files (e7bc919)
+- **seed:** Move reset-* lib helpers to own subdirs, remove reset-environment index.ts (7856e56)
+- **seed:** Remove presets/index.ts, extract PRESETS to presets.ts (cd69771)
+- **seed:** Update presets.test.ts imports after index.ts removal (a3f280d)
+
+### Testing
+- **seed:** Add RED tests for reset helpers (S3, SQS, DynamoDB, Lambda, SNS) (3beee56)
+- **seed:** Add RED tests then implement resetEnvironmentAction (dry-run + execute) (bcd1f89)
 ## [0.7.0-alpha.0] - 2026-05-19
 
 ### Bug Fixes
@@ -8,6 +34,7 @@ All notable changes to this project will be documented in this file.
 
 ### Chore
 - Release v0.6.0-alpha.0 (35eef9f)
+- Release v0.7.0-alpha.0 (de1b730)
 
 ### Features
 - Add resource search in command palette and list auto-refresh (e0ae097)
