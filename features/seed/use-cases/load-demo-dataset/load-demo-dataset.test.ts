@@ -4,27 +4,27 @@ vi.mock("server-only", () => ({}));
 vi.mock("next/cache", () => ({ revalidatePath: vi.fn() }));
 
 // Mock per-service seed helpers
-vi.mock("@/features/seed/lib/seed-s3", () => ({
+vi.mock("@/features/seed/lib/seed-s3/seed-s3", () => ({
   seedS3: vi.fn(),
 }));
-vi.mock("@/features/seed/lib/seed-sqs", () => ({
+vi.mock("@/features/seed/lib/seed-sqs/seed-sqs", () => ({
   seedSQS: vi.fn(),
 }));
-vi.mock("@/features/seed/lib/seed-dynamodb", () => ({
+vi.mock("@/features/seed/lib/seed-dynamodb/seed-dynamodb", () => ({
   seedDynamoDB: vi.fn(),
 }));
-vi.mock("@/features/seed/lib/seed-lambda", () => ({
+vi.mock("@/features/seed/lib/seed-lambda/seed-lambda", () => ({
   seedLambda: vi.fn(),
 }));
-vi.mock("@/features/seed/lib/seed-sns", () => ({
+vi.mock("@/features/seed/lib/seed-sns/seed-sns", () => ({
   seedSNS: vi.fn(),
 }));
 
-import { seedS3 } from "@/features/seed/lib/seed-s3";
-import { seedSQS } from "@/features/seed/lib/seed-sqs";
-import { seedDynamoDB } from "@/features/seed/lib/seed-dynamodb";
-import { seedLambda } from "@/features/seed/lib/seed-lambda";
-import { seedSNS } from "@/features/seed/lib/seed-sns";
+import { seedS3 } from "@/features/seed/lib/seed-s3/seed-s3";
+import { seedSQS } from "@/features/seed/lib/seed-sqs/seed-sqs";
+import { seedDynamoDB } from "@/features/seed/lib/seed-dynamodb/seed-dynamodb";
+import { seedLambda } from "@/features/seed/lib/seed-lambda/seed-lambda";
+import { seedSNS } from "@/features/seed/lib/seed-sns/seed-sns";
 import { loadDemoDatasetAction } from "./load-demo-dataset";
 import type { ActionState } from "@/features/shared/types/action-state";
 import type { LoadReport } from "@/features/seed/types";

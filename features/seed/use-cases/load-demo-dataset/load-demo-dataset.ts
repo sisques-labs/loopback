@@ -3,11 +3,11 @@
 import "server-only";
 import { revalidatePath } from "next/cache";
 import { PRESETS, isPresetSlug } from "@/features/seed/presets";
-import { seedS3 } from "@/features/seed/lib/seed-s3";
-import { seedSQS } from "@/features/seed/lib/seed-sqs";
-import { seedDynamoDB } from "@/features/seed/lib/seed-dynamodb";
-import { seedLambda } from "@/features/seed/lib/seed-lambda";
-import { seedSNS } from "@/features/seed/lib/seed-sns";
+import { seedS3 } from "@/features/seed/lib/seed-s3/seed-s3";
+import { seedSQS } from "@/features/seed/lib/seed-sqs/seed-sqs";
+import { seedDynamoDB } from "@/features/seed/lib/seed-dynamodb/seed-dynamodb";
+import { seedLambda } from "@/features/seed/lib/seed-lambda/seed-lambda";
+import { seedSNS } from "@/features/seed/lib/seed-sns/seed-sns";
 import type { ActionState } from "@/features/shared/types/action-state";
 import type { LoadReport, ServiceKey, ServiceResult } from "@/features/seed/types";
 
