@@ -1,6 +1,12 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+## [0.9.0-alpha.0] - 2026-05-20
+
+### Features
+- **timeline:** Add data/state foundation for event timeline (680d4fc)
+- **timeline:** Add presentation layer components and page route (b4015cc)
+- **timeline:** Add i18n files, dictionary wiring, and tools-registry entry (PR-3) (86ae6e0)
 ## [0.8.0-alpha.0] - 2026-05-20
 
 ### Bug Fixes
@@ -9,6 +15,9 @@ All notable changes to this project will be documented in this file.
 - **seed:** Wire warningText i18n key in ResetPanel (7a39843)
 - **seed:** Add explicit types to fix tsc pre-push errors (526063e)
 - **seed:** Add missing command palette dict keys in shell test (f2ffb36)
+
+### Chore
+- Release v0.8.0-alpha.0 (dad3f06)
 
 ### Features
 - **seed:** Add foundation, preset definitions, i18n and lambda delete-function (ae35c74)
