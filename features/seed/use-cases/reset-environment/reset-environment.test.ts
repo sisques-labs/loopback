@@ -4,27 +4,27 @@ vi.mock("server-only", () => ({}));
 vi.mock("next/cache", () => ({ revalidatePath: vi.fn() }));
 
 // Mock all reset helpers
-vi.mock("@/features/seed/lib/reset-s3", () => ({
+vi.mock("@/features/seed/lib/reset-s3/reset-s3", () => ({
   resetS3: vi.fn(),
 }));
-vi.mock("@/features/seed/lib/reset-sqs", () => ({
+vi.mock("@/features/seed/lib/reset-sqs/reset-sqs", () => ({
   resetSQS: vi.fn(),
 }));
-vi.mock("@/features/seed/lib/reset-dynamodb", () => ({
+vi.mock("@/features/seed/lib/reset-dynamodb/reset-dynamodb", () => ({
   resetDynamoDB: vi.fn(),
 }));
-vi.mock("@/features/seed/lib/reset-lambda", () => ({
+vi.mock("@/features/seed/lib/reset-lambda/reset-lambda", () => ({
   resetLambda: vi.fn(),
 }));
-vi.mock("@/features/seed/lib/reset-sns", () => ({
+vi.mock("@/features/seed/lib/reset-sns/reset-sns", () => ({
   resetSNS: vi.fn(),
 }));
 
-import { resetS3 } from "@/features/seed/lib/reset-s3";
-import { resetSQS } from "@/features/seed/lib/reset-sqs";
-import { resetDynamoDB } from "@/features/seed/lib/reset-dynamodb";
-import { resetLambda } from "@/features/seed/lib/reset-lambda";
-import { resetSNS } from "@/features/seed/lib/reset-sns";
+import { resetS3 } from "@/features/seed/lib/reset-s3/reset-s3";
+import { resetSQS } from "@/features/seed/lib/reset-sqs/reset-sqs";
+import { resetDynamoDB } from "@/features/seed/lib/reset-dynamodb/reset-dynamodb";
+import { resetLambda } from "@/features/seed/lib/reset-lambda/reset-lambda";
+import { resetSNS } from "@/features/seed/lib/reset-sns/reset-sns";
 import { resetEnvironmentAction } from "./reset-environment";
 import type { ActionState } from "@/features/shared/types/action-state";
 import type { ResetReport } from "@/features/seed/types";

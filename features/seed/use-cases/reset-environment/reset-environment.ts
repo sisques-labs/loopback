@@ -2,11 +2,11 @@
 
 import "server-only";
 import { revalidatePath } from "next/cache";
-import { resetS3 } from "@/features/seed/lib/reset-s3";
-import { resetSQS } from "@/features/seed/lib/reset-sqs";
-import { resetDynamoDB } from "@/features/seed/lib/reset-dynamodb";
-import { resetLambda } from "@/features/seed/lib/reset-lambda";
-import { resetSNS } from "@/features/seed/lib/reset-sns";
+import { resetS3 } from "@/features/seed/lib/reset-s3/reset-s3";
+import { resetSQS } from "@/features/seed/lib/reset-sqs/reset-sqs";
+import { resetDynamoDB } from "@/features/seed/lib/reset-dynamodb/reset-dynamodb";
+import { resetLambda } from "@/features/seed/lib/reset-lambda/reset-lambda";
+import { resetSNS } from "@/features/seed/lib/reset-sns/reset-sns";
 import type { ActionState } from "@/features/shared/types/action-state";
 import type { ResetReport, ServiceKey, ServiceResult } from "@/features/seed/types";
 
