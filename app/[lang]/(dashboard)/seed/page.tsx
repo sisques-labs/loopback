@@ -46,6 +46,7 @@ export default async function SeedPage({ params, searchParams }: Props) {
       <LoadButton
         selectedPreset={validatedPreset}
         dict={dict.seed.load}
+        resultsDict={dict.seed.results}
       />
     </div>
   );

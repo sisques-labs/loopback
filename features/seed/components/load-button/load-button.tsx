@@ -15,22 +15,15 @@ export type LoadButtonDict = {
   errorTitle: string;
 };
 
-const RESULTS_DICT = {
-  tableTitle: "Results",
-  service: "Service",
-  created: "Created",
-  skipped: "Skipped",
-  failed: "Failed",
-};
-
 const INITIAL_STATE: ActionState<LoadReport> = { status: "idle" };
 
 type Props = {
   selectedPreset: PresetSlug | undefined;
   dict: LoadButtonDict;
+  resultsDict: ResultsTableDict;
 };
 
-export function LoadButton({ selectedPreset, dict }: Props) {
+export function LoadButton({ selectedPreset, dict, resultsDict }: Props) {
   const [state, formAction, pending] = useActionState(
     loadDemoDatasetAction,
     INITIAL_STATE,
@@ -62,7 +55,7 @@ export function LoadButton({ selectedPreset, dict }: Props) {
           <p className="text-sm font-medium text-green-600 dark:text-green-400">
             {dict.successTitle}
           </p>
-          <ResultsTable results={state.data.results} dict={RESULTS_DICT} />
+          <ResultsTable results={state.data.results} dict={resultsDict} />
         </div>
       )}
 
