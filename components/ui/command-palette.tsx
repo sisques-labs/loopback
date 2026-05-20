@@ -31,6 +31,7 @@ export type CommandPaletteDict = {
   actionSettings: string;
   actionToggleTheme: string;
   actionLoadDemoData: string;
+  actionResetEnvironment: string;
   ariaLabel: string;
 };
 
@@ -134,6 +135,16 @@ function CommandPaletteInner({ dict, localePrefix }: CommandPaletteProps) {
       action: () => {
         close();
         router.push(`${localePrefix}/seed`);
+      },
+    },
+    {
+      id: "action-reset-environment",
+      label: dict.actionResetEnvironment,
+      group: "actions" as const,
+      icon: DatabaseZapIcon,
+      action: () => {
+        close();
+        router.push(`${localePrefix}/seed#reset`);
       },
     },
   ];

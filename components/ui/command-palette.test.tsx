@@ -48,6 +48,7 @@ const dict = {
   actionSettings: "Settings",
   actionToggleTheme: "Toggle theme",
   actionLoadDemoData: "Load demo data",
+  actionResetEnvironment: "Reset environment",
   ariaLabel: "Command palette",
 };
 
@@ -276,6 +277,37 @@ describe("CommandPalette — Load demo data action", () => {
     expect(actionOption).toBeTruthy();
     await userEvent.click(actionOption!);
     expect(mockPush).toHaveBeenCalledWith("/en/seed");
+    expect(usePaletteStore.getState().open).toBe(false);
+  });
+});
+
+// ── Reset environment palette action ──────────────────────────────────────────
+describe("CommandPalette — Reset environment action", () => {
+  it("shows 'Reset environment' in the actions group", () => {
+    renderPalette(true);
+    const matches = screen.getAllByText(dict.actionResetEnvironment);
+    expect(matches.length).toBeGreaterThan(0);
+  });
+
+  it("filtering by 'reset' shows the Reset environment action", async () => {
+    renderPalette(true);
+    const input = screen.getByRole("searchbox");
+    await userEvent.type(input, "reset");
+    const matches = screen.getAllByText(dict.actionResetEnvironment);
+    expect(matches.length).toBeGreaterThan(0);
+  });
+
+  it("clicking 'Reset environment' navigates to /en/seed#reset and closes palette", async () => {
+    renderPalette(true);
+    const input = screen.getByRole("searchbox");
+    await userEvent.type(input, "reset");
+    const options = screen.getAllByRole("option");
+    const actionOption = options.find((el) =>
+      el.textContent?.includes(dict.actionResetEnvironment),
+    );
+    expect(actionOption).toBeTruthy();
+    await userEvent.click(actionOption!);
+    expect(mockPush).toHaveBeenCalledWith("/en/seed#reset");
     expect(usePaletteStore.getState().open).toBe(false);
   });
 });
