@@ -1,6 +1,16 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+## [0.7.0-alpha.0] - 2026-05-19
+
+### Bug Fixes
+- **tests:** Resolve tsc errors in cookie and shortcut mocks (2699890)
+
+### Chore
+- Release v0.6.0-alpha.0 (35eef9f)
+
+### Features
+- Add resource search in command palette and list auto-refresh (e0ae097)
 ## [0.6.0-alpha.0] - 2026-05-18
 
 ### Bug Fixes
@@ -16,6 +26,7 @@ All notable changes to this project will be documented in this file.
 - **tests:** Enhance test imports and add linting command (2ebd9a8)
 - **package:** Add codegraph commands to package.json for initialization and indexing (2ce0e36)
 - **package:** Add codegraph commands to package.json for initialization and indexing (973e864)
+- Release v0.6.0-alpha.0 (23506d4)
 
 ### Features
 - Add tinykeys dep, themeToggle/commandPalette i18n keys, and usePaletteStore (529e66e)
