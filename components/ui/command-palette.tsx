@@ -3,7 +3,7 @@
 import { useState, useEffect, useId } from "react";
 import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
-import { SettingsIcon, PaletteIcon, BoxIcon } from "lucide-react";
+import { SettingsIcon, PaletteIcon, BoxIcon, DatabaseZapIcon } from "lucide-react";
 import { services } from "@/lib/services-registry";
 import { tools } from "@/lib/tools-registry";
 import { usePaletteStore } from "@/features/shared/stores/use-palette-store";
@@ -30,6 +30,8 @@ export type CommandPaletteDict = {
   searchEmpty: string;
   actionSettings: string;
   actionToggleTheme: string;
+  actionLoadDemoData: string;
+  actionResetEnvironment: string;
   ariaLabel: string;
 };
 
@@ -123,6 +125,26 @@ function CommandPaletteInner({ dict, localePrefix }: CommandPaletteProps) {
       action: () => {
         setTheme(cycleTheme(theme));
         close();
+      },
+    },
+    {
+      id: "action-load-demo-data",
+      label: dict.actionLoadDemoData,
+      group: "actions" as const,
+      icon: DatabaseZapIcon,
+      action: () => {
+        close();
+        router.push(`${localePrefix}/seed`);
+      },
+    },
+    {
+      id: "action-reset-environment",
+      label: dict.actionResetEnvironment,
+      group: "actions" as const,
+      icon: DatabaseZapIcon,
+      action: () => {
+        close();
+        router.push(`${localePrefix}/seed#reset`);
       },
     },
   ];

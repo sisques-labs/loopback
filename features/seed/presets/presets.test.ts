@@ -1,8 +1,9 @@
 import { describe, expect, it } from "vitest";
 
 // These imports will fail until the implementation files are created — that's the RED state.
-import { isPresetSlug, PRESETS } from "./index";
-import type { PresetSlug } from "./schema";
+import { isPresetSlug } from "./schema";
+import { PRESETS } from "./presets";
+import type { PresetSlug, SNSResource } from "./schema";
 
 describe("isPresetSlug — valid slugs", () => {
   it("accepts 'ecommerce'", () => {
@@ -153,8 +154,8 @@ describe("PRESETS — event-driven resource name pattern", () => {
     expect(preset.dynamodb.map((t) => t.name)).toContain("loopback-event-store");
     expect(preset.lambda.map((f) => f.name)).toContain("loopback-event-consumer");
     expect(preset.lambda.map((f) => f.name)).toContain("loopback-event-router");
-    expect(preset.sns.map((t) => t.name)).toContain("loopback-event-fanout");
-    expect(preset.sns.map((t) => t.name)).toContain("loopback-event-alerts");
+    expect(preset.sns.map((t: SNSResource) => t.name)).toContain("loopback-event-fanout");
+    expect(preset.sns.map((t: SNSResource) => t.name)).toContain("loopback-event-alerts");
   });
 });
 
@@ -164,5 +165,44 @@ describe("PRESETS — preset slug field", () => {
     for (const slug of slugs) {
       expect(PRESETS[slug].slug).toBe(slug);
     }
+  });
+});
+
+describe("PRESETS — name and description fields", () => {
+  it("each PRESET entry has a non-empty name string", () => {
+    const slugs: PresetSlug[] = ["ecommerce", "blog", "event-driven"];
+    for (const slug of slugs) {
+      expect(typeof PRESETS[slug].name).toBe("string");
+      expect(PRESETS[slug].name.length).toBeGreaterThan(0);
+    }
+  });
+
+  it("each PRESET entry has a non-empty description string", () => {
+    const slugs: PresetSlug[] = ["ecommerce", "blog", "event-driven"];
+    for (const slug of slugs) {
+      expect(typeof PRESETS[slug].description).toBe("string");
+      expect(PRESETS[slug].description.length).toBeGreaterThan(0);
+    }
+  });
+
+  it("ecommerce preset has correct name and description", () => {
+    expect(PRESETS["ecommerce"].name).toBe("E-Commerce");
+    expect(PRESETS["ecommerce"].description).toBe(
+      "Products catalog, orders queue, inventory table, and fulfillment function",
+    );
+  });
+
+  it("blog preset has correct name and description", () => {
+    expect(PRESETS["blog"].name).toBe("Blog");
+    expect(PRESETS["blog"].description).toBe(
+      "Content bucket, posts table, notifications topic, and publishing function",
+    );
+  });
+
+  it("event-driven preset has correct name and description", () => {
+    expect(PRESETS["event-driven"].name).toBe("Event-Driven");
+    expect(PRESETS["event-driven"].description).toBe(
+      "Event bus queues, routing topics, and processor functions",
+    );
   });
 });

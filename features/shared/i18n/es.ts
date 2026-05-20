@@ -124,6 +124,8 @@ const dict = {
     searchEmpty: "No se encontraron recursos.",
     actionSettings: "Ajustes",
     actionToggleTheme: "Cambiar tema",
+    actionLoadDemoData: "Cargar datos de demo",
+    actionResetEnvironment: "Reiniciar entorno",
     ariaLabel: "Paleta de comandos",
   },
   resourceExplorer: {
