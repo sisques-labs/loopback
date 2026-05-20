@@ -1,6 +1,6 @@
 import "server-only";
 
-import { ListTablesCommand, DeleteTableCommand } from "@aws-sdk/client-dynamodb";
+import { ListTablesCommand, DeleteTableCommand, type ListTablesCommandOutput } from "@aws-sdk/client-dynamodb";
 import { getDynamoDBClient } from "@/features/dynamodb/lib/client";
 
 type DeleteResult = { deleted: string[]; failed: string[] };
@@ -23,7 +23,7 @@ export async function resetDynamoDB(
   const tableNames: string[] = [];
   let lastEvaluated: string | undefined = undefined;
   do {
-    const res = await client.send(
+    const res: ListTablesCommandOutput = await client.send(
       new ListTablesCommand(
         lastEvaluated ? { ExclusiveStartTableName: lastEvaluated } : {},
       ),

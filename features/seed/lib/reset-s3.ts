@@ -5,6 +5,7 @@ import {
   ListObjectsV2Command,
   DeleteObjectsCommand,
   DeleteBucketCommand,
+  type ListObjectsV2CommandOutput,
 } from "@aws-sdk/client-s3";
 import { getS3Client } from "@/lib/aws/client-factory";
 
@@ -41,7 +42,7 @@ export async function resetS3(
         // Paginate ListObjectsV2 → DeleteObjects (batches of 1000)
         let continuationToken: string | undefined = undefined;
         do {
-          const listObjRes = await client.send(
+          const listObjRes: ListObjectsV2CommandOutput = await client.send(
             new ListObjectsV2Command({
               Bucket: name,
               ...(continuationToken ? { ContinuationToken: continuationToken } : {}),

@@ -38,11 +38,11 @@ function makeDeleteResult(names: string[]) {
 beforeEach(() => {
   vi.clearAllMocks();
   // Default: return mock dry-run counts
-  vi.mocked(resetS3).mockResolvedValue(2 as unknown as ReturnType<typeof resetS3>);
-  vi.mocked(resetSQS).mockResolvedValue(1 as unknown as ReturnType<typeof resetSQS>);
-  vi.mocked(resetDynamoDB).mockResolvedValue(0 as unknown as ReturnType<typeof resetDynamoDB>);
-  vi.mocked(resetLambda).mockResolvedValue(0 as unknown as ReturnType<typeof resetLambda>);
-  vi.mocked(resetSNS).mockResolvedValue(0 as unknown as ReturnType<typeof resetSNS>);
+  vi.mocked(resetS3).mockResolvedValue(2 as never);
+  vi.mocked(resetSQS).mockResolvedValue(1 as never);
+  vi.mocked(resetDynamoDB).mockResolvedValue(0 as never);
+  vi.mocked(resetLambda).mockResolvedValue(0 as never);
+  vi.mocked(resetSNS).mockResolvedValue(0 as never);
 });
 
 // ─── Dry-run ──────────────────────────────────────────────────────────────────
@@ -67,11 +67,11 @@ describe("resetEnvironmentAction — dry-run", () => {
   });
 
   it("dry-run returns resource counts per service without deleting", async () => {
-    vi.mocked(resetS3).mockResolvedValue(2 as unknown as ReturnType<typeof resetS3>);
-    vi.mocked(resetSQS).mockResolvedValue(1 as unknown as ReturnType<typeof resetSQS>);
-    vi.mocked(resetDynamoDB).mockResolvedValue(0 as unknown as ReturnType<typeof resetDynamoDB>);
-    vi.mocked(resetLambda).mockResolvedValue(0 as unknown as ReturnType<typeof resetLambda>);
-    vi.mocked(resetSNS).mockResolvedValue(0 as unknown as ReturnType<typeof resetSNS>);
+    vi.mocked(resetS3).mockResolvedValue(2 as never);
+    vi.mocked(resetSQS).mockResolvedValue(1 as never);
+    vi.mocked(resetDynamoDB).mockResolvedValue(0 as never);
+    vi.mocked(resetLambda).mockResolvedValue(0 as never);
+    vi.mocked(resetSNS).mockResolvedValue(0 as never);
 
     const fd = new FormData();
     fd.set("dryRun", "true");
@@ -100,11 +100,11 @@ describe("resetEnvironmentAction — dry-run", () => {
 
 describe("resetEnvironmentAction — execute mode", () => {
   beforeEach(() => {
-    vi.mocked(resetS3).mockResolvedValue(makeDeleteResult(["bucket-a"]) as unknown as ReturnType<typeof resetS3>);
-    vi.mocked(resetSQS).mockResolvedValue(makeDeleteResult(["queue-a"]) as unknown as ReturnType<typeof resetSQS>);
-    vi.mocked(resetDynamoDB).mockResolvedValue(makeDeleteResult(["table-a"]) as unknown as ReturnType<typeof resetDynamoDB>);
-    vi.mocked(resetLambda).mockResolvedValue(makeDeleteResult(["fn-a"]) as unknown as ReturnType<typeof resetLambda>);
-    vi.mocked(resetSNS).mockResolvedValue(makeDeleteResult(["topic-a"]) as unknown as ReturnType<typeof resetSNS>);
+    vi.mocked(resetS3).mockResolvedValue(makeDeleteResult(["bucket-a"]) as never);
+    vi.mocked(resetSQS).mockResolvedValue(makeDeleteResult(["queue-a"]) as never);
+    vi.mocked(resetDynamoDB).mockResolvedValue(makeDeleteResult(["table-a"]) as never);
+    vi.mocked(resetLambda).mockResolvedValue(makeDeleteResult(["fn-a"]) as never);
+    vi.mocked(resetSNS).mockResolvedValue(makeDeleteResult(["topic-a"]) as never);
   });
 
   it("calls all helpers with dryRun: false when dryRun param is 'false'", async () => {
@@ -155,10 +155,10 @@ describe("resetEnvironmentAction — execute mode", () => {
 describe("resetEnvironmentAction — partial failure tolerance", () => {
   it("returns success even when one helper throws, includes all 5 results", async () => {
     vi.mocked(resetS3).mockRejectedValueOnce(new Error("S3 down") as unknown as never);
-    vi.mocked(resetSQS).mockResolvedValue(makeDeleteResult(["q1"]) as unknown as ReturnType<typeof resetSQS>);
-    vi.mocked(resetDynamoDB).mockResolvedValue(makeDeleteResult([]) as unknown as ReturnType<typeof resetDynamoDB>);
-    vi.mocked(resetLambda).mockResolvedValue(makeDeleteResult([]) as unknown as ReturnType<typeof resetLambda>);
-    vi.mocked(resetSNS).mockResolvedValue(makeDeleteResult([]) as unknown as ReturnType<typeof resetSNS>);
+    vi.mocked(resetSQS).mockResolvedValue(makeDeleteResult(["q1"]) as never);
+    vi.mocked(resetDynamoDB).mockResolvedValue(makeDeleteResult([]) as never);
+    vi.mocked(resetLambda).mockResolvedValue(makeDeleteResult([]) as never);
+    vi.mocked(resetSNS).mockResolvedValue(makeDeleteResult([]) as never);
 
     const fd = new FormData();
     fd.set("dryRun", "false");

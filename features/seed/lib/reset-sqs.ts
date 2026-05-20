@@ -1,6 +1,6 @@
 import "server-only";
 
-import { ListQueuesCommand, DeleteQueueCommand } from "@aws-sdk/client-sqs";
+import { ListQueuesCommand, DeleteQueueCommand, type ListQueuesCommandOutput } from "@aws-sdk/client-sqs";
 import { getSQSClient } from "@/features/sqs/lib/client";
 
 type DeleteResult = { deleted: string[]; failed: string[] };
@@ -23,7 +23,7 @@ export async function resetSQS(
   const urls: string[] = [];
   let nextToken: string | undefined = undefined;
   do {
-    const res = await client.send(
+    const res: ListQueuesCommandOutput = await client.send(
       new ListQueuesCommand({ ...(nextToken ? { NextToken: nextToken } : {}) }),
     );
     for (const url of res.QueueUrls ?? []) {

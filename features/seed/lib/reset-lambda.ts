@@ -1,6 +1,6 @@
 import "server-only";
 
-import { ListFunctionsCommand, DeleteFunctionCommand } from "@aws-sdk/client-lambda";
+import { ListFunctionsCommand, DeleteFunctionCommand, type ListFunctionsCommandOutput } from "@aws-sdk/client-lambda";
 import { getLambdaClient } from "@/features/lambda/lib/client";
 
 type DeleteResult = { deleted: string[]; failed: string[] };
@@ -23,7 +23,7 @@ export async function resetLambda(
   const functionNames: string[] = [];
   let marker: string | undefined = undefined;
   do {
-    const res = await client.send(
+    const res: ListFunctionsCommandOutput = await client.send(
       new ListFunctionsCommand({ ...(marker ? { Marker: marker } : {}) }),
     );
     for (const fn of res.Functions ?? []) {

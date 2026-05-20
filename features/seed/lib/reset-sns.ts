@@ -1,6 +1,6 @@
 import "server-only";
 
-import { ListTopicsCommand, DeleteTopicCommand } from "@aws-sdk/client-sns";
+import { ListTopicsCommand, DeleteTopicCommand, type ListTopicsCommandOutput } from "@aws-sdk/client-sns";
 import { getSNSClient } from "@/features/sns/lib/client";
 
 type DeleteResult = { deleted: string[]; failed: string[] };
@@ -23,7 +23,7 @@ export async function resetSNS(
   const arns: string[] = [];
   let nextToken: string | undefined = undefined;
   do {
-    const res = await client.send(
+    const res: ListTopicsCommandOutput = await client.send(
       new ListTopicsCommand({ ...(nextToken ? { NextToken: nextToken } : {}) }),
     );
     for (const t of res.Topics ?? []) {

@@ -4,6 +4,7 @@ import { useActionState } from "react";
 import { loadDemoDatasetAction } from "@/features/seed/use-cases/load-demo-dataset/load-demo-dataset";
 import { ResultsTable } from "@/features/seed/components/results-table/results-table";
 import type { PresetSlug } from "@/features/seed/presets/schema";
+import type { ResultsTableDict } from "@/features/seed/components/results-table/results-table";
 import type { ActionState } from "@/features/shared/types/action-state";
 import type { LoadReport } from "@/features/seed/types";
 
