@@ -125,6 +125,9 @@ const dict = {
     refreshing: "Refreshing…",
     updatedAt: "Updated {time}",
   },
+  tools: {
+    seed: "Demo Data",
+  },
 } as const;
 
 export default dict;

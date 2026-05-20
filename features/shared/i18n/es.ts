@@ -130,6 +130,9 @@ const dict = {
     refreshing: "Actualizando…",
     updatedAt: "Actualizado {time}",
   },
+  tools: {
+    seed: "Datos de demo",
+  },
 } as const satisfies SharedDictTranslated;
 
 export default dict;
