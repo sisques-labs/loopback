@@ -18,3 +18,28 @@ describe("tools-registry", () => {
     expect(unique.size).toBe(ids.length);
   });
 });
+
+describe("tools-registry — timeline entry", () => {
+  it("contains a timeline entry", () => {
+    const entry = tools.find((t) => t.id === "timeline");
+    expect(entry).toBeDefined();
+  });
+
+  it("timeline entry has correct href", () => {
+    const entry = tools.find((t) => t.id === "timeline");
+    expect(entry?.href).toBe("/timeline");
+  });
+
+  it("timeline entry has a label", () => {
+    const entry = tools.find((t) => t.id === "timeline");
+    expect(entry?.label).toBeTruthy();
+    expect(typeof entry?.label).toBe("string");
+  });
+
+  it("timeline entry has an icon", () => {
+    const entry = tools.find((t) => t.id === "timeline");
+    // Lucide icons are forwardRef objects, not plain functions
+    expect(entry?.icon).toBeDefined();
+    expect(entry?.icon).not.toBeNull();
+  });
+});

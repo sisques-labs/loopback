@@ -8,19 +8,13 @@ import { TimelineEmpty } from "../timeline-empty/timeline-empty";
 import { TimelineSkeleton } from "../timeline-skeleton/timeline-skeleton";
 import type { TimelineEvent, TimelineTimeRange } from "../../lib/types/types";
 
-// ── Types ──────────────────────────────────────────────────────────────────────
-
-type TimelineClientProps = {
-  initialEvents: TimelineEvent[];
-};
-
-// ── Inline dict (fallback until PR-3 wires i18n) ──────────────────────────────
+// ── Inline dict (fallback — real dict is passed from RSC page after PR-3) ──────
 
 const INLINE_DICT = {
   toolbar: {
     timeRange: {
       label: "Time range",
-      "1h": "Last 1 hour",
+      "1h": "Last hour",
       "6h": "Last 6 hours",
       "24h": "Last 24 hours",
       all: "All time",
@@ -36,9 +30,18 @@ const INLINE_DICT = {
   },
 };
 
+// ── Types ──────────────────────────────────────────────────────────────────────
+
+type TimelineClientDict = typeof INLINE_DICT;
+
+type TimelineClientProps = {
+  initialEvents: TimelineEvent[];
+  dict?: TimelineClientDict;
+};
+
 // ── Component ──────────────────────────────────────────────────────────────────
 
-export function TimelineClient({ initialEvents }: TimelineClientProps) {
+export function TimelineClient({ initialEvents, dict = INLINE_DICT }: TimelineClientProps) {
   // ── Selectors (one per slice to minimise re-renders) ──
   const events = useTimelineStore((s) => s.events);
   const status = useTimelineStore((s) => s.status);
@@ -71,7 +74,7 @@ export function TimelineClient({ initialEvents }: TimelineClientProps) {
     <div className="flex flex-col gap-4">
       {/* Toolbar */}
       <TimelineToolbar
-        dict={INLINE_DICT}
+        dict={dict}
         status={status}
         lastUpdatedAt={lastUpdatedAt}
         timeRange={timeRange}
@@ -82,7 +85,7 @@ export function TimelineClient({ initialEvents }: TimelineClientProps) {
       {showSkeleton ? (
         <TimelineSkeleton count={5} />
       ) : showEmpty ? (
-        <TimelineEmpty dict={INLINE_DICT} />
+        <TimelineEmpty dict={dict} />
       ) : (
         <TimelineList events={events} />
       )}
