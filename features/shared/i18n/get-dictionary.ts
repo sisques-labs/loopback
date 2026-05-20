@@ -16,6 +16,8 @@ import enTerminal from "@/features/terminal/i18n/en";
 import esTerminal from "@/features/terminal/i18n/es";
 import enLogs from "@/features/logs/i18n/en";
 import esLogs from "@/features/logs/i18n/es";
+import enSeed from "@/features/seed/i18n/en";
+import esSeed from "@/features/seed/i18n/es";
 import type { Locale } from "./locale";
 import type { WidenStringLiterals } from "./widen-literals";
 
@@ -29,6 +31,7 @@ export type AppDict = {
   dynamodb: WidenStringLiterals<typeof enDynamoDB>;
   terminal: WidenStringLiterals<typeof enTerminal>;
   logs: WidenStringLiterals<typeof enLogs>;
+  seed: WidenStringLiterals<typeof enSeed>;
 };
 
 const dictionaries: Record<Locale, AppDict> = {
@@ -42,6 +45,7 @@ const dictionaries: Record<Locale, AppDict> = {
     dynamodb: enDynamoDB,
     terminal: enTerminal,
     logs: enLogs,
+    seed: enSeed,
   },
   es: {
     shared: esShared,
@@ -53,6 +57,7 @@ const dictionaries: Record<Locale, AppDict> = {
     dynamodb: esDynamoDB,
     terminal: esTerminal,
     logs: esLogs,
+    seed: esSeed,
   },
 };
 
