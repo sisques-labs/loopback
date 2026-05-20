@@ -2,7 +2,8 @@
 
 import "server-only";
 import { revalidatePath } from "next/cache";
-import { PRESETS, isPresetSlug } from "@/features/seed/presets";
+import { PRESETS } from "@/features/seed/presets/presets";
+import { isPresetSlug } from "@/features/seed/presets/schema";
 import { seedS3 } from "@/features/seed/lib/seed-s3/seed-s3";
 import { seedSQS } from "@/features/seed/lib/seed-sqs/seed-sqs";
 import { seedDynamoDB } from "@/features/seed/lib/seed-dynamodb/seed-dynamodb";

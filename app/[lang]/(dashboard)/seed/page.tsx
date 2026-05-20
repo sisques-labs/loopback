@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { getDictionary } from "@/features/shared/i18n/get-dictionary";
 import { DEFAULT_LOCALE, isLocale, type Locale } from "@/features/shared/i18n/locale";
-import { isPresetSlug } from "@/features/seed/presets";
+import { isPresetSlug } from "@/features/seed/presets/schema";
 import { PresetPicker } from "@/features/seed/components/preset-picker/preset-picker";
 import { LoadButton } from "@/features/seed/components/load-button/load-button";
 import { ResetPanel } from "@/features/seed/components/reset-panel/reset-panel";

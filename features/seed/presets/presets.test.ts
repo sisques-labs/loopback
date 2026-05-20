@@ -1,8 +1,9 @@
 import { describe, expect, it } from "vitest";
 
 // These imports will fail until the implementation files are created — that's the RED state.
-import { isPresetSlug, PRESETS } from "./index";
-import type { PresetSlug } from "./schema";
+import { isPresetSlug } from "./schema";
+import { PRESETS } from "./presets";
+import type { PresetSlug, SNSResource } from "./schema";
 
 describe("isPresetSlug — valid slugs", () => {
   it("accepts 'ecommerce'", () => {
@@ -153,8 +154,8 @@ describe("PRESETS — event-driven resource name pattern", () => {
     expect(preset.dynamodb.map((t) => t.name)).toContain("loopback-event-store");
     expect(preset.lambda.map((f) => f.name)).toContain("loopback-event-consumer");
     expect(preset.lambda.map((f) => f.name)).toContain("loopback-event-router");
-    expect(preset.sns.map((t) => t.name)).toContain("loopback-event-fanout");
-    expect(preset.sns.map((t) => t.name)).toContain("loopback-event-alerts");
+    expect(preset.sns.map((t: SNSResource) => t.name)).toContain("loopback-event-fanout");
+    expect(preset.sns.map((t: SNSResource) => t.name)).toContain("loopback-event-alerts");
   });
 });
 
