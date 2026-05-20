@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
 import { createSnapshotAction } from "@/features/snapshots/use-cases/create-snapshot/create-snapshot";
 import { useSnapshotStore } from "@/features/snapshots/stores/use-snapshot-store/use-snapshot-store";
 import type { ActionState } from "@/features/shared/types/action-state";
@@ -20,10 +20,11 @@ export function SnapshotPanel({ dict }: Props) {
     INITIAL_STATE,
   );
 
-  // Sync captured snapshot into the store when action succeeds
-  if (state.status === "success" && state.data.document) {
-    setSnapshot(state.data.document);
-  }
+  useEffect(() => {
+    if (state.status === "success" && state.data.document) {
+      setSnapshot(state.data.document);
+    }
+  }, [state, setSnapshot]);
 
   return (
     <div className="flex flex-col gap-4">
