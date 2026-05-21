@@ -111,6 +111,15 @@ const dict = {
     payloadHashLabel: "Payload",
     errorLabel: "Function error",
   },
+  invokeLogTail: {
+    title: "Execution Logs",
+    autoScroll: "Auto-scroll",
+    noLogs: "No logs yet.",
+    polling: "Polling logs...",
+    done: "Done.",
+    collapse: "Collapse",
+    expand: "Expand",
+  },
   errors: {
     connectFailed: "Failed to connect to Lambda",
     connectFailedDetail:
