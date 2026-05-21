@@ -20,12 +20,14 @@ import type { InvokeResult } from "@/features/lambda/types/lambda";
 import type { AppDict } from "@/features/shared/i18n/get-dictionary";
 import type { Locale } from "@/features/shared/i18n/locale";
 import { useInvokeHistoryStore } from "@/features/lambda/stores/use-invoke-history-store/use-invoke-history-store";
+import { InvokeLogTail } from "@/features/lambda/components/invoke-log-tail/invoke-log-tail";
 
 const INITIAL_STATE: ActionState<InvokeResult> = { status: "idle" };
 
 type Props = {
   functionName: string;
   dict: AppDict["lambda"]["invokeDialog"];
+  logTailDict?: AppDict["lambda"]["invokeLogTail"];
   locale: Locale;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
@@ -44,7 +46,7 @@ async function computePayloadHash(payloadString: string): Promise<string> {
   return hex.slice(0, 8);
 }
 
-export function InvokeDialog({ functionName, dict, locale, open, onOpenChange, closeLabel, payload: payloadProp }: Props) {
+export function InvokeDialog({ functionName, dict, logTailDict, locale, open, onOpenChange, closeLabel, payload: payloadProp }: Props) {
   const [state, formAction, pending] = useActionState(invokeFunctionAction, INITIAL_STATE);
   const closeRef = useRef<HTMLButtonElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
@@ -55,8 +57,20 @@ export function InvokeDialog({ functionName, dict, locale, open, onOpenChange, c
   const payloadAtSubmitRef = useRef<string>(payloadProp ?? "");
   // Track whether we've already dispatched to the store for the current success state
   const dispatchedRef = useRef(false);
+  // Timestamp captured at submit time (epoch ms) — passed to InvokeLogTail
+  const [submitTimestamp, setSubmitTimestamp] = useState<number | null>(null);
 
   const addEntry = useInvokeHistoryStore.getState().addEntry;
+
+  // Set submitTimestamp when action settles with success (fallback if handleSubmit didn't capture it)
+  useEffect(() => {
+    if (state.status === "success" && submitTimestamp === null) {
+      setSubmitTimestamp(Date.now());
+    }
+    if (state.status !== "success") {
+      setSubmitTimestamp(null);
+    }
+  }, [state.status]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Dispatch to history store when the action settles with success
   useEffect(() => {
@@ -102,6 +116,9 @@ export function InvokeDialog({ functionName, dict, locale, open, onOpenChange, c
     } else {
       setPayloadError(null);
     }
+
+    // Capture submit timestamp for InvokeLogTail
+    setSubmitTimestamp(Date.now());
   }
 
   return (
@@ -160,6 +177,14 @@ export function InvokeDialog({ functionName, dict, locale, open, onOpenChange, c
                 </div>
               </div>
             </div>
+          )}
+
+          {state.status === "success" && logTailDict && submitTimestamp !== null && (
+            <InvokeLogTail
+              functionName={functionName}
+              invokeTimestamp={submitTimestamp}
+              dict={logTailDict}
+            />
           )}
 
           <DialogFooter>

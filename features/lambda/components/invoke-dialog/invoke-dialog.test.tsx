@@ -186,6 +186,7 @@ describe("InvokeDialog — log tail wiring", () => {
       false,
     ];
 
+    // Use controlled open so dialog content renders in the DOM
     render(
       <InvokeDialog
         functionName="fn-log"
@@ -194,6 +195,8 @@ describe("InvokeDialog — log tail wiring", () => {
         locale="en"
         closeLabel="Close"
         payload="{}"
+        open={true}
+        onOpenChange={() => {}}
       />,
     );
 
@@ -218,6 +221,8 @@ describe("InvokeDialog — log tail wiring", () => {
         logTailDict={logTailDict}
         locale="en"
         closeLabel="Close"
+        open={true}
+        onOpenChange={() => {}}
       />,
     );
 
@@ -242,6 +247,8 @@ describe("InvokeDialog — log tail wiring", () => {
         locale="en"
         closeLabel="Close"
         payload="{}"
+        open={true}
+        onOpenChange={() => {}}
       />,
     );
 
