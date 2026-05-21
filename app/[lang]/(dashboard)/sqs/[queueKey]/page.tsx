@@ -9,6 +9,7 @@ import { decodeQueueUrlParam, isLikelyQueueServiceUrl } from "@/features/sqs/lib
 import { queueNameFromUrl } from "@/features/sqs/lib/queue-url-display";
 import { QueueAttributesCard } from "@/features/sqs/components/queue-attributes-card/queue-attributes-card";
 import { QueueDetailMessaging } from "@/features/sqs/components/queue-detail-messaging/queue-detail-messaging";
+import { CopyButton } from "@/features/shared/components/copy-button/copy-button";
 
 export const dynamic = "force-dynamic";
 
@@ -49,10 +50,16 @@ export default async function QueueDetailPage({ params }: Props) {
       <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
         <div className="min-w-0 flex-1">
           <h1 className="text-xl font-semibold wrap-break-word">{displayName}</h1>
-          <p className="mt-1 min-w-0 wrap-break-word text-sm text-muted-foreground">
+          <div className="mt-1 flex min-w-0 flex-wrap items-center gap-1 text-sm text-muted-foreground">
             <span className="font-medium">{d.urlLabel}:</span>{" "}
-            <span className="font-mono text-xs sm:text-sm">{queueUrl}</span>
-          </p>
+            <span className="font-mono text-xs sm:text-sm wrap-break-word">{queueUrl}</span>
+            <CopyButton
+              value={queueUrl}
+              size="sm"
+              copyLabel={dict.shared.copyButton.copyUrl}
+              copiedLabel={dict.shared.copyButton.copyUrlCopied}
+            />
+          </div>
         </div>
         <Badge variant={isFifo ? "default" : "secondary"} className="shrink-0">
           {isFifo ? d.typeFifo : d.typeStandard}
@@ -67,6 +74,7 @@ export default async function QueueDetailPage({ params }: Props) {
         isFifo={isFifo}
         dict={d}
         confirmDict={dict.shared.confirmDialog}
+        copyButtonDict={dict.shared.copyButton}
         closeLabel={dict.shared.dialog.close}
         locale={locale}
       />
