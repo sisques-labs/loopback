@@ -17,6 +17,26 @@ const dict = {
   services: {
     comingSoon: "Coming soon",
   },
+  serviceHealthPanel: {
+    title: "LocalStack Service Status",
+    services: {
+      S3: "S3",
+      SQS: "SQS",
+      DynamoDB: "DynamoDB",
+      Lambda: "Lambda",
+      SNS: "SNS",
+    },
+    status: {
+      healthy: "Healthy",
+      degraded: "Degraded",
+      unreachable: "Unreachable",
+    },
+    hint: "Check LocalStack is running",
+    columns: {
+      service: "Service",
+      status: "Status",
+    },
+  },
 } as const;
 
 export default dict;

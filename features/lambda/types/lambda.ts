@@ -1,3 +1,13 @@
+export interface InvokeHistoryEntry {
+  id: string; // crypto.randomUUID()
+  functionName: string;
+  payloadHash: string; // 8-char SHA-256 hex prefix
+  statusCode: number;
+  duration: number; // ms; client-measured
+  timestamp: string; // ISO-8601
+  functionError?: string;
+}
+
 export interface LambdaFunction {
   functionName: string;
   functionArn: string;
