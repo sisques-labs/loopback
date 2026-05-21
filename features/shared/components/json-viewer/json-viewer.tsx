@@ -9,9 +9,9 @@ interface JsonViewerProps {
   /** Inline max-height for the pre container (e.g. "200px"). Default: "12rem" (≈48 lines). */
   maxHeight?: string;
   /** i18n label for the copy button idle state. */
-  copyLabel: string;
+  copyLabel?: string;
   /** i18n label for the copy button after success. */
-  copiedLabel: string;
+  copiedLabel?: string;
   /** Optional empty-state placeholder. Default: "—". */
   emptyFallback?: string;
   className?: string;
@@ -38,8 +38,8 @@ function normalize(value: string | object): string {
 export function JsonViewer({
   value,
   maxHeight = "12rem",
-  copyLabel,
-  copiedLabel,
+  copyLabel = "Copy",
+  copiedLabel = "Copied!",
   emptyFallback = "—",
   className,
 }: JsonViewerProps) {
