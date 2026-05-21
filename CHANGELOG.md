@@ -1,10 +1,43 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+## [0.11.0-alpha.0] - 2026-05-21
+
+### Bug Fixes
+- **lambda:** Use ISO-8601 string for InvokeHistoryEntry timestamp (bcd0fdc)
+- **lambda:** Use useState initialized at mount for submitTimestamp, remove setState-in-effect (4381e71)
+- **lambda:** Resolve merge conflicts in invoke-dialog, toolbar and i18n parity test (afdd379)
+
+### Features
+- **lambda:** Add InvokeHistoryEntry type and i18n keys (06b892e)
+- **lambda:** Implement use-invoke-history-store (16f014d)
+- **lambda:** Implement InvokeHistoryPanel (7128596)
+- **lambda:** Wire invoke history to invoke-dialog and function page (424a837)
+- **dashboard:** Add ServiceStatus type and i18n keys for health panel (6f74e37)
+- **dashboard:** Extend getEndpointHealth to return per-service status (7ba0412)
+- **dashboard:** Implement ServiceHealthPanel component (e43d41d)
+- **dashboard:** Wire ServiceHealthPanel to dashboard page (7818390)
+- **lambda:** Add invokeLogTail i18n keys (b61eb3e)
+- **lambda:** Implement InvokeLogTail component (163af0f)
+- **lambda:** Render InvokeLogTail in invoke-dialog after successful invoke (75eca9d)
+
+### Refactor
+- **dashboard:** Move ServiceStatus to types/, export CORE_SERVICES, add dashboard i18n parity test (b56efec)
+
+### Testing
+- **lambda:** Add failing tests for use-invoke-history-store (688cae7)
+- **lambda:** Add failing tests for InvokeHistoryPanel (735c96e)
+- **dashboard:** Add failing tests for getEndpointHealth services map (2dea7f3)
+- **dashboard:** Add failing tests for ServiceHealthPanel component (7dfadd8)
+- **lambda:** Add failing tests for InvokeLogTail component (264b140)
+- **lambda:** Extend invoke-dialog tests for InvokeLogTail wiring (1440962)
 ## [0.10.1-alpha.0] - 2026-05-21
 
 ### Bug Fixes
 - **shared:** Add scroll to sidebar and mobile nav drawer (f3aa17d)
+
+### Chore
+- Release v0.10.1-alpha.0 (caa7559)
 ## [0.10.0-alpha.0] - 2026-05-21
 
 ### Bug Fixes
