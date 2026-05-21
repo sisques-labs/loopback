@@ -57,20 +57,10 @@ export function InvokeDialog({ functionName, dict, logTailDict, locale, open, on
   const payloadAtSubmitRef = useRef<string>(payloadProp ?? "");
   // Track whether we've already dispatched to the store for the current success state
   const dispatchedRef = useRef(false);
-  // Timestamp captured at submit time (epoch ms) — passed to InvokeLogTail
-  const [submitTimestamp, setSubmitTimestamp] = useState<number | null>(null);
+  // Timestamp captured at submit time (epoch ms); initialized to mount time so it's always valid
+  const [submitTimestamp, setSubmitTimestamp] = useState<number>(() => Date.now());
 
   const addEntry = useInvokeHistoryStore.getState().addEntry;
-
-  // Set submitTimestamp when action settles with success (fallback if handleSubmit didn't capture it)
-  useEffect(() => {
-    if (state.status === "success" && submitTimestamp === null) {
-      setSubmitTimestamp(Date.now());
-    }
-    if (state.status !== "success") {
-      setSubmitTimestamp(null);
-    }
-  }, [state.status]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Dispatch to history store when the action settles with success
   useEffect(() => {
@@ -179,7 +169,7 @@ export function InvokeDialog({ functionName, dict, logTailDict, locale, open, on
             </div>
           )}
 
-          {state.status === "success" && logTailDict && submitTimestamp !== null && (
+          {state.status === "success" && logTailDict && (
             <InvokeLogTail
               functionName={functionName}
               invokeTimestamp={submitTimestamp}
