@@ -74,6 +74,32 @@ describe("CopyButton", () => {
     });
   });
 
+  it("logs a console.warn when clipboard API is unavailable", async () => {
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    Object.defineProperty(navigator, "clipboard", {
+      configurable: true,
+      value: undefined,
+    });
+    Object.defineProperty(document, "execCommand", {
+      configurable: true,
+      value: vi.fn().mockReturnValue(true),
+    });
+
+    render(
+      <CopyButton value="warn-value" copyLabel="Copy" copiedLabel="Copied" />,
+    );
+    await userEvent.click(screen.getByRole("button", { name: "Copy" }));
+    expect(warnSpy).toHaveBeenCalledWith(
+      "[CopyButton] clipboard unavailable, falling back to execCommand",
+    );
+
+    warnSpy.mockRestore();
+    Object.defineProperty(document, "execCommand", {
+      configurable: true,
+      value: undefined,
+    });
+  });
+
   it("has aria-label for accessibility", () => {
     render(
       <CopyButton value="test" copyLabel="Copy URL" copiedLabel="URL copied" />,
@@ -94,8 +120,8 @@ describe("CopyButton", () => {
     expect(screen.getByText("Copy ARN")).toBeInTheDocument();
   });
 
-  it("renders in sm size variant without error", () => {
-    const { container } = render(
+  it("renders in sm size variant with compact icon-xs class", () => {
+    render(
       <CopyButton
         value="test"
         copyLabel="Copy"
@@ -103,7 +129,9 @@ describe("CopyButton", () => {
         size="sm"
       />,
     );
-    expect(container.firstChild).toBeTruthy();
+    const btn = screen.getByRole("button", { name: "Copy" });
+    // size="sm" maps to Button size="icon-xs" which applies the "size-6" utility class
+    expect(btn).toHaveClass("size-6");
   });
 
   it("renders with only required prop value", () => {

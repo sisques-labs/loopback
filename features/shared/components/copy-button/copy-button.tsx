@@ -14,8 +14,8 @@ interface CopyButtonProps {
   copyLabel: string;
   /** Tooltip + aria-label after success. */
   copiedLabel: string;
-  /** "sm" = compact, for table cells. "md" = default. */
-  size?: "sm" | "md";
+  /** "sm" = compact, for table cells. "default" = standard. */
+  size?: "sm" | "default";
   className?: string;
 }
 
@@ -24,7 +24,7 @@ export function CopyButton({
   label,
   copyLabel,
   copiedLabel,
-  size = "md",
+  size = "default",
   className,
 }: CopyButtonProps) {
   const [copied, setCopied] = useState(false);
@@ -41,6 +41,7 @@ export function CopyButton({
       if (navigator.clipboard?.writeText) {
         await navigator.clipboard.writeText(value);
       } else {
+        console.warn("[CopyButton] clipboard unavailable, falling back to execCommand");
         // Fallback for HTTP localhost / older browsers
         const ta = document.createElement("textarea");
         ta.value = value;
@@ -71,6 +72,7 @@ export function CopyButton({
         size === "sm"
           ? "min-h-11 min-w-11 md:min-h-7 md:min-w-7"
           : "min-h-11 min-w-11 md:min-h-8 md:min-w-8",
+
         className,
       )}
       aria-label={aria}
