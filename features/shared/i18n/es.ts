@@ -135,6 +135,16 @@ const dict = {
   tools: {
     seed: "Datos de demo",
   },
+  copyButton: {
+    copy: "Copiar",
+    copied: "Copiado",
+    copyArn: "Copiar ARN",
+    copyArnCopied: "ARN copiado",
+    copyUrl: "Copiar URL",
+    copyUrlCopied: "URL copiada",
+    copyJson: "Copiar JSON",
+    copyJsonCopied: "JSON copiado",
+  },
 } as const satisfies SharedDictTranslated;
 
 export default dict;
