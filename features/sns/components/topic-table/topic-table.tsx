@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/table";
 import type { Topic } from "@/features/sns/types/sns";
 import { TopicRowActions } from "@/features/sns/components/topic-row-actions/topic-row-actions";
+import { CopyButton } from "@/features/shared/components/copy-button/copy-button";
 import type { AppDict } from "@/features/shared/i18n/get-dictionary";
 import type { Locale } from "@/features/shared/i18n/locale";
 
@@ -18,6 +19,7 @@ type Props = {
   rowActionsDict: AppDict["sns"]["topicRowActions"];
   confirmDict: AppDict["shared"]["confirmDialog"];
   publishDict: AppDict["sns"]["publishDialog"];
+  copyButtonDict: AppDict["shared"]["copyButton"];
   localePrefix: string;
   locale: Locale;
   closeLabel: string;
@@ -29,6 +31,7 @@ export function TopicTable({
   rowActionsDict,
   confirmDict,
   publishDict,
+  copyButtonDict,
   localePrefix,
   locale,
   closeLabel,
@@ -58,8 +61,16 @@ export function TopicTable({
             <TableCell className="hidden text-muted-foreground sm:table-cell">
               {topic.displayName ?? "—"}
             </TableCell>
-            <TableCell className="hidden truncate max-w-[20rem] text-muted-foreground md:table-cell">
-              {topic.arn}
+            <TableCell className="hidden text-muted-foreground md:table-cell">
+              <div className="flex items-center gap-1 max-w-[20rem]">
+                <span className="truncate">{topic.arn}</span>
+                <CopyButton
+                  value={topic.arn}
+                  size="sm"
+                  copyLabel={copyButtonDict.copyArn}
+                  copiedLabel={copyButtonDict.copyArnCopied}
+                />
+              </div>
             </TableCell>
             <TableCell className="hidden text-muted-foreground sm:table-cell">
               {topic.isFifo ? dict.typeFifo : dict.typeStandard}
