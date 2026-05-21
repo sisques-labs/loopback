@@ -18,6 +18,7 @@ type LambdaListShellDict = {
   rowActions: AppDict["lambda"]["rowActions"];
   invokeDialog: AppDict["lambda"]["invokeDialog"];
   updateCodeDialog: AppDict["lambda"]["updateCodeDialog"];
+  copyButton: AppDict["shared"]["copyButton"];
   page: { title: string; empty: string; createCta: string };
   dialog: { close: string };
 };
@@ -50,6 +51,7 @@ export function LambdaListShell({ initialItems, dict, localePrefix, locale }: Pr
       rowActionsDict={dict.rowActions}
       invokeDialogDict={dict.invokeDialog}
       updateCodeDialogDict={dict.updateCodeDialog}
+      copyButtonDict={dict.copyButton}
       localePrefix={localePrefix}
       locale={locale}
       closeLabel={dict.dialog.close}

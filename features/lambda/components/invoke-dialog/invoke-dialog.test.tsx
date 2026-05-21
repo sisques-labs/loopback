@@ -29,6 +29,17 @@ const dict = {
   invalidPayload: "Payload must be valid JSON.",
 };
 
+const copyButtonDict = {
+  copy: "Copy",
+  copied: "Copied",
+  copyArn: "Copy ARN",
+  copyArnCopied: "ARN copied",
+  copyUrl: "Copy URL",
+  copyUrlCopied: "URL copied",
+  copyJson: "Copy JSON",
+  copyJsonCopied: "JSON copied",
+};
+
 describe("InvokeDialog", () => {
   afterEach(() => {
     cleanup();
@@ -39,6 +50,7 @@ describe("InvokeDialog", () => {
       <InvokeDialog
         functionName="my-function"
         dict={dict}
+        copyButtonDict={copyButtonDict}
         locale="en"
         closeLabel="Close"
       />,
@@ -54,6 +66,7 @@ describe("InvokeDialog", () => {
       <InvokeDialog
         functionName="my-function"
         dict={dict}
+        copyButtonDict={copyButtonDict}
         locale="en"
         closeLabel="Close"
       />,

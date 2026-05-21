@@ -130,6 +130,16 @@ const dict = {
   tools: {
     seed: "Demo Data",
   },
+  copyButton: {
+    copy: "Copy",
+    copied: "Copied",
+    copyArn: "Copy ARN",
+    copyArnCopied: "ARN copied",
+    copyUrl: "Copy URL",
+    copyUrlCopied: "URL copied",
+    copyJson: "Copy JSON",
+    copyJsonCopied: "JSON copied",
+  },
 } as const;
 
 export default dict;

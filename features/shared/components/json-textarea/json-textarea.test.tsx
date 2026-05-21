@@ -56,7 +56,37 @@ describe("JsonTextarea", () => {
   it("defaultValue pre-fills textarea", () => {
     render(<JsonTextarea name="body" label="Body" defaultValue='{"x":1}' />);
 
-    expect(screen.getByLabelText("Body")).toHaveValue('{"x":1}');
+    expect(screen.getByLabelText("Body")).toHaveValue('{\n  "x": 1\n}');
+  });
+
+  it("auto-formats valid compact JSON in defaultValue on mount", () => {
+    render(
+      <JsonTextarea name="body" label="Body" defaultValue='{"x":1,"y":2}' />,
+    );
+
+    expect(screen.getByLabelText("Body")).toHaveValue(
+      '{\n  "x": 1,\n  "y": 2\n}',
+    );
+  });
+
+  it("leaves invalid defaultValue untouched (no crash)", () => {
+    render(
+      <JsonTextarea name="body" label="Body" defaultValue="{not valid" />,
+    );
+
+    expect(screen.getByLabelText("Body")).toHaveValue("{not valid");
+  });
+
+  it("leaves empty defaultValue untouched (no crash)", () => {
+    render(<JsonTextarea name="body" label="Body" defaultValue="" />);
+
+    expect(screen.getByLabelText("Body")).toHaveValue("");
+  });
+
+  it("leaves bare primitive defaultValue untouched", () => {
+    render(<JsonTextarea name="body" label="Body" defaultValue='"42"' />);
+
+    expect(screen.getByLabelText("Body")).toHaveValue('"42"');
   });
 
   it("defaultValue validity reflects that value (valid JSON → Format enabled)", () => {

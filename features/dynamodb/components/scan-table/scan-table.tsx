@@ -27,10 +27,10 @@ type Props = {
   querySk?: string;
   dict: AppDict["dynamodb"];
   confirmDict: AppDict["shared"]["confirmDialog"];
+  copyButtonDict: AppDict["shared"]["copyButton"];
   locale: Locale;
   localePrefix: string;
-
-    closeLabel: string;
+  closeLabel: string;
 };
 
 function buildTableHref(
@@ -58,8 +58,11 @@ export function ScanTable({
   querySk,
   dict,
   confirmDict,
+  copyButtonDict,
   locale,
-  localePrefix, closeLabel}: Props) {
+  localePrefix,
+  closeLabel,
+}: Props) {
   const [viewItem, setViewItem] = useState<Record<string, unknown> | null>(null);
   const [editItem, setEditItem] = useState<Record<string, unknown> | null>(null);
   const scanDict = dict.scan;
@@ -206,6 +209,7 @@ export function ScanTable({
           }}
           item={viewItem}
           dict={dict.itemViewDialog}
+          copyButtonDict={copyButtonDict}
           closeLabel={closeLabel}
         />
       )}

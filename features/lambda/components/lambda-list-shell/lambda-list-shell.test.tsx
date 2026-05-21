@@ -109,6 +109,16 @@ const dict = {
     submit: "Upload",
     successToast: "Function code updated successfully.",
   },
+  copyButton: {
+    copy: "Copy",
+    copied: "Copied",
+    copyArn: "Copy ARN",
+    copyArnCopied: "ARN copied",
+    copyUrl: "Copy URL",
+    copyUrlCopied: "URL copied",
+    copyJson: "Copy JSON",
+    copyJsonCopied: "JSON copied",
+  },
   page: {
     title: "Lambda Functions",
     empty: "No functions deployed in this account.",

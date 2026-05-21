@@ -96,6 +96,17 @@ const receiveDict = {
 
 const queueUrl = "https://localhost/000000000000/test-queue";
 
+const copyButtonDict = {
+  copy: "Copy",
+  copied: "Copied",
+  copyArn: "Copy ARN",
+  copyArnCopied: "ARN copied",
+  copyUrl: "Copy URL",
+  copyUrlCopied: "URL copied",
+  copyJson: "Copy JSON",
+  copyJsonCopied: "JSON copied",
+};
+
 beforeEach(() => {
   requeueCallCount = 0;
   requeueStubs = [];
@@ -111,7 +122,14 @@ async function renderSection() {
   requeueCallCount = 0;
   const { ReceiveMessagesSection } = await import("./receive-messages-section");
   await act(async () => {
-    render(<ReceiveMessagesSection queueUrl={queueUrl} dict={receiveDict} locale="en" />);
+    render(
+      <ReceiveMessagesSection
+        queueUrl={queueUrl}
+        dict={receiveDict}
+        copyButtonDict={copyButtonDict}
+        locale="en"
+      />,
+    );
   });
 }
 
