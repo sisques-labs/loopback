@@ -15,7 +15,7 @@ function makeEntry(
     payloadHash: "abcd1234",
     statusCode: 200,
     duration: 100,
-    timestamp: Date.now(),
+    timestamp: new Date().toISOString(),
     ...overrides,
   };
 }
@@ -51,14 +51,14 @@ describe("useInvokeHistoryStore", () => {
   });
 
   it("addEntry enforces FIFO eviction at 50 — oldest entry is dropped", () => {
-    const oldest = makeEntry("fn-a", { timestamp: 1000 });
+    const oldest = makeEntry("fn-a", { timestamp: new Date(1000).toISOString() });
     useInvokeHistoryStore.getState().addEntry(oldest);
     // Fill to cap with 49 more entries
-    Array.from({ length: 49 }, () => makeEntry("fn-a", { timestamp: Date.now() })).forEach(
+    Array.from({ length: 49 }, () => makeEntry("fn-a", { timestamp: new Date().toISOString() })).forEach(
       (e) => useInvokeHistoryStore.getState().addEntry(e),
     );
     // Adding one more should evict oldest
-    const newest = makeEntry("fn-a", { timestamp: Date.now() + 9999 });
+    const newest = makeEntry("fn-a", { timestamp: new Date(Date.now() + 9999).toISOString() });
     useInvokeHistoryStore.getState().addEntry(newest);
     const forFn = selectEntriesForFunction(useInvokeHistoryStore.getState(), "fn-a");
     expect(forFn).toHaveLength(50);

@@ -4,7 +4,7 @@ export interface InvokeHistoryEntry {
   payloadHash: string; // 8-char SHA-256 hex prefix
   statusCode: number;
   duration: number; // ms; client-measured
-  timestamp: number; // epoch ms
+  timestamp: string; // ISO-8601
   functionError?: string;
 }
 

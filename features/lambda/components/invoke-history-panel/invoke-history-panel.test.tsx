@@ -30,7 +30,7 @@ function makeEntry(
     payloadHash: "abcd1234",
     statusCode: 200,
     duration: 123,
-    timestamp: 1716000000000,
+    timestamp: new Date(1716000000000).toISOString(),
     ...overrides,
   };
 }

@@ -77,7 +77,7 @@ export function InvokeDialog({ functionName, dict, locale, open, onOpenChange, c
         payloadHash,
         statusCode: state.data.statusCode,
         duration: Date.now() - startTime,
-        timestamp: startTime,
+        timestamp: new Date(startTime).toISOString(),
         functionError: state.data.functionError,
       });
     });
