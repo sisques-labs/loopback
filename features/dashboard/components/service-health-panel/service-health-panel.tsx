@@ -1,4 +1,5 @@
-import type { ServiceStatus } from "@/features/dashboard/lib/health";
+import type { ServiceStatus } from "@/features/dashboard/types";
+import { CORE_SERVICES } from "@/features/dashboard/lib/health";
 import type { AppDict } from "@/features/shared/i18n/get-dictionary";
 
 type ServiceHealthPanelDict = AppDict["dashboard"]["serviceHealthPanel"];
@@ -7,8 +8,6 @@ type Props = {
   services: Record<string, ServiceStatus>;
   dict: ServiceHealthPanelDict;
 };
-
-const CORE_SERVICES = ["S3", "SQS", "DynamoDB", "Lambda", "SNS"] as const;
 
 const indicatorClass: Record<ServiceStatus, string> = {
   healthy: "bg-green-500",

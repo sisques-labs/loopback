@@ -1,8 +1,8 @@
 import "server-only";
 
-export type HealthStatus = "connected" | "degraded" | "unreachable";
+import type { HealthStatus, ServiceStatus } from "@/features/dashboard/types";
 
-export type ServiceStatus = "healthy" | "degraded" | "unreachable";
+export type { HealthStatus, ServiceStatus } from "@/features/dashboard/types";
 
 export type EndpointHealth = {
   status: HealthStatus;
@@ -18,7 +18,7 @@ type EndpointHealthPayload = {
 export const ENDPOINT_HEALTH_PATH = "/_localstack/health";
 
 /** The fixed set of LocalStack services always shown in the health panel. */
-const CORE_SERVICES = ["S3", "SQS", "DynamoDB", "Lambda", "SNS"] as const;
+export const CORE_SERVICES = ["S3", "SQS", "DynamoDB", "Lambda", "SNS"] as const;
 
 /** Maps a raw LocalStack service string to a ServiceStatus. */
 function toServiceStatus(raw: string | undefined): ServiceStatus {
