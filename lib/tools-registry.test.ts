@@ -43,3 +43,27 @@ describe("tools-registry — timeline entry", () => {
     expect(entry?.icon).not.toBeNull();
   });
 });
+
+describe("tools-registry — snapshots entry", () => {
+  it("contains a snapshots entry", () => {
+    const entry = tools.find((t) => t.id === "snapshots");
+    expect(entry).toBeDefined();
+  });
+
+  it("snapshots entry has correct href /snapshots", () => {
+    const entry = tools.find((t) => t.id === "snapshots");
+    expect(entry?.href).toBe("/snapshots");
+  });
+
+  it("snapshots entry has a label", () => {
+    const entry = tools.find((t) => t.id === "snapshots");
+    expect(entry?.label).toBeTruthy();
+    expect(typeof entry?.label).toBe("string");
+  });
+
+  it("snapshots entry has an icon", () => {
+    const entry = tools.find((t) => t.id === "snapshots");
+    expect(entry?.icon).toBeDefined();
+    expect(entry?.icon).not.toBeNull();
+  });
+});
