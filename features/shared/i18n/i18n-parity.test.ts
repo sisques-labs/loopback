@@ -96,6 +96,12 @@ describe("i18n parity — dashboard", () => {
   it("every key in en.ts exists in es.ts", async () => {
     const { default: en } = await import("@/features/dashboard/i18n/en");
     const { default: es } = await import("@/features/dashboard/i18n/es");
+// ── snapshots parity ──────────────────────────────────────────────────────────
+
+describe("i18n parity — snapshots", () => {
+  it("every key in en.ts exists in es.ts", async () => {
+    const { default: en } = await import("@/features/snapshots/i18n/en");
+    const { default: es } = await import("@/features/snapshots/i18n/es");
 
     const enKeys = flatKeys(en);
     const esKeys = flatKeys(es);
@@ -107,6 +113,8 @@ describe("i18n parity — dashboard", () => {
   it("every key in es.ts exists in en.ts", async () => {
     const { default: en } = await import("@/features/dashboard/i18n/en");
     const { default: es } = await import("@/features/dashboard/i18n/es");
+    const { default: en } = await import("@/features/snapshots/i18n/en");
+    const { default: es } = await import("@/features/snapshots/i18n/es");
 
     const enKeys = flatKeys(en);
     const esKeys = flatKeys(es);

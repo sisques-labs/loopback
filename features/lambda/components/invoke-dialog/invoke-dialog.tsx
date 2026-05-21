@@ -11,8 +11,8 @@ import {
   DialogTrigger,
   DialogClose,
 } from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import { JsonTextarea } from "@/features/shared/components/json-textarea/json-textarea";
+import { JsonViewer } from "@/features/shared/components/json-viewer/json-viewer";
 import { invokeFunctionAction } from "@/features/lambda/use-cases/invoke-function/invoke-function";
 import { t } from "@/features/shared/i18n/interpolate";
 import type { ActionState } from "@/features/shared/types/action-state";
@@ -28,6 +28,7 @@ type Props = {
   functionName: string;
   dict: AppDict["lambda"]["invokeDialog"];
   logTailDict?: AppDict["lambda"]["invokeLogTail"];
+  copyButtonDict: AppDict["shared"]["copyButton"];
   locale: Locale;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
@@ -47,6 +48,9 @@ async function computePayloadHash(payloadString: string): Promise<string> {
 }
 
 export function InvokeDialog({ functionName, dict, logTailDict, locale, open, onOpenChange, closeLabel, payload: payloadProp }: Props) {
+};
+
+export function InvokeDialog({ functionName, dict, copyButtonDict, locale, open, onOpenChange, closeLabel }: Props) {
   const [state, formAction, pending] = useActionState(invokeFunctionAction, INITIAL_STATE);
   const closeRef = useRef<HTMLButtonElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
@@ -105,6 +109,8 @@ export function InvokeDialog({ functionName, dict, logTailDict, locale, open, on
       }
     } else {
       setPayloadError(null);
+    if (payloadError !== null) {
+      e.preventDefault();
     }
 
     // Capture submit timestamp for InvokeLogTail
@@ -128,16 +134,15 @@ export function InvokeDialog({ functionName, dict, logTailDict, locale, open, on
           <input type="hidden" name="functionName" value={functionName} />
           <input type="hidden" name="locale" value={locale} />
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="invoke-payload">{dict.payloadLabel}</Label>
-            <Textarea
-              id="invoke-payload"
+            <JsonTextarea
               name="payload"
+              label={dict.payloadLabel}
               placeholder={dict.payloadPlaceholder}
-              className="font-mono text-sm"
+              rows={6}
+              onValidityChange={(valid) =>
+                setPayloadError(valid ? null : dict.invalidPayload)
+              }
             />
-            {payloadError && (
-              <p className="text-xs text-destructive">{payloadError}</p>
-            )}
             {state.status === "error" && (
               <p className="text-xs text-destructive">{state.message}</p>
             )}
@@ -161,9 +166,11 @@ export function InvokeDialog({ functionName, dict, logTailDict, locale, open, on
                     {state.data.statusCode}
                   </p>
                   <p className="text-xs text-muted-foreground">{dict.bodyLabel}:</p>
-                  <pre className="max-h-48 overflow-auto rounded-lg border bg-muted px-3 py-2 font-mono text-xs">
-                    {state.data.body || "—"}
-                  </pre>
+                  <JsonViewer
+                    value={state.data.body ?? ""}
+                    copyLabel={copyButtonDict.copyJson}
+                    copiedLabel={copyButtonDict.copyJsonCopied}
+                  />
                 </div>
               </div>
             </div>

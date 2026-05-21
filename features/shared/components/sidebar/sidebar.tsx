@@ -1,3 +1,4 @@
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { NavLinks } from "@/features/shared/components/mobile-nav/nav-links";
 import { Logo } from "@/features/shared/components/logo/logo";
 import type { AppDict } from "@/features/shared/i18n/get-dictionary";
@@ -10,15 +11,17 @@ type Props = {
 export function Sidebar({ dict, localePrefix }: Props) {
   return (
     <aside className="hidden h-full w-56 flex-col border-r bg-sidebar px-4 py-6 md:flex">
-      <Logo className="mb-4" />
-      <NavLinks
-        localePrefix={localePrefix}
-        dashboardLinkLabel={dict.dashboard}
-        servicesLabel={dict.services}
-        settingsSectionLabel={dict.settingsSection}
-        settingsLinkLabel={dict.settings}
-        toolsSectionLabel={dict.tools}
-      />
+      <Logo className="mb-4 shrink-0" />
+      <ScrollArea className="min-h-0 flex-1">
+        <NavLinks
+          localePrefix={localePrefix}
+          dashboardLinkLabel={dict.dashboard}
+          servicesLabel={dict.services}
+          settingsSectionLabel={dict.settingsSection}
+          settingsLinkLabel={dict.settings}
+          toolsSectionLabel={dict.tools}
+        />
+      </ScrollArea>
     </aside>
   );
 }

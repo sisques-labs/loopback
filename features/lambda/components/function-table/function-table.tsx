@@ -10,6 +10,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import type { LambdaFunction } from "@/features/lambda/types/lambda";
 import { FunctionRowActions } from "@/features/lambda/components/function-row-actions/function-row-actions";
+import { CopyButton } from "@/features/shared/components/copy-button/copy-button";
 import { encodeFunctionNameForRoute } from "@/features/lambda/lib/route-codec";
 import { stateBadgeVariant, stateLabel } from "@/features/lambda/lib/state-badge";
 import type { AppDict } from "@/features/shared/i18n/get-dictionary";
@@ -21,6 +22,7 @@ type Props = {
   rowActionsDict: AppDict["lambda"]["rowActions"];
   invokeDialogDict: AppDict["lambda"]["invokeDialog"];
   updateCodeDialogDict: AppDict["lambda"]["updateCodeDialog"];
+  copyButtonDict: AppDict["shared"]["copyButton"];
   localePrefix: string;
   locale: Locale;
   closeLabel: string;
@@ -32,6 +34,7 @@ export function FunctionTable({
   rowActionsDict,
   invokeDialogDict,
   updateCodeDialogDict,
+  copyButtonDict,
   localePrefix,
   locale,
   closeLabel,
@@ -54,12 +57,22 @@ export function FunctionTable({
         {functions.map((fn) => (
           <TableRow key={fn.functionArn}>
             <TableCell className="min-w-0 max-w-[min(100%,12rem)] sm:max-w-none">
-              <Link
-                href={`${localePrefix}/lambda/${encodeFunctionNameForRoute(fn.functionName)}`}
-                className="block truncate font-mono font-medium hover:underline sm:overflow-visible sm:whitespace-normal"
-              >
-                {fn.functionName}
-              </Link>
+              <div className="flex items-center gap-1">
+                <Link
+                  href={`${localePrefix}/lambda/${encodeFunctionNameForRoute(fn.functionName)}`}
+                  className="block truncate font-mono font-medium hover:underline sm:overflow-visible sm:whitespace-normal"
+                >
+                  {fn.functionName}
+                </Link>
+                {fn.functionArn && (
+                  <CopyButton
+                    value={fn.functionArn}
+                    size="sm"
+                    copyLabel={copyButtonDict.copyArn}
+                    copiedLabel={copyButtonDict.copyArnCopied}
+                  />
+                )}
+              </div>
             </TableCell>
             <TableCell className="hidden font-mono text-sm text-muted-foreground sm:table-cell">
               {fn.runtime || "—"}
@@ -97,6 +110,7 @@ export function FunctionTable({
                 dict={rowActionsDict}
                 invokeDialogDict={invokeDialogDict}
                 updateCodeDialogDict={updateCodeDialogDict}
+                copyButtonDict={copyButtonDict}
                 localePrefix={localePrefix}
                 locale={locale}
                 closeLabel={closeLabel}

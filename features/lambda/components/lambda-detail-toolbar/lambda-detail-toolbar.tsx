@@ -14,6 +14,7 @@ type Props = {
   invokeDialogDict: AppDict["lambda"]["invokeDialog"];
   invokeLogTailDict?: AppDict["lambda"]["invokeLogTail"];
   updateCodeDialogDict: AppDict["lambda"]["updateCodeDialog"];
+  copyButtonDict: AppDict["shared"]["copyButton"];
   replaceCodeCta: string;
   trailing?: ReactNode;
   closeLabel: string;
@@ -25,6 +26,7 @@ export function LambdaDetailToolbar({
   invokeDialogDict,
   invokeLogTailDict,
   updateCodeDialogDict,
+  copyButtonDict,
   replaceCodeCta,
   trailing,
   closeLabel,
@@ -35,6 +37,13 @@ export function LambdaDetailToolbar({
     <>
       <div className="flex shrink-0 flex-wrap items-center gap-2">
         <InvokeDialog functionName={functionName} dict={invokeDialogDict} logTailDict={invokeLogTailDict} locale={locale} closeLabel={closeLabel} />
+        <InvokeDialog
+          functionName={functionName}
+          dict={invokeDialogDict}
+          copyButtonDict={copyButtonDict}
+          locale={locale}
+          closeLabel={closeLabel}
+        />
         <Button
           type="button"
           variant="outline"

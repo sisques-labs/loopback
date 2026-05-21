@@ -10,6 +10,7 @@ import {
 } from "@/features/sqs/use-cases/receive-messages/receive-messages";
 import { requeueMessageAction } from "@/features/sqs/use-cases/requeue-message/requeue-message";
 import { MessageAttributesDialog } from "@/features/sqs/components/message-attributes-dialog/message-attributes-dialog";
+import { JsonViewer } from "@/features/shared/components/json-viewer/json-viewer";
 import type { ActionState } from "@/features/shared/types/action-state";
 import type { AppDict } from "@/features/shared/i18n/get-dictionary";
 import type { Locale } from "@/features/shared/i18n/locale";
@@ -22,9 +23,10 @@ type MessageRowProps = {
   queueUrl: string;
   locale: Locale;
   dict: AppDict["sqs"]["queueDetail"]["receive"];
+  copyButtonDict: AppDict["shared"]["copyButton"];
 };
 
-function MessageRow({ message, queueUrl, locale, dict }: MessageRowProps) {
+function MessageRow({ message, queueUrl, locale, dict, copyButtonDict }: MessageRowProps) {
   const [state, formAction, pending] = useActionState(requeueMessageAction, INITIAL_REQUEUE_STATE);
   const [attrsOpen, setAttrsOpen] = useState(false);
 
@@ -42,9 +44,14 @@ function MessageRow({ message, queueUrl, locale, dict }: MessageRowProps) {
             {dict.messageIdLabel}:{" "}
             <span className="font-mono text-foreground">{message.messageId}</span>
           </p>
-          <pre className="mt-2 max-h-40 overflow-auto wrap-break-word whitespace-pre-wrap font-mono text-xs">
-            {message.body || "—"}
-          </pre>
+          <div className="mt-2">
+            <JsonViewer
+              value={message.body ?? ""}
+              maxHeight="10rem"
+              copyLabel={copyButtonDict.copy}
+              copiedLabel={copyButtonDict.copied}
+            />
+          </div>
           {message.receiptHandle ? (
             <p className="mt-2 text-[10px] text-muted-foreground">
               receipt:{" "}
@@ -111,10 +118,11 @@ function MessageRow({ message, queueUrl, locale, dict }: MessageRowProps) {
 type Props = {
   queueUrl: string;
   dict: AppDict["sqs"]["queueDetail"]["receive"];
+  copyButtonDict: AppDict["shared"]["copyButton"];
   locale: Locale;
 };
 
-export function ReceiveMessagesSection({ queueUrl, dict, locale }: Props) {
+export function ReceiveMessagesSection({ queueUrl, dict, copyButtonDict, locale }: Props) {
   const [state, formAction, pending] = useActionState(receiveMessagesAction, INITIAL);
   const [lastBatch, setLastBatch] = useState<SqsReceivedMessageBrief[]>([]);
 
@@ -162,6 +170,7 @@ export function ReceiveMessagesSection({ queueUrl, dict, locale }: Props) {
               queueUrl={queueUrl}
               locale={locale}
               dict={dict}
+              copyButtonDict={copyButtonDict}
             />
           ))}
         </ul>

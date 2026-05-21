@@ -1,6 +1,59 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+## [0.10.1-alpha.0] - 2026-05-21
+
+### Bug Fixes
+- **shared:** Add scroll to sidebar and mobile nav drawer (f3aa17d)
+## [0.10.0-alpha.0] - 2026-05-21
+
+### Bug Fixes
+- **shared:** Make TableSkeleton columns optional with default 4 (ebc427d)
+- **shared:** Resolve copy-button spec deviations (size prop, warn logging, test coverage) (bf94a98)
+- **shared:** Auto-format JSON on mount in JsonTextarea (c758493)
+- **shared:** Make JsonViewer copy labels optional with defaults (92d403e)
+- **snapshots:** Capture QueueArn and add SnapshotServiceResult + SnapshotCreateReport types (fab4be9)
+- **snapshots:** Use useEffect for store sync in SnapshotPanel (2684305)
+- **snapshots:** Accept widened dict types in snapshot panels (73b067f)
+
+### Chore
+- **test:** Exclude stale worktrees from vitest glob (99313ac)
+- **test:** Exclude stale worktrees from vitest glob (f3d4c86)
+- Release v0.10.0-alpha.0 (d2baa4b)
+
+### Features
+- **ui:** Add Skeleton primitive component (910881a)
+- **shared:** Add TableSkeleton, CardGridSkeleton, DetailSkeleton components (9355878)
+- **app:** Add loading.tsx skeletons for all list and detail routes (94dad97)
+- **shared:** Add CopyButton component (6fc45f0)
+- **sns:** Add copy-to-clipboard for topic ARN (75f7ffb)
+- **lambda:** Add copy-to-clipboard for ARN and function URL (8187ee6)
+- **sqs:** Add copy-to-clipboard for queue URL and message body (03848ee)
+- **dynamodb:** Add copy-to-clipboard for item JSON (d9d7cd2)
+- **shared:** Add JsonViewer component (1ee1551)
+- **lambda:** Use JsonViewer for invoke response body and JsonTextarea for payload (d7fec04)
+- **sns:** Use JsonTextarea for publish message body and migrate pre to JsonViewer (dcb45c4)
+- **snapshots:** Add snapshot types and Zod schema (3e3f1b4)
+- **snapshots:** Add useSnapshotStore Zustand store (eac3263)
+- **snapshots:** Wire tools-registry and i18n (ba8c931)
+- **snapshots:** Add capture-dynamodb, capture-sqs, capture-s3 services (202ce8e)
+- **snapshots:** Add create-snapshot server action (1c75113)
+- **snapshots:** Add restore-dynamodb, restore-sqs, restore-s3 services (600284b)
+- **snapshots:** Add restore-snapshot and import-snapshot server actions (47502bd)
+- **snapshots:** Add export route handler (5366d0b)
+- **snapshots:** Add snapshots page and UI components (408ba54)
+
+### Refactor
+- **ui:** Change SkeletonProps from interface to type for consistency (d9fd0d2)
+## [0.9.0-alpha.0] - 2026-05-20
+
+### Chore
+- Release v0.9.0-alpha.0 (c63d299)
+
+### Features
+- **timeline:** Add data/state foundation for event timeline (680d4fc)
+- **timeline:** Add presentation layer components and page route (b4015cc)
+- **timeline:** Add i18n files, dictionary wiring, and tools-registry entry (PR-3) (86ae6e0)
 ## [0.8.0-alpha.0] - 2026-05-20
 
 ### Bug Fixes
@@ -9,6 +62,9 @@ All notable changes to this project will be documented in this file.
 - **seed:** Wire warningText i18n key in ResetPanel (7a39843)
 - **seed:** Add explicit types to fix tsc pre-push errors (526063e)
 - **seed:** Add missing command palette dict keys in shell test (f2ffb36)
+
+### Chore
+- Release v0.8.0-alpha.0 (dad3f06)
 
 ### Features
 - **seed:** Add foundation, preset definitions, i18n and lambda delete-function (ae35c74)

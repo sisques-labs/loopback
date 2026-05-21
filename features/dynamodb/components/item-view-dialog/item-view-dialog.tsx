@@ -9,6 +9,7 @@ import {
   DialogFooter,
   DialogClose,
 } from "@/components/ui/dialog";
+import { JsonViewer } from "@/features/shared/components/json-viewer/json-viewer";
 import type { AppDict } from "@/features/shared/i18n/get-dictionary";
 
 type Props = {
@@ -16,22 +17,23 @@ type Props = {
   onOpenChange: (open: boolean) => void;
   item: Record<string, unknown>;
   dict: AppDict["dynamodb"]["itemViewDialog"];
-
-    closeLabel: string;
+  copyButtonDict: AppDict["shared"]["copyButton"];
+  closeLabel: string;
 };
 
-export function ItemViewDialog({ open, onOpenChange, item, dict, closeLabel}: Props) {
+export function ItemViewDialog({ open, onOpenChange, item, dict, copyButtonDict, closeLabel}: Props) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent closeLabel={closeLabel} className="max-w-2xl">
         <DialogHeader>
           <DialogTitle>{dict.title}</DialogTitle>
         </DialogHeader>
-        <div className="max-h-[60vh] overflow-auto rounded-md border bg-muted/40 p-3">
-          <pre className="font-mono text-xs leading-relaxed whitespace-pre-wrap break-all">
-            {JSON.stringify(item, null, 2)}
-          </pre>
-        </div>
+        <JsonViewer
+          value={item}
+          maxHeight="60vh"
+          copyLabel={copyButtonDict.copyJson}
+          copiedLabel={copyButtonDict.copyJsonCopied}
+        />
         <DialogFooter>
           <DialogClose render={<Button variant="outline" type="button" />}>
             {dict.close}

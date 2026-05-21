@@ -60,6 +60,16 @@ const dict = {
     submitting: "Publishing…",
     successToast: "Message published to {topic}.",
   },
+  copyButton: {
+    copy: "Copy",
+    copied: "Copied",
+    copyArn: "Copy ARN",
+    copyArnCopied: "ARN copied",
+    copyUrl: "Copy URL",
+    copyUrlCopied: "URL copied",
+    copyJson: "Copy JSON",
+    copyJsonCopied: "JSON copied",
+  },
   page: {
     title: "SNS Topics",
     empty: "No topics found in this account.",

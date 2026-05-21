@@ -24,6 +24,7 @@ export default async function LambdaPage({ params }: Props) {
     rowActions: lambda.rowActions,
     invokeDialog: lambda.invokeDialog,
     updateCodeDialog: lambda.updateCodeDialog,
+    copyButton: shared.copyButton,
     page: lambda.page,
     dialog: shared.dialog,
   };

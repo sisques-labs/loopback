@@ -6,6 +6,7 @@ import { DEFAULT_LOCALE, isLocale, type Locale } from "@/features/shared/i18n/lo
 import { decodeFunctionNameParam } from "@/features/lambda/lib/route-codec";
 import { LambdaDetailToolbar } from "@/features/lambda/components/lambda-detail-toolbar/lambda-detail-toolbar";
 import { InvokeHistoryPanel } from "@/features/lambda/components/invoke-history-panel/invoke-history-panel";
+import { CopyButton } from "@/features/shared/components/copy-button/copy-button";
 import { Badge } from "@/components/ui/badge";
 import { stateBadgeVariant, stateLabel } from "@/features/lambda/lib/state-badge";
 
@@ -22,6 +23,7 @@ export default async function LambdaFunctionDetailPage({ params }: Props) {
   const dict = getDictionary(locale);
   const d = dict.lambda.detail;
   const tableDict = dict.lambda.table;
+  const copyButton = dict.shared.copyButton;
   const localePrefix = `/${locale}`;
 
   const fn = await getFunction(functionName);
@@ -51,6 +53,7 @@ export default async function LambdaFunctionDetailPage({ params }: Props) {
           invokeDialogDict={dict.lambda.invokeDialog}
           invokeLogTailDict={dict.lambda.invokeLogTail}
           updateCodeDialogDict={dict.lambda.updateCodeDialog}
+          copyButtonDict={copyButton}
           replaceCodeCta={d.replaceCodeCta}
           trailing={
             fn.state ? (
@@ -68,7 +71,15 @@ export default async function LambdaFunctionDetailPage({ params }: Props) {
         </div>
         <div className="rounded-lg border bg-card p-4 shadow-sm">
           <p className="text-sm text-muted-foreground">{d.functionArnLabel}</p>
-          <p className="mt-1 break-all font-mono text-xs text-muted-foreground">{fn.functionArn}</p>
+          <div className="mt-1 flex items-start gap-1">
+            <p className="break-all font-mono text-xs text-muted-foreground">{fn.functionArn}</p>
+            <CopyButton
+              value={fn.functionArn}
+              size="sm"
+              copyLabel={copyButton.copyArn}
+              copiedLabel={copyButton.copyArnCopied}
+            />
+          </div>
         </div>
         <div className="rounded-lg border bg-card p-4 shadow-sm">
           <p className="text-sm text-muted-foreground">{d.runtimeLabel}</p>

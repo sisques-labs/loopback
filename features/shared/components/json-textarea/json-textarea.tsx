@@ -14,6 +14,19 @@ interface JsonTextareaProps {
   onValidityChange?: (valid: boolean) => void;
 }
 
+function tryFormat(input: string | undefined): string {
+  if (!input) return "";
+  const trimmed = input.trim();
+  if (trimmed[0] !== "{" && trimmed[0] !== "[") return input;
+  try {
+    const parsed = JSON.parse(trimmed);
+    if (parsed === null || typeof parsed !== "object") return input;
+    return JSON.stringify(parsed, null, 2);
+  } catch {
+    return input;
+  }
+}
+
 function getJsonError(value: string): string | null {
   const trimmed = value.trim();
   if (!trimmed) return null;
@@ -35,7 +48,7 @@ export function JsonTextarea({
   rows,
   onValidityChange,
 }: JsonTextareaProps) {
-  const [value, setValue] = useState(defaultValue ?? "");
+  const [value, setValue] = useState(() => tryFormat(defaultValue));
   const error = getJsonError(value);
 
   useEffect(() => {
