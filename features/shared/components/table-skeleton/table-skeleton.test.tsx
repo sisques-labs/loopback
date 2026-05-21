@@ -4,7 +4,7 @@ import { TableSkeleton } from "./table-skeleton";
 
 describe("TableSkeleton", () => {
   it("renders with default 5 rows and 4 columns", () => {
-    const { container } = render(<TableSkeleton columns={4} />);
+    const { container } = render(<TableSkeleton />);
     // 5 body rows
     const bodyRows = container.querySelectorAll("tbody tr");
     expect(bodyRows).toHaveLength(5);

@@ -10,7 +10,7 @@ import {
 
 interface TableSkeletonProps {
   rows?: number;
-  columns: number;
+  columns?: number;
   /** Column indices to hide below `sm` breakpoint. */
   hideBelowSm?: number[];
   /** Column indices to hide below `md` breakpoint. */
@@ -19,7 +19,7 @@ interface TableSkeletonProps {
 
 export function TableSkeleton({
   rows = 5,
-  columns,
+  columns = 4,
   hideBelowSm = [],
   hideBelowMd = [],
 }: TableSkeletonProps) {
