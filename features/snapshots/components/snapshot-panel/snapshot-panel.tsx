@@ -6,11 +6,12 @@ import { useSnapshotStore } from "@/features/snapshots/stores/use-snapshot-store
 import type { ActionState } from "@/features/shared/types/action-state";
 import type { SnapshotCreateReport } from "@/features/snapshots/lib/types/snapshot";
 import type { SnapshotsDict } from "@/features/snapshots/i18n/en";
+import type { WidenStringLiterals } from "@/features/shared/i18n/widen-literals";
 
 const INITIAL_STATE: ActionState<SnapshotCreateReport> = { status: "idle" };
 
 type Props = {
-  dict: SnapshotsDict;
+  dict: WidenStringLiterals<SnapshotsDict>;
 };
 
 export function SnapshotPanel({ dict }: Props) {
