@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import { JsonTextarea } from "@/features/shared/components/json-textarea/json-textarea";
 import { publishMessageAction } from "@/features/sns/use-cases/publish-message/publish-message";
 import { t } from "@/features/shared/i18n/interpolate";
 import type { ActionState } from "@/features/shared/types/action-state";
@@ -68,13 +68,12 @@ export function PublishDialog({ topicArn, topicName, dict, locale, open, onOpenC
           <input type="hidden" name="topicArn" value={topicArn} />
           <input type="hidden" name="locale" value={locale} />
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="publish-message">{dict.messageLabel}</Label>
-            <Textarea
-              id="publish-message"
+            <JsonTextarea
               name="message"
+              label={dict.messageLabel}
               placeholder={dict.messagePlaceholder}
               required
-              aria-required="true"
+              rows={4}
             />
             {state.status === "error" && (
               <p className="text-xs text-destructive">{state.message}</p>

@@ -10,7 +10,7 @@ import {
 } from "@/features/sqs/use-cases/receive-messages/receive-messages";
 import { requeueMessageAction } from "@/features/sqs/use-cases/requeue-message/requeue-message";
 import { MessageAttributesDialog } from "@/features/sqs/components/message-attributes-dialog/message-attributes-dialog";
-import { CopyButton } from "@/features/shared/components/copy-button/copy-button";
+import { JsonViewer } from "@/features/shared/components/json-viewer/json-viewer";
 import type { ActionState } from "@/features/shared/types/action-state";
 import type { AppDict } from "@/features/shared/i18n/get-dictionary";
 import type { Locale } from "@/features/shared/i18n/locale";
@@ -44,20 +44,13 @@ function MessageRow({ message, queueUrl, locale, dict, copyButtonDict }: Message
             {dict.messageIdLabel}:{" "}
             <span className="font-mono text-foreground">{message.messageId}</span>
           </p>
-          <div className="relative mt-2">
-            <pre className="max-h-40 overflow-auto wrap-break-word whitespace-pre-wrap font-mono text-xs">
-              {message.body || "—"}
-            </pre>
-            {message.body && (
-              <div className="absolute top-0 right-0">
-                <CopyButton
-                  value={message.body}
-                  size="sm"
-                  copyLabel={copyButtonDict.copy}
-                  copiedLabel={copyButtonDict.copied}
-                />
-              </div>
-            )}
+          <div className="mt-2">
+            <JsonViewer
+              value={message.body ?? ""}
+              maxHeight="10rem"
+              copyLabel={copyButtonDict.copy}
+              copiedLabel={copyButtonDict.copied}
+            />
           </div>
           {message.receiptHandle ? (
             <p className="mt-2 text-[10px] text-muted-foreground">
