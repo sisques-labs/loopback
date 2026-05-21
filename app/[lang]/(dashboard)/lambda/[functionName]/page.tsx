@@ -49,6 +49,7 @@ export default async function LambdaFunctionDetailPage({ params }: Props) {
           functionName={fn.functionName}
           locale={locale}
           invokeDialogDict={dict.lambda.invokeDialog}
+          invokeLogTailDict={dict.lambda.invokeLogTail}
           updateCodeDialogDict={dict.lambda.updateCodeDialog}
           replaceCodeCta={d.replaceCodeCta}
           trailing={

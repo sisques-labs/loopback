@@ -111,4 +111,89 @@ describe("getEndpointHealth", () => {
       expect.objectContaining({ cache: "no-store" }),
     );
   });
+
+  // --- PR-2: per-service ServiceStatus ---
+
+  it("returns services map with all 5 core keys always present", async () => {
+    mockFetch({
+      ok: true,
+      body: { services: { s3: "running" } },
+    });
+
+    const result = await getEndpointHealth();
+
+    expect(result.services).toHaveProperty("S3");
+    expect(result.services).toHaveProperty("SQS");
+    expect(result.services).toHaveProperty("DynamoDB");
+    expect(result.services).toHaveProperty("Lambda");
+    expect(result.services).toHaveProperty("SNS");
+  });
+
+  it('maps "running" to "healthy"', async () => {
+    mockFetch({
+      ok: true,
+      body: { services: { s3: "running", sqs: "running", dynamodb: "running", lambda: "running", sns: "running" } },
+    });
+
+    const result = await getEndpointHealth();
+
+    expect(result.services["S3"]).toBe("healthy");
+    expect(result.services["SQS"]).toBe("healthy");
+    expect(result.services["DynamoDB"]).toBe("healthy");
+    expect(result.services["Lambda"]).toBe("healthy");
+    expect(result.services["SNS"]).toBe("healthy");
+  });
+
+  it('maps any other non-empty string to "degraded"', async () => {
+    mockFetch({
+      ok: true,
+      body: { services: { s3: "stopped", sqs: "error", dynamodb: "available" } },
+    });
+
+    const result = await getEndpointHealth();
+
+    expect(result.services["S3"]).toBe("degraded");
+    expect(result.services["SQS"]).toBe("degraded");
+    // "available" is not "running" so also degraded
+    expect(result.services["DynamoDB"]).toBe("degraded");
+  });
+
+  it('maps absent service to "unreachable"', async () => {
+    mockFetch({
+      ok: true,
+      body: { services: { s3: "running" } },
+    });
+
+    const result = await getEndpointHealth();
+
+    // None of these are in the response → unreachable
+    expect(result.services["SQS"]).toBe("unreachable");
+    expect(result.services["DynamoDB"]).toBe("unreachable");
+    expect(result.services["Lambda"]).toBe("unreachable");
+    expect(result.services["SNS"]).toBe("unreachable");
+  });
+
+  it("maps all services to unreachable on fetch error", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new Error("ECONNREFUSED")));
+
+    const result = await getEndpointHealth();
+
+    expect(result.services["S3"]).toBe("unreachable");
+    expect(result.services["SQS"]).toBe("unreachable");
+    expect(result.services["DynamoDB"]).toBe("unreachable");
+    expect(result.services["Lambda"]).toBe("unreachable");
+    expect(result.services["SNS"]).toBe("unreachable");
+  });
+
+  it("existing aggregate status field is unchanged (backward compat)", async () => {
+    mockFetch({
+      ok: true,
+      body: { services: { s3: "running", sqs: "running", lambda: "running", dynamodb: "running", sns: "running" } },
+    });
+
+    const result = await getEndpointHealth();
+
+    expect(result.status).toBe("connected");
+    expect(result.endpointUrl).toBe(ENDPOINT);
+  });
 });
