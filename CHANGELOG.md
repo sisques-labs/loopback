@@ -1,6 +1,10 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+## [0.10.1-alpha.0] - 2026-05-21
+
+### Bug Fixes
+- **shared:** Add scroll to sidebar and mobile nav drawer (f3aa17d)
 ## [0.10.0-alpha.0] - 2026-05-21
 
 ### Bug Fixes
@@ -15,6 +19,7 @@ All notable changes to this project will be documented in this file.
 ### Chore
 - **test:** Exclude stale worktrees from vitest glob (99313ac)
 - **test:** Exclude stale worktrees from vitest glob (f3d4c86)
+- Release v0.10.0-alpha.0 (d2baa4b)
 
 ### Features
 - **ui:** Add Skeleton primitive component (910881a)
