@@ -95,6 +95,16 @@ const dict = {
     lastModifiedLabel: "Última modificación",
     stateLabel: "Estado",
   },
+  invokeHistory: {
+    title: "Historial de invocaciones",
+    clearHistory: "Limpiar historial",
+    empty: "Todavía no hay invocaciones registradas.",
+    statusLabel: "Estado",
+    durationLabel: "Duración",
+    timestampLabel: "Hora",
+    payloadHashLabel: "Payload",
+    errorLabel: "Error de la función",
+  },
   sdkErrors: {
     notFound: "La función especificada no existe.",
     invalidParam: "Parámetro de función inválido.",
