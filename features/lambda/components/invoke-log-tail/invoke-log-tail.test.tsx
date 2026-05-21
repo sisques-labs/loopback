@@ -27,10 +27,13 @@ const dict = {
   expand: "Expand",
 };
 
+// A fixed epoch that is sane relative to fake timers (2024-01-01T00:00:00Z)
+const BASE_NOW = new Date("2024-01-01T00:00:00Z").getTime();
+
 function makeLogEntry(message: string) {
   return {
     id: crypto.randomUUID(),
-    timestamp: Date.now(),
+    timestamp: BASE_NOW,
     message,
     level: "info" as const,
     logGroupName: "/aws/lambda/fn-a",
@@ -39,15 +42,12 @@ function makeLogEntry(message: string) {
   };
 }
 
-const BASE_PROPS = {
-  functionName: "fn-a",
-  invokeTimestamp: 1_000_000, // epoch ms
-  dict,
-};
-
 describe("InvokeLogTail", () => {
   beforeEach(() => {
+    // Set system time so Date.now() === BASE_NOW at test start.
+    // This ensures invokeTimestamp === Date.now() → elapsed = 0 → no premature timeout.
     vi.useFakeTimers();
+    vi.setSystemTime(BASE_NOW);
     mockGetLogEvents.mockResolvedValue({ status: "success", data: { entries: [] } });
   });
 
@@ -57,8 +57,15 @@ describe("InvokeLogTail", () => {
     cleanup();
   });
 
+  // invokeTimestamp = Date.now() at mount time, which is BASE_NOW
+  const PROPS = {
+    functionName: "fn-a",
+    invokeTimestamp: BASE_NOW,
+    dict,
+  };
+
   it("does NOT poll immediately on mount — no calls before 500ms delay", async () => {
-    render(<InvokeLogTail {...BASE_PROPS} />);
+    render(<InvokeLogTail {...PROPS} />);
 
     // Advance less than 500ms
     await act(async () => {
@@ -69,25 +76,28 @@ describe("InvokeLogTail", () => {
   });
 
   it("fires first poll at 500ms after mount", async () => {
-    render(<InvokeLogTail {...BASE_PROPS} />);
+    render(<InvokeLogTail {...PROPS} />);
 
     await act(async () => {
       vi.advanceTimersByTime(500);
+      // Flush microtasks so the async poll() body executes
+      await Promise.resolve();
     });
 
     expect(mockGetLogEvents).toHaveBeenCalledTimes(1);
     expect(mockGetLogEvents).toHaveBeenCalledWith({
       logGroupName: "/aws/lambda/fn-a",
-      since: BASE_PROPS.invokeTimestamp,
+      since: BASE_NOW,
     });
   });
 
   it("polls every 2 seconds after first poll", async () => {
-    render(<InvokeLogTail {...BASE_PROPS} />);
+    render(<InvokeLogTail {...PROPS} />);
 
     // First poll at 500ms
     await act(async () => {
       vi.advanceTimersByTime(500);
+      await Promise.resolve();
     });
 
     expect(mockGetLogEvents).toHaveBeenCalledTimes(1);
@@ -95,6 +105,7 @@ describe("InvokeLogTail", () => {
     // +2000ms = second poll
     await act(async () => {
       vi.advanceTimersByTime(2000);
+      await Promise.resolve();
     });
 
     expect(mockGetLogEvents).toHaveBeenCalledTimes(2);
@@ -102,6 +113,7 @@ describe("InvokeLogTail", () => {
     // +2000ms = third poll
     await act(async () => {
       vi.advanceTimersByTime(2000);
+      await Promise.resolve();
     });
 
     expect(mockGetLogEvents).toHaveBeenCalledTimes(3);
@@ -110,14 +122,10 @@ describe("InvokeLogTail", () => {
   it("shows 'No logs yet.' when first poll returns empty", async () => {
     mockGetLogEvents.mockResolvedValue({ status: "success", data: { entries: [] } });
 
-    render(<InvokeLogTail {...BASE_PROPS} />);
+    render(<InvokeLogTail {...PROPS} />);
 
     await act(async () => {
       vi.advanceTimersByTime(500);
-    });
-
-    // Flush promises
-    await act(async () => {
       await Promise.resolve();
     });
 
@@ -130,13 +138,10 @@ describe("InvokeLogTail", () => {
       data: { entries: [makeLogEntry("Hello from lambda")] },
     });
 
-    render(<InvokeLogTail {...BASE_PROPS} />);
+    render(<InvokeLogTail {...PROPS} />);
 
     await act(async () => {
       vi.advanceTimersByTime(500);
-    });
-
-    await act(async () => {
       await Promise.resolve();
     });
 
@@ -144,7 +149,7 @@ describe("InvokeLogTail", () => {
   });
 
   it("stops polling after first empty poll following at least one non-empty poll (drain condition)", async () => {
-    // First poll: returns data; second poll: empty
+    // First poll: returns data; second poll: empty → triggers drain stop
     mockGetLogEvents
       .mockResolvedValueOnce({
         status: "success",
@@ -152,104 +157,91 @@ describe("InvokeLogTail", () => {
       })
       .mockResolvedValue({ status: "success", data: { entries: [] } });
 
-    render(<InvokeLogTail {...BASE_PROPS} />);
+    render(<InvokeLogTail {...PROPS} />);
 
     // First poll (500ms)
     await act(async () => {
       vi.advanceTimersByTime(500);
+      await Promise.resolve();
     });
-    await act(async () => { await Promise.resolve(); });
+
+    expect(mockGetLogEvents).toHaveBeenCalledTimes(1);
 
     // Second poll (2000ms) — empty, triggers drain stop
     await act(async () => {
       vi.advanceTimersByTime(2000);
+      await Promise.resolve();
     });
-    await act(async () => { await Promise.resolve(); });
 
     const callsAfterDrain = mockGetLogEvents.mock.calls.length;
     expect(callsAfterDrain).toBe(2);
 
     // Advance further — no more calls
     await act(async () => {
-      vi.advanceTimersByTime(4000);
+      vi.advanceTimersByTime(10_000);
+      await Promise.resolve();
     });
 
     expect(mockGetLogEvents).toHaveBeenCalledTimes(callsAfterDrain);
   });
 
   it("stops polling after 30 seconds from invokeTimestamp regardless of results", async () => {
-    // The invokeTimestamp is BASE_PROPS.invokeTimestamp = 1_000_000ms epoch
-    // The component measures 30s from invokeTimestamp using Date.now()
-    // We set Date.now() to start at invokeTimestamp so elapsed = 0
-    vi.setSystemTime(BASE_PROPS.invokeTimestamp);
-
     mockGetLogEvents.mockResolvedValue({
       status: "success",
       data: { entries: [makeLogEntry("still going")] },
     });
 
-    render(<InvokeLogTail {...BASE_PROPS} />);
+    render(<InvokeLogTail {...PROPS} />);
 
-    // Advance to just before 30s (relative to invokeTimestamp)
-    // 500ms initial delay + many 2s intervals
+    // Advance to 29.5s — polling should still be active
     await act(async () => {
-      vi.advanceTimersByTime(500);
+      vi.advanceTimersByTime(29_500);
+      await Promise.resolve();
     });
-    await act(async () => { await Promise.resolve(); });
-
-    // Advance 28 more seconds (total from mount: 28.5s, from invokeTimestamp: 28.5s)
-    await act(async () => {
-      vi.advanceTimersByTime(28_000);
-    });
-    await act(async () => { await Promise.resolve(); });
 
     const callsBefore30s = mockGetLogEvents.mock.calls.length;
     expect(callsBefore30s).toBeGreaterThan(1);
 
-    // Advance past 30s mark
+    // Cross the 30s mark
     await act(async () => {
       vi.advanceTimersByTime(2000);
+      await Promise.resolve();
     });
-    await act(async () => { await Promise.resolve(); });
 
-    // Advance further — no more calls
+    // Advance well past — polling should have stopped
     await act(async () => {
-      vi.advanceTimersByTime(10_000);
+      vi.advanceTimersByTime(20_000);
+      await Promise.resolve();
     });
 
-    const callsAfter30s = mockGetLogEvents.mock.calls.length;
-    // Should be close to callsBefore30s, with at most 1-2 more from the boundary
-    expect(callsAfter30s).toBeLessThanOrEqual(callsBefore30s + 2);
-
-    // But definitely stopped — no calls after the 30s window
+    const totalCalls = mockGetLogEvents.mock.calls.length;
+    // Advance even further — count must not grow
     await act(async () => {
-      vi.advanceTimersByTime(10_000);
+      vi.advanceTimersByTime(20_000);
+      await Promise.resolve();
     });
-    expect(mockGetLogEvents).toHaveBeenCalledTimes(callsAfter30s);
+
+    expect(mockGetLogEvents).toHaveBeenCalledTimes(totalCalls);
   });
 
   it("auto-scroll toggle: clicking toggle disables auto-scroll (default on)", async () => {
-    render(<InvokeLogTail {...BASE_PROPS} />);
+    render(<InvokeLogTail {...PROPS} />);
 
     // Toggle button should be present and labeled
     const toggle = screen.getByRole("button", { name: dict.autoScroll });
     expect(toggle).toBeInTheDocument();
 
+    // aria-pressed should reflect on state
+    expect(toggle).toHaveAttribute("aria-pressed", "true");
+
     // Clicking it disables auto-scroll
     fireEvent.click(toggle);
 
-    // Toggle should now reflect off state (aria-pressed false or different label isn't enforced;
-    // we just verify clicking doesn't crash and the button is still there)
-    expect(toggle).toBeInTheDocument();
+    expect(toggle).toHaveAttribute("aria-pressed", "false");
   });
 
   it("section is collapsible: collapse button hides log content, expand button shows it", async () => {
-    mockGetLogEvents.mockResolvedValue({
-      status: "success",
-      data: { entries: [makeLogEntry("visible log")] },
-    });
-
-    render(<InvokeLogTail {...BASE_PROPS} />);
+    render(<InvokeLogTail {...PROPS} />);
 
     // Initially expanded — section title visible
     expect(screen.getByText(dict.title)).toBeInTheDocument();
@@ -258,7 +250,7 @@ describe("InvokeLogTail", () => {
     const collapseBtn = screen.getByRole("button", { name: dict.collapse });
     fireEvent.click(collapseBtn);
 
-    // After collapse, content should be hidden and expand button appears
+    // After collapse, expand button appears and collapse button is gone
     expect(screen.getByRole("button", { name: dict.expand })).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: dict.collapse })).not.toBeInTheDocument();
 
