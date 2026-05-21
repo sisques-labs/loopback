@@ -13,6 +13,22 @@ vi.mock("@/features/lambda/use-cases/invoke-function/invoke-function", () => ({
   invokeFunctionAction: vi.fn(),
 }));
 
+vi.mock("@/features/shared/components/json-textarea/json-textarea", () => ({
+  JsonTextarea: ({ name, label, placeholder, onValidityChange }: { name: string; label: string; placeholder?: string; rows?: number; onValidityChange?: (v: boolean) => void }) => {
+    onValidityChange?.(true);
+    return (
+      <div>
+        <label htmlFor={name}>{label}</label>
+        <textarea id={name} name={name} placeholder={placeholder} data-slot="textarea" />
+      </div>
+    );
+  },
+}));
+
+vi.mock("@/features/shared/components/json-viewer/json-viewer", () => ({
+  JsonViewer: () => <div data-testid="json-viewer" />,
+}));
+
 // Shared mock factory — lets tests override state per describe block
 let mockActionState: [unknown, () => void, boolean] = [{ status: "idle" }, vi.fn(), false];
 
@@ -115,9 +131,9 @@ describe("InvokeDialog — history dispatch on success", () => {
       <InvokeDialog
         functionName="fn-a"
         dict={dict}
+        copyButtonDict={copyButtonDict}
         locale="en"
         closeLabel="Close"
-        payload="test-payload"
       />,
     );
 
@@ -151,9 +167,9 @@ describe("InvokeDialog — history dispatch on success", () => {
       <InvokeDialog
         functionName="fn-b"
         dict={dict}
+        copyButtonDict={copyButtonDict}
         locale="en"
         closeLabel="Close"
-        payload="{}"
       />,
     );
 
@@ -205,9 +221,9 @@ describe("InvokeDialog — log tail wiring", () => {
         functionName="fn-log"
         dict={dict}
         logTailDict={logTailDict}
+        copyButtonDict={copyButtonDict}
         locale="en"
         closeLabel="Close"
-        payload="{}"
         open={true}
         onOpenChange={() => {}}
       />,
@@ -257,9 +273,9 @@ describe("InvokeDialog — log tail wiring", () => {
         functionName="fn-log-err"
         dict={dict}
         logTailDict={logTailDict}
+        copyButtonDict={copyButtonDict}
         locale="en"
         closeLabel="Close"
-        payload="{}"
         open={true}
         onOpenChange={() => {}}
       />,

@@ -33,8 +33,6 @@ type Props = {
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
   closeLabel: string;
-  /** Seeded payload for testing — in production the form captures it via ref */
-  payload?: string;
 };
 
 async function computePayloadHash(payloadString: string): Promise<string> {
@@ -47,10 +45,7 @@ async function computePayloadHash(payloadString: string): Promise<string> {
   return hex.slice(0, 8);
 }
 
-export function InvokeDialog({ functionName, dict, logTailDict, locale, open, onOpenChange, closeLabel, payload: payloadProp }: Props) {
-};
-
-export function InvokeDialog({ functionName, dict, copyButtonDict, locale, open, onOpenChange, closeLabel }: Props) {
+export function InvokeDialog({ functionName, dict, logTailDict, copyButtonDict, locale, open, onOpenChange, closeLabel }: Props) {
   const [state, formAction, pending] = useActionState(invokeFunctionAction, INITIAL_STATE);
   const closeRef = useRef<HTMLButtonElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
@@ -58,7 +53,7 @@ export function InvokeDialog({ functionName, dict, copyButtonDict, locale, open,
   const controlled = open !== undefined;
 
   // Track the payload string at submit time so we can hash it when action settles
-  const payloadAtSubmitRef = useRef<string>(payloadProp ?? "");
+  const payloadAtSubmitRef = useRef<string>("");
   // Track whether we've already dispatched to the store for the current success state
   const dispatchedRef = useRef(false);
   // Timestamp captured at submit time (epoch ms); initialized to mount time so it's always valid
@@ -92,28 +87,14 @@ export function InvokeDialog({ functionName, dict, copyButtonDict, locale, open,
   }, [state, functionName, addEntry]);
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    const form = e.currentTarget;
-    const payload = (form.elements.namedItem("payload") as HTMLTextAreaElement)?.value ?? "";
-    // Capture payload at submit time for hashing after action settles
-    payloadAtSubmitRef.current = payload;
-    dispatchedRef.current = false;
-
-    if (payload.trim() !== "") {
-      try {
-        JSON.parse(payload);
-        setPayloadError(null);
-      } catch {
-        e.preventDefault();
-        setPayloadError(dict.invalidPayload);
-        return;
-      }
-    } else {
-      setPayloadError(null);
     if (payloadError !== null) {
       e.preventDefault();
+      return;
     }
-
-    // Capture submit timestamp for InvokeLogTail
+    const form = e.currentTarget;
+    const payload = (form.elements.namedItem("payload") as HTMLTextAreaElement)?.value ?? "";
+    payloadAtSubmitRef.current = payload;
+    dispatchedRef.current = false;
     setSubmitTimestamp(Date.now());
   }
 

@@ -36,10 +36,10 @@ export function LambdaDetailToolbar({
   return (
     <>
       <div className="flex shrink-0 flex-wrap items-center gap-2">
-        <InvokeDialog functionName={functionName} dict={invokeDialogDict} logTailDict={invokeLogTailDict} locale={locale} closeLabel={closeLabel} />
         <InvokeDialog
           functionName={functionName}
           dict={invokeDialogDict}
+          logTailDict={invokeLogTailDict}
           copyButtonDict={copyButtonDict}
           locale={locale}
           closeLabel={closeLabel}
