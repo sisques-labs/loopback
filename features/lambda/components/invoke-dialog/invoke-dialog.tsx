@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { CopyButton } from "@/features/shared/components/copy-button/copy-button";
 import { invokeFunctionAction } from "@/features/lambda/use-cases/invoke-function/invoke-function";
 import { t } from "@/features/shared/i18n/interpolate";
 import type { ActionState } from "@/features/shared/types/action-state";
@@ -25,14 +26,14 @@ const INITIAL_STATE: ActionState<InvokeResult> = { status: "idle" };
 type Props = {
   functionName: string;
   dict: AppDict["lambda"]["invokeDialog"];
+  copyButtonDict: AppDict["shared"]["copyButton"];
   locale: Locale;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
-
-    closeLabel: string;
+  closeLabel: string;
 };
 
-export function InvokeDialog({ functionName, dict, locale, open, onOpenChange, closeLabel}: Props) {
+export function InvokeDialog({ functionName, dict, copyButtonDict, locale, open, onOpenChange, closeLabel }: Props) {
   const [state, formAction, pending] = useActionState(invokeFunctionAction, INITIAL_STATE);
   const closeRef = useRef<HTMLButtonElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
@@ -106,9 +107,21 @@ export function InvokeDialog({ functionName, dict, locale, open, onOpenChange, c
                     {state.data.statusCode}
                   </p>
                   <p className="text-xs text-muted-foreground">{dict.bodyLabel}:</p>
-                  <pre className="max-h-48 overflow-auto rounded-lg border bg-muted px-3 py-2 font-mono text-xs">
-                    {state.data.body || "—"}
-                  </pre>
+                  <div className="relative">
+                    <pre className="max-h-48 overflow-auto rounded-lg border bg-muted px-3 py-2 font-mono text-xs">
+                      {state.data.body || "—"}
+                    </pre>
+                    {state.data.body && (
+                      <div className="absolute top-1 right-1">
+                        <CopyButton
+                          value={state.data.body}
+                          size="sm"
+                          copyLabel={copyButtonDict.copyJson}
+                          copiedLabel={copyButtonDict.copyJsonCopied}
+                        />
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>

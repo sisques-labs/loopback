@@ -21,10 +21,10 @@ type Props = {
   dict: AppDict["lambda"]["rowActions"];
   invokeDialogDict: AppDict["lambda"]["invokeDialog"];
   updateCodeDialogDict: AppDict["lambda"]["updateCodeDialog"];
+  copyButtonDict: AppDict["shared"]["copyButton"];
   localePrefix: string;
   locale: Locale;
-
-    closeLabel: string;
+  closeLabel: string;
 };
 
 export function FunctionRowActions({
@@ -32,8 +32,11 @@ export function FunctionRowActions({
   dict,
   invokeDialogDict,
   updateCodeDialogDict,
+  copyButtonDict,
   localePrefix,
-  locale, closeLabel}: Props) {
+  locale,
+  closeLabel,
+}: Props) {
   const [invokeOpen, setInvokeOpen] = useState(false);
   const [updateCodeOpen, setUpdateCodeOpen] = useState(false);
 
@@ -75,10 +78,12 @@ export function FunctionRowActions({
       <InvokeDialog
         functionName={functionName}
         dict={invokeDialogDict}
+        copyButtonDict={copyButtonDict}
         locale={locale}
         open={invokeOpen}
         onOpenChange={setInvokeOpen}
-       closeLabel={closeLabel}/>
+        closeLabel={closeLabel}
+      />
       <UpdateCodeDialog
         functionName={functionName}
         dict={updateCodeDialogDict}
