@@ -12,6 +12,7 @@ type Props = {
   functionName: string;
   locale: Locale;
   invokeDialogDict: AppDict["lambda"]["invokeDialog"];
+  invokeLogTailDict?: AppDict["lambda"]["invokeLogTail"];
   updateCodeDialogDict: AppDict["lambda"]["updateCodeDialog"];
   copyButtonDict: AppDict["shared"]["copyButton"];
   replaceCodeCta: string;
@@ -23,6 +24,7 @@ export function LambdaDetailToolbar({
   functionName,
   locale,
   invokeDialogDict,
+  invokeLogTailDict,
   updateCodeDialogDict,
   copyButtonDict,
   replaceCodeCta,
@@ -37,6 +39,7 @@ export function LambdaDetailToolbar({
         <InvokeDialog
           functionName={functionName}
           dict={invokeDialogDict}
+          logTailDict={invokeLogTailDict}
           copyButtonDict={copyButtonDict}
           locale={locale}
           closeLabel={closeLabel}

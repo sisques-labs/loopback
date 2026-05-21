@@ -101,6 +101,25 @@ const dict = {
     codeStorageExceeded: "Account code storage limit exceeded.",
     invalidZip: "The uploaded file is not a valid Lambda deployment package.",
   },
+  invokeHistory: {
+    title: "Invocation history",
+    clearHistory: "Clear history",
+    empty: "No invocations recorded yet.",
+    statusLabel: "Status",
+    durationLabel: "Duration",
+    timestampLabel: "Time",
+    payloadHashLabel: "Payload",
+    errorLabel: "Function error",
+  },
+  invokeLogTail: {
+    title: "Execution Logs",
+    autoScroll: "Auto-scroll",
+    noLogs: "No logs yet.",
+    polling: "Polling logs...",
+    done: "Done.",
+    collapse: "Collapse",
+    expand: "Expand",
+  },
   errors: {
     connectFailed: "Failed to connect to Lambda",
     connectFailedDetail:
