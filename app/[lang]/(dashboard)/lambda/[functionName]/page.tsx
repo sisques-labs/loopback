@@ -5,6 +5,7 @@ import { getDictionary } from "@/features/shared/i18n/get-dictionary";
 import { DEFAULT_LOCALE, isLocale, type Locale } from "@/features/shared/i18n/locale";
 import { decodeFunctionNameParam } from "@/features/lambda/lib/route-codec";
 import { LambdaDetailToolbar } from "@/features/lambda/components/lambda-detail-toolbar/lambda-detail-toolbar";
+import { InvokeHistoryPanel } from "@/features/lambda/components/invoke-history-panel/invoke-history-panel";
 import { Badge } from "@/components/ui/badge";
 import { stateBadgeVariant, stateLabel } from "@/features/lambda/lib/state-badge";
 
@@ -103,6 +104,11 @@ export default async function LambdaFunctionDetailPage({ params }: Props) {
           </div>
         </div>
       </div>
+
+      <InvokeHistoryPanel
+        functionName={fn.functionName}
+        dict={dict.lambda.invokeHistory}
+      />
     </div>
   );
 }
