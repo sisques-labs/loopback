@@ -105,6 +105,15 @@ const dict = {
     payloadHashLabel: "Payload",
     errorLabel: "Error de la función",
   },
+  invokeLogTail: {
+    title: "Registros de ejecución",
+    autoScroll: "Desplazamiento automático",
+    noLogs: "Sin registros aún.",
+    polling: "Consultando registros...",
+    done: "Listo.",
+    collapse: "Contraer",
+    expand: "Expandir",
+  },
   sdkErrors: {
     notFound: "La función especificada no existe.",
     invalidParam: "Parámetro de función inválido.",
