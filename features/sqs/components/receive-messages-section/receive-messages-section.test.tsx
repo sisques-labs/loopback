@@ -1,5 +1,14 @@
 import { act, cleanup, render, screen } from "@testing-library/react";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import {
+  afterEach,
+  beforeAll,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  vi,
+} from "vitest";
+import type { ReceiveMessagesSection as ReceiveMessagesSectionType } from "./receive-messages-section";
 
 vi.mock("sonner", () => ({
   toast: { success: vi.fn() },
@@ -107,6 +116,12 @@ const copyButtonDict = {
   copyJsonCopied: "JSON copied",
 };
 
+let ReceiveMessagesSection: typeof ReceiveMessagesSectionType;
+
+beforeAll(async () => {
+  ({ ReceiveMessagesSection } = await import("./receive-messages-section"));
+});
+
 beforeEach(() => {
   requeueCallCount = 0;
   requeueStubs = [];
@@ -120,7 +135,6 @@ afterEach(() => {
 
 async function renderSection() {
   requeueCallCount = 0;
-  const { ReceiveMessagesSection } = await import("./receive-messages-section");
   await act(async () => {
     render(
       <ReceiveMessagesSection
