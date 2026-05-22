@@ -5,11 +5,21 @@ import type { InspectorDict } from "@/features/inspector/i18n/en";
 import type { WidenStringLiterals } from "@/features/shared/i18n/widen-literals";
 
 // ── Mocks ─────────────────────────────────────────────────────────────────────
+// vi.mock() is hoisted to the top of the file, BEFORE any const declarations.
+// To reference mock functions inside a vi.mock factory, they must be declared
+// with vi.hoisted() which runs at the same "hoisted" phase as vi.mock itself.
 
-const mockSeedEntries = vi.fn();
-const mockStartPolling = vi.fn();
-const mockStopPolling = vi.fn();
-const mockRehydrate = vi.fn().mockResolvedValue(undefined);
+const {
+  mockSeedEntries,
+  mockStartPolling,
+  mockStopPolling,
+  mockRehydrate,
+} = vi.hoisted(() => ({
+  mockSeedEntries: vi.fn(),
+  mockStartPolling: vi.fn(),
+  mockStopPolling: vi.fn(),
+  mockRehydrate: vi.fn().mockResolvedValue(undefined),
+}));
 
 vi.mock(
   "@/features/inspector/stores/use-inspector-store/use-inspector-store",
