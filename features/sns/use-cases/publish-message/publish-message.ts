@@ -7,7 +7,10 @@ import { getDictionary } from "@/features/shared/i18n/get-dictionary";
 import { DEFAULT_LOCALE, isLocale, type Locale } from "@/features/shared/i18n/locale";
 import { getSNSClient } from "@/features/sns/lib/client";
 import { toFriendlyError } from "@/features/sns/lib/errors";
+import { sanitizeJson } from "@/features/shared/utils/sanitize-json/sanitize-json";
 import type { ActionState } from "@/features/shared/types/action-state";
+
+const SNS_MAX_BYTES = 256 * 1024; // 256 KB — AWS SNS message size limit
 
 export async function publishMessageAction(
   _prev: ActionState,
@@ -22,6 +25,20 @@ export async function publishMessageAction(
 
   if (!message.trim()) {
     return { status: "error", message: dict.sns.validation.messageRequired };
+  }
+
+  // Validate JSON structure when the message looks like JSON (starts with { or [).
+  // Plain-string SNS messages (e.g. "Hello!") bypass JSON validation.
+  const trimmed = message.trim();
+  if (trimmed[0] === "{" || trimmed[0] === "[") {
+    const result = sanitizeJson(message, { maxBytes: SNS_MAX_BYTES });
+    if (!result.ok) {
+      const msg =
+        result.error === "PAYLOAD_TOO_LARGE"
+          ? dict.sns.publishDialog.tooLarge
+          : dict.sns.publishDialog.invalidJson;
+      return { status: "error", message: msg };
+    }
   }
 
   try {

@@ -7,7 +7,10 @@ import { getDictionary } from "@/features/shared/i18n/get-dictionary";
 import { DEFAULT_LOCALE, isLocale, type Locale } from "@/features/shared/i18n/locale";
 import { getDynamoDBDocumentClient } from "@/features/dynamodb/lib/client";
 import { toFriendlyError } from "@/features/dynamodb/lib/errors";
+import { sanitizeJson } from "@/features/shared/utils/sanitize-json/sanitize-json";
 import type { ActionState } from "@/features/shared/types/action-state";
+
+const DYNAMODB_MAX_BYTES = 400 * 1024; // 400 KB — DynamoDB item size limit
 
 export async function updateItemAction(
   _prev: ActionState,
@@ -25,14 +28,18 @@ export async function updateItemAction(
     return { status: "error", message: dict.editItemDialog.invalidJson };
   }
 
-  // Parse and validate itemJson
-  let parsed: unknown;
-  try {
-    parsed = JSON.parse(itemJson);
-  } catch {
-    return { status: "error", message: dict.editItemDialog.invalidJson };
+  // Parse, validate size, and scrub proto-pollution for itemJson
+  const itemSanitizeResult = sanitizeJson(itemJson, { maxBytes: DYNAMODB_MAX_BYTES });
+  if (!itemSanitizeResult.ok) {
+    const msg =
+      itemSanitizeResult.error === "PAYLOAD_TOO_LARGE"
+        ? dict.editItemDialog.tooLarge
+        : dict.editItemDialog.invalidJson;
+    return { status: "error", message: msg };
   }
+  const parsed = itemSanitizeResult.value;
 
+  // Must be a plain object (not array, not null, not primitive) — PRESERVED from original
   if (
     typeof parsed !== "object" ||
     parsed === null ||
@@ -41,21 +48,20 @@ export async function updateItemAction(
     return { status: "error", message: dict.editItemDialog.notObject };
   }
 
-  // Parse keyJson
-  let key: Record<string, unknown>;
-  try {
-    const parsedKey = JSON.parse(keyJson);
-    if (
-      typeof parsedKey !== "object" ||
-      parsedKey === null ||
-      Array.isArray(parsedKey)
-    ) {
-      throw new Error("keyJson must be a plain object");
-    }
-    key = parsedKey as Record<string, unknown>;
-  } catch {
+  // Parse, validate size, and scrub proto-pollution for keyJson
+  const keySanitizeResult = sanitizeJson(keyJson, { maxBytes: DYNAMODB_MAX_BYTES });
+  if (!keySanitizeResult.ok) {
     return { status: "error", message: dict.editItemDialog.invalidJson };
   }
+  const parsedKey = keySanitizeResult.value;
+  if (
+    typeof parsedKey !== "object" ||
+    parsedKey === null ||
+    Array.isArray(parsedKey)
+  ) {
+    return { status: "error", message: dict.editItemDialog.invalidJson };
+  }
+  const key = parsedKey as Record<string, unknown>;
 
   // Strip key attrs from the item to build non-key attrs
   const item = parsed as Record<string, unknown>;

@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useEffect, useRef } from "react";
+import { useActionState, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
@@ -30,8 +30,7 @@ type Props = {
   locale: Locale;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
-
-    closeLabel: string;
+  closeLabel: string;
 };
 
 export function PublishDialog({ topicArn, topicName, dict, locale, open, onOpenChange, closeLabel}: Props) {
@@ -39,6 +38,7 @@ export function PublishDialog({ topicArn, topicName, dict, locale, open, onOpenC
   const closeRef = useRef<HTMLButtonElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const controlled = open !== undefined;
+  const [messageError, setMessageError] = useState<string | null>(null);
 
   useEffect(() => {
     if (state.status !== "success") return;
@@ -50,6 +50,12 @@ export function PublishDialog({ topicArn, topicName, dict, locale, open, onOpenC
       closeRef.current?.click();
     }
   }, [state.status, dict.successToast, topicName, controlled, onOpenChange]);
+
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    if (messageError !== null) {
+      e.preventDefault();
+    }
+  }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -64,7 +70,7 @@ export function PublishDialog({ topicArn, topicName, dict, locale, open, onOpenC
         <DialogHeader>
           <DialogTitle>{t(dict.title, { topic: topicName })}</DialogTitle>
         </DialogHeader>
-        <form ref={formRef} action={formAction} className="flex flex-col gap-4">
+        <form ref={formRef} action={formAction} onSubmit={handleSubmit} className="flex flex-col gap-4">
           <input type="hidden" name="topicArn" value={topicArn} />
           <input type="hidden" name="locale" value={locale} />
           <div className="flex flex-col gap-1.5">
@@ -74,7 +80,13 @@ export function PublishDialog({ topicArn, topicName, dict, locale, open, onOpenC
               placeholder={dict.messagePlaceholder}
               required
               rows={4}
+              onValidityChange={(valid) =>
+                setMessageError(valid ? null : dict.invalidJson)
+              }
             />
+            {messageError !== null && (
+              <p className="text-xs text-destructive">{messageError}</p>
+            )}
             {state.status === "error" && (
               <p className="text-xs text-destructive">{state.message}</p>
             )}
@@ -98,7 +110,7 @@ export function PublishDialog({ topicArn, topicName, dict, locale, open, onOpenC
                 {dict.cancel}
               </Button>
             )}
-            <Button type="submit" disabled={pending}>
+            <Button type="submit" disabled={pending || messageError !== null}>
               {pending ? dict.submitting : dict.submit}
             </Button>
           </DialogFooter>
