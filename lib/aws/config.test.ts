@@ -350,30 +350,33 @@ describe("COOKIE_OPTIONS", () => {
     expect(COOKIE_OPTIONS).toMatchObject({ maxAge: 60 * 60 * 24 * 365 });
   });
 
-  it("sets secure: true when NODE_ENV is 'production'", () => {
+  it("sets secure: true when NODE_ENV is 'production'", async () => {
     const original = process.env.NODE_ENV;
+    vi.resetModules();
     try {
       // @ts-expect-error — overriding read-only env for test
       process.env.NODE_ENV = "production";
-      // COOKIE_OPTIONS is evaluated at module load time — we test the formula directly
-      const secure = process.env.NODE_ENV === "production";
-      expect(secure).toBe(true);
+      const { COOKIE_OPTIONS: prodOptions } = await import("./config");
+      expect(prodOptions.secure).toBe(true);
     } finally {
       // @ts-expect-error — restoring env
       process.env.NODE_ENV = original;
+      vi.resetModules();
     }
   });
 
-  it("sets secure: false when NODE_ENV is 'development'", () => {
+  it("sets secure: false when NODE_ENV is 'development'", async () => {
     const original = process.env.NODE_ENV;
+    vi.resetModules();
     try {
       // @ts-expect-error — overriding read-only env for test
       process.env.NODE_ENV = "development";
-      const secure = process.env.NODE_ENV === "production";
-      expect(secure).toBe(false);
+      const { COOKIE_OPTIONS: devOptions } = await import("./config");
+      expect(devOptions.secure).toBe(false);
     } finally {
       // @ts-expect-error — restoring env
       process.env.NODE_ENV = original;
+      vi.resetModules();
     }
   });
 
