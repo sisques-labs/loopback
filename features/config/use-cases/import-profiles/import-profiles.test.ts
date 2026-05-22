@@ -197,22 +197,18 @@ describe("importProfilesAction — cap boundary", () => {
 });
 
 describe("importProfilesAction — cookie secure flag", () => {
-  it("sets secure: true on cookie when NODE_ENV is production", async () => {
+  it("uses COOKIE_OPTIONS (includes secure flag) when setting the cookie", async () => {
     mockCookiesGet.mockReturnValue(undefined);
-    const original = process.env.NODE_ENV;
 
-    try {
-      // @ts-expect-error — overriding read-only env for test
-      process.env.NODE_ENV = "production";
-      const newProfiles: Profile[] = [
-        { id: "n1", name: "dev", endpoint: "http://dev:4566", region: "eu-west-1" },
-      ];
-      await importProfilesAction(JSON.stringify(newProfiles));
-      const cookieOptions = mockCookiesSet.mock.calls[0]?.[2];
-      expect(cookieOptions).toMatchObject({ secure: true });
-    } finally {
-      // @ts-expect-error — restoring env
-      process.env.NODE_ENV = original;
-    }
+    const newProfiles: Profile[] = [
+      { id: "n1", name: "dev", endpoint: "http://dev:4566", region: "eu-west-1" },
+    ];
+    await importProfilesAction(JSON.stringify(newProfiles));
+
+    // COOKIE_OPTIONS.secure is false in test env (NODE_ENV=test), true in production.
+    // This assertion verifies the action uses the centralized COOKIE_OPTIONS, not an
+    // inline literal. The secure flag's value itself is validated in lib/aws/config.test.ts.
+    const cookieOptions = mockCookiesSet.mock.calls[0]?.[2];
+    expect(cookieOptions).toMatchObject({ secure: process.env.NODE_ENV === "production" });
   });
 });

@@ -3,7 +3,7 @@ import "server-only";
 
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
-import { PROFILES_COOKIE_NAME } from "@/lib/aws/config";
+import { PROFILES_COOKIE_NAME, COOKIE_OPTIONS } from "@/lib/aws/config";
 import {
   parseProfilesCookie,
   serializeProfiles,
@@ -14,13 +14,6 @@ import type { Profile } from "@/lib/aws/profiles";
 import type { ActionState } from "@/features/shared/types/action-state";
 
 type ImportResult = { imported: number; skipped: number };
-
-const COOKIE_OPTIONS = {
-  httpOnly: true,
-  sameSite: "lax" as const,
-  path: "/",
-  maxAge: 60 * 60 * 24 * 365,
-};
 
 export async function importProfilesAction(
   json: string,

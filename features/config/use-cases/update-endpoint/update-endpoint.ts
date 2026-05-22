@@ -3,7 +3,7 @@ import "server-only";
 
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
-import { ENDPOINT_COOKIE_NAME } from "@/lib/aws/config";
+import { ENDPOINT_COOKIE_NAME, COOKIE_OPTIONS } from "@/lib/aws/config";
 import type { ActionState } from "@/features/shared/types/action-state";
 
 export async function updateEndpointAction(
@@ -28,12 +28,7 @@ export async function updateEndpointAction(
     return { status: "error", message: "Must be a valid absolute URL" };
   }
 
-  store.set(ENDPOINT_COOKIE_NAME, parsed.toString(), {
-    httpOnly: true,
-    sameSite: "lax",
-    path: "/",
-    maxAge: 60 * 60 * 24 * 365,
-  });
+  store.set(ENDPOINT_COOKIE_NAME, parsed.toString(), COOKIE_OPTIONS);
   revalidatePath("/", "layout");
   return { status: "success", data: undefined };
 }

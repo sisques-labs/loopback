@@ -125,23 +125,19 @@ describe("activateProfileAction — error cases", () => {
 });
 
 describe("activateProfileAction — cookie secure flag", () => {
-  it("sets secure: true on cookie when NODE_ENV is production", async () => {
+  it("uses COOKIE_OPTIONS (includes secure flag) when setting the cookie", async () => {
     const store = makeCookieStore([profileDev, profileStaging]);
     vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
-    const original = process.env.NODE_ENV;
 
-    try {
-      // @ts-expect-error — overriding read-only env for test
-      process.env.NODE_ENV = "production";
-      await activateProfileAction("dev-id");
-      expect(store.set).toHaveBeenCalledWith(
-        expect.any(String),
-        expect.any(String),
-        expect.objectContaining({ secure: true }),
-      );
-    } finally {
-      // @ts-expect-error — restoring env
-      process.env.NODE_ENV = original;
-    }
+    await activateProfileAction("dev-id");
+
+    // COOKIE_OPTIONS.secure is false in test env (NODE_ENV=test), true in production.
+    // This assertion verifies the action uses the centralized COOKIE_OPTIONS, not an
+    // inline literal. The secure flag's value itself is validated in lib/aws/config.test.ts.
+    expect(store.set).toHaveBeenCalledWith(
+      expect.any(String),
+      expect.any(String),
+      expect.objectContaining({ secure: process.env.NODE_ENV === "production" }),
+    );
   });
 });
