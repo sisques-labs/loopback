@@ -1,0 +1,81 @@
+import { cleanup, render, screen } from "@testing-library/react";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import type { RequestEntry } from "@/features/inspector/lib/types/types";
+
+// ── Mocks ─────────────────────────────────────────────────────────────────────
+
+vi.mock(
+  "@/features/inspector/components/request-detail-dialog/request-detail-dialog",
+  () => ({
+    RequestDetailDialog: vi.fn(
+      ({ open }: { open: boolean }) =>
+        open ? <div data-testid="detail-dialog" /> : null,
+    ),
+  }),
+);
+
+import { RequestCard } from "./request-card";
+
+// ── Fixtures ──────────────────────────────────────────────────────────────────
+
+function makeEntry(overrides: Partial<RequestEntry> = {}): RequestEntry {
+  return {
+    id: "entry-1",
+    timestamp: 1700000000000,
+    service: "SQS",
+    operation: "SendMessageCommand",
+    input: { QueueUrl: "https://sqs.us-east-1.localhost.localstack.cloud/000000000000/test" },
+    output: { MessageId: "msg-1" },
+    durationMs: 42,
+    status: "success",
+    attempts: 1,
+    ...overrides,
+  };
+}
+
+afterEach(() => {
+  cleanup();
+  vi.clearAllMocks();
+});
+
+// ── Tests ─────────────────────────────────────────────────────────────────────
+
+describe("RequestCard", () => {
+  it("renders the service name as a badge", () => {
+    render(<RequestCard entry={makeEntry()} />);
+    expect(screen.getByText("SQS")).toBeInTheDocument();
+  });
+
+  it("renders the operation name", () => {
+    render(<RequestCard entry={makeEntry()} />);
+    expect(screen.getByText("SendMessageCommand")).toBeInTheDocument();
+  });
+
+  it("renders the duration pill with ms value", () => {
+    render(<RequestCard entry={makeEntry({ durationMs: 42 })} />);
+    expect(screen.getByText("42ms")).toBeInTheDocument();
+  });
+
+  it("renders a green status indicator for success", () => {
+    render(<RequestCard entry={makeEntry({ status: "success" })} />);
+    const indicator = screen.getByTestId("status-indicator");
+    expect(indicator).toBeInTheDocument();
+    expect(indicator.getAttribute("data-status")).toBe("success");
+  });
+
+  it("renders a red status indicator for error", () => {
+    render(<RequestCard entry={makeEntry({ status: "error", error: { name: "E", message: "fail" } })} />);
+    const indicator = screen.getByTestId("status-indicator");
+    expect(indicator.getAttribute("data-status")).toBe("error");
+  });
+
+  it("does NOT render retry badge when attempts === 1", () => {
+    render(<RequestCard entry={makeEntry({ attempts: 1 })} />);
+    expect(screen.queryByTestId("retry-badge")).not.toBeInTheDocument();
+  });
+
+  it("renders with a different service (DynamoDB)", () => {
+    render(<RequestCard entry={makeEntry({ service: "DynamoDB" })} />);
+    expect(screen.getByText("DynamoDB")).toBeInTheDocument();
+  });
+});
