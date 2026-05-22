@@ -77,6 +77,7 @@ const dict = {
     successToast: "Item saved.",
     invalidJson: "Invalid JSON — must be a plain object",
     notObject: "Value must be a JSON object, not an array or primitive.",
+    tooLarge: "Payload exceeds the 400 KB DynamoDB item limit.",
   },
   deleteItemDialog: {
     title: "Delete item",
@@ -110,6 +111,7 @@ const dict = {
     overwriteWarning: "This will overwrite all non-key attributes.",
     invalidJson: "Invalid JSON — must be a plain object",
     notObject: "Value must be a JSON object, not an array or primitive.",
+    tooLarge: "Payload exceeds the 400 KB DynamoDB item limit.",
   },
   query: {
     modeScan: "Scan",
