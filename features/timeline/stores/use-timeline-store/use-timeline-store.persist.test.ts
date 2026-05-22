@@ -103,9 +103,11 @@ describe("useTimelineStore – persistence", () => {
     expect("lastUpdatedAt" in partial).toBe(false);
   });
 
-  it("skipHydration: persist.hasHydrated() is false until rehydrate() is called", () => {
-    // With skipHydration: true, the store does not auto-hydrate on creation
-    // hasHydrated() should reflect whether rehydrate() has been called
+  it("skipHydration: persist option is true", () => {
+    expect(useTimelineStore.persist.getOptions().skipHydration).toBe(true);
+  });
+
+  it("skipHydration: persist.hasHydrated() is a function", () => {
     expect(typeof useTimelineStore.persist.hasHydrated).toBe("function");
   });
 

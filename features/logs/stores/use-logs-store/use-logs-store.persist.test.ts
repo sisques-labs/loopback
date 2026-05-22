@@ -44,6 +44,10 @@ describe("useLogsStore – persistence", () => {
     expect(useLogsStore.persist.getOptions().version).toBe(1);
   });
 
+  it("skipHydration: persist option is true", () => {
+    expect(useLogsStore.persist.getOptions().skipHydration).toBe(true);
+  });
+
   // ── partialize whitelist ──────────────────────────────────────────────────
 
   it("partialize: only filters is persisted", () => {

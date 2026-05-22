@@ -7,7 +7,7 @@
  *  - partialize whitelist: only entries is written to storage
  *  - skipHydration: persist middleware is wired with skipHydration: true
  */
-import { describe, beforeEach, it, expect } from "vitest";
+import { describe, beforeEach, afterEach, it, expect, vi } from "vitest";
 import {
   useInvokeHistoryStore,
   selectEntriesForFunction,
@@ -34,6 +34,10 @@ describe("useInvokeHistoryStore – persistence", () => {
     useInvokeHistoryStore.setState({ entries: [] });
   });
 
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   // ── persist middleware wired ────────────────────────────────────────────────
 
   it("persist.rehydrate() is a function (persist middleware wired)", () => {
@@ -43,6 +47,10 @@ describe("useInvokeHistoryStore – persistence", () => {
 
   it("persist storage key is 'aws-local-ui/invoke-history'", () => {
     expect(useInvokeHistoryStore.persist.getOptions().name).toBe("aws-local-ui/invoke-history");
+  });
+
+  it("skipHydration: persist option is true", () => {
+    expect(useInvokeHistoryStore.persist.getOptions().skipHydration).toBe(true);
   });
 
   it("version is 1", () => {
