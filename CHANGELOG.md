@@ -1,12 +1,52 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+## [0.12.0-alpha.0] - 2026-05-22
+
+### Bug Fixes
+- **persistence:** Use StateStorage fallback and stabilize SQS receive test (df2239b)
+- **sns:** Wire onValidityChange and messageError state in publish-dialog to disable submit on invalid JSON (a13c72c)
+
+### Features
+- **timeline:** Add persist middleware to useTimelineStore (29d22dd)
+- **lambda:** Add persist middleware and total LRU cap to useInvokeHistoryStore (830196a)
+- **logs:** Add persist middleware to useLogsStore (322d207)
+- **shared:** Create useHydration hook with memoized hydrationPromise (0af0a2e)
+- **config:** Centralize COOKIE_OPTIONS in lib/aws/config.ts (fd7949a)
+- **shared:** Implement sanitizeJson utility with discriminated result and proto scrubbing (648fe80)
+- **lambda/sns/dynamodb:** Add i18n keys for JSON payload size and validation errors (c59eccf)
+- **sns:** Wire sanitizeJson (256 KB) in publishMessageAction (4b50077)
+- **lambda:** Replace JSON.parse with sanitizeJson (6 MB) in invokeFunctionAction (337495d)
+- **dynamodb:** Replace JSON.parse with sanitizeJson (400 KB) in putItemAction (d247379)
+- **dynamodb:** Replace both JSON.parse calls with sanitizeJson (400 KB) in updateItemAction (c896bb1)
+
+### Refactor
+- **config:** Replace inline cookie options with centralized COOKIE_OPTIONS (aeca56a)
+
+### Testing
+- **timeline:** Add persist round-trip tests for useTimelineStore (202cff8)
+- **lambda:** Add persist round-trip and LRU tests for useInvokeHistoryStore (05934c9)
+- **logs:** Add persist round-trip tests for useLogsStore (523e745)
+- **shared:** Add render-hook tests for useHydration false→true flip (dba9084)
+- **persistence:** Add skipHydration option assertions and afterEach cleanup (6614824)
+- **config:** Add failing tests for COOKIE_OPTIONS secure flag (f53d333)
+- **config:** Add failing secure-flag assertions for all 7 cookie server actions (2027af0)
+- **config:** Use vi.resetModules and dynamic import to assert secure:true in production (2182eb3)
+- **shared:** Add failing tests for sanitizeJson utility (8e618d8)
+- **sns:** Add failing tests for publishMessageAction JSON validation and size limit (55df946)
+- **lambda:** Add failing tests for invokeFunctionAction JSON validation and 6 MB size limit (164b707)
+- **dynamodb:** Add failing tests for putItemAction size limit and proto-pollution (38a6aaa)
+- **dynamodb:** Add failing tests for updateItemAction size limit and proto-pollution on both JSON paths (92b24bf)
+- **sns:** Add failing test for publish-dialog submit disabled on invalid JSON (af83a92)
 ## [0.11.0-alpha.0] - 2026-05-21
 
 ### Bug Fixes
 - **lambda:** Use ISO-8601 string for InvokeHistoryEntry timestamp (bcd0fdc)
 - **lambda:** Use useState initialized at mount for submitTimestamp, remove setState-in-effect (4381e71)
 - **lambda:** Resolve merge conflicts in invoke-dialog, toolbar and i18n parity test (afdd379)
+
+### Chore
+- Release v0.11.0-alpha.0 (127799f)
 
 ### Features
 - **lambda:** Add InvokeHistoryEntry type and i18n keys (06b892e)
