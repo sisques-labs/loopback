@@ -195,3 +195,24 @@ describe("importProfilesAction — cap boundary", () => {
     expect(data.skipped).toBe(1);
   });
 });
+
+describe("importProfilesAction — cookie secure flag", () => {
+  it("sets secure: true on cookie when NODE_ENV is production", async () => {
+    mockCookiesGet.mockReturnValue(undefined);
+    const original = process.env.NODE_ENV;
+
+    try {
+      // @ts-expect-error — overriding read-only env for test
+      process.env.NODE_ENV = "production";
+      const newProfiles: Profile[] = [
+        { id: "n1", name: "dev", endpoint: "http://dev:4566", region: "eu-west-1" },
+      ];
+      await importProfilesAction(JSON.stringify(newProfiles));
+      const cookieOptions = mockCookiesSet.mock.calls[0]?.[2];
+      expect(cookieOptions).toMatchObject({ secure: true });
+    } finally {
+      // @ts-expect-error — restoring env
+      process.env.NODE_ENV = original;
+    }
+  });
+});

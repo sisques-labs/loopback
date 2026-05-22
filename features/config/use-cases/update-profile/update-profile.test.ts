@@ -230,3 +230,30 @@ describe("updateProfileAction — validation errors", () => {
     expect(revalidatePath).not.toHaveBeenCalled();
   });
 });
+
+describe("updateProfileAction — cookie secure flag", () => {
+  it("sets secure: true on cookie when NODE_ENV is production", async () => {
+    const store = makeCookieStore([profileDev]);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
+    const original = process.env.NODE_ENV;
+
+    try {
+      // @ts-expect-error — overriding read-only env for test
+      process.env.NODE_ENV = "production";
+      await updateProfileAction(idle, {
+        id: "dev-id",
+        name: "dev-updated",
+        endpoint: "http://localhost:9000",
+        region: "us-west-2",
+      });
+      expect(store.set).toHaveBeenCalledWith(
+        expect.any(String),
+        expect.any(String),
+        expect.objectContaining({ secure: true }),
+      );
+    } finally {
+      // @ts-expect-error — restoring env
+      process.env.NODE_ENV = original;
+    }
+  });
+});
