@@ -2,6 +2,7 @@ import "server-only";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
 import { createAwsConfig } from "@/lib/aws/config";
+import { withInspectorMiddleware } from "@/lib/aws/inspector-middleware";
 
 /**
  * Returns a fresh DynamoDBClient on every call.
@@ -15,7 +16,7 @@ import { createAwsConfig } from "@/lib/aws/config";
  */
 export async function getDynamoDBClient(): Promise<DynamoDBClient> {
   const config = await createAwsConfig();
-  return new DynamoDBClient(config);
+  return withInspectorMiddleware(new DynamoDBClient(config), "DynamoDB");
 }
 
 /**
