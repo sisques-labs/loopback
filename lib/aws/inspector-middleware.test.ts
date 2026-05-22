@@ -167,6 +167,74 @@ describe("withInspectorMiddleware — success path", () => {
     expect(recorded.operation).toBe("UnknownCommand");
   });
 
+  it("durationMs is >= 0 on success", async () => {
+    const client = makeClient();
+    withInspectorMiddleware(client, "SQS");
+
+    const [middleware] = client.middlewareStack.add.mock.calls[0] as [
+      (next: unknown, ctx: unknown) => (args: unknown) => Promise<unknown>,
+      unknown,
+    ];
+
+    const next = vi.fn().mockResolvedValue({
+      output: { $metadata: { attempts: 1 } },
+    });
+    const ctx = { commandName: "SendMessageCommand" };
+    const args = { input: {}, request: {} };
+
+    await middleware(next, ctx)(args);
+
+    const recorded = mockPushEntry.mock.calls[0][0];
+    expect(recorded.durationMs).toBeGreaterThanOrEqual(0);
+  });
+
+  it("id is a UUID (v4 format) on success", async () => {
+    const client = makeClient();
+    withInspectorMiddleware(client, "SQS");
+
+    const [middleware] = client.middlewareStack.add.mock.calls[0] as [
+      (next: unknown, ctx: unknown) => (args: unknown) => Promise<unknown>,
+      unknown,
+    ];
+
+    const next = vi.fn().mockResolvedValue({
+      output: { $metadata: { attempts: 1 } },
+    });
+    const ctx = { commandName: "SendMessageCommand" };
+    const args = { input: {}, request: {} };
+
+    await middleware(next, ctx)(args);
+
+    const recorded = mockPushEntry.mock.calls[0][0];
+    expect(recorded.id).toMatch(
+      /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i,
+    );
+  });
+
+  it("timestamp is an epoch ms number on success", async () => {
+    const before = Date.now();
+    const client = makeClient();
+    withInspectorMiddleware(client, "SQS");
+
+    const [middleware] = client.middlewareStack.add.mock.calls[0] as [
+      (next: unknown, ctx: unknown) => (args: unknown) => Promise<unknown>,
+      unknown,
+    ];
+
+    const next = vi.fn().mockResolvedValue({
+      output: { $metadata: { attempts: 1 } },
+    });
+    const ctx = { commandName: "SendMessageCommand" };
+    const args = { input: {}, request: {} };
+
+    await middleware(next, ctx)(args);
+    const after = Date.now();
+
+    const recorded = mockPushEntry.mock.calls[0][0];
+    expect(recorded.timestamp).toBeGreaterThanOrEqual(before);
+    expect(recorded.timestamp).toBeLessThanOrEqual(after);
+  });
+
   it("returns the result from next (transparent)", async () => {
     const client = makeClient();
     withInspectorMiddleware(client, "SQS");
