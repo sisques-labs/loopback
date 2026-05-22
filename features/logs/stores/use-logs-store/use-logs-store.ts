@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
 import type { LogEntry, LogFilters } from "@/features/logs/lib/types/types";
 import { getLogEventsAction } from "@/features/logs/use-cases/get-log-events";
 
@@ -81,54 +82,73 @@ async function poll(): Promise<void> {
   }
 }
 
-export const useLogsStore = create<LogStoreState>((set, get) => ({
-  entries: [],
-  isPolling: false,
-  autoScroll: true,
-  status: "idle",
-  lastUpdatedAt: null,
-  filters: { service: "", level: "all", text: "" },
+export const useLogsStore = create<LogStoreState>()(
+  persist(
+    (set, get) => ({
+      entries: [],
+      isPolling: false,
+      autoScroll: true,
+      status: "idle",
+      lastUpdatedAt: null,
+      filters: { service: "", level: "all", text: "" },
 
-  startPolling() {
-    if (get().isPolling) return;
+      startPolling() {
+        if (get().isPolling) return;
 
-    set({ isPolling: true, status: "polling" });
+        set({ isPolling: true, status: "polling" });
 
-    // Immediate first poll
-    void poll();
+        // Immediate first poll
+        void poll();
 
-    intervalRef = setInterval(() => {
-      void poll();
-    }, POLL_INTERVAL_MS);
-  },
+        intervalRef = setInterval(() => {
+          void poll();
+        }, POLL_INTERVAL_MS);
+      },
 
-  stopPolling() {
-    if (intervalRef !== null) {
-      clearInterval(intervalRef);
-      intervalRef = null;
-    }
-    cursor = undefined;
-    lastPollTime = 0;
-    set({ isPolling: false, status: "idle" });
-  },
+      stopPolling() {
+        if (intervalRef !== null) {
+          clearInterval(intervalRef);
+          intervalRef = null;
+        }
+        cursor = undefined;
+        lastPollTime = 0;
+        set({ isPolling: false, status: "idle" });
+      },
 
-  setFilter(key, value) {
-    set((s) => ({
-      filters: { ...s.filters, [key]: value ?? "" },
-    }));
-  },
+      setFilter(key, value) {
+        set((s) => ({
+          filters: { ...s.filters, [key]: value ?? "" },
+        }));
+      },
 
-  toggleAutoScroll() {
-    set((s) => ({ autoScroll: !s.autoScroll }));
-  },
+      toggleAutoScroll() {
+        set((s) => ({ autoScroll: !s.autoScroll }));
+      },
 
-  setAutoScroll(value: boolean) {
-    set({ autoScroll: value });
-  },
+      setAutoScroll(value: boolean) {
+        set({ autoScroll: value });
+      },
 
-  clearBuffer() {
-    seenIds.clear();
-    cursor = undefined;
-    set({ entries: [] });
-  },
-}));
+      clearBuffer() {
+        seenIds.clear();
+        cursor = undefined;
+        set({ entries: [] });
+      },
+    }),
+    {
+      name: "aws-local-ui/logs-filters",
+      storage: createJSONStorage(() =>
+        typeof localStorage !== "undefined" && localStorage !== null
+          ? localStorage
+          : {
+              getItem: () => null,
+              setItem: () => {},
+              removeItem: () => {},
+            } as Storage,
+      ),
+      partialize: (s) => ({ filters: s.filters }),
+      skipHydration: true,
+      version: 1,
+    },
+  ),
+);
