@@ -69,6 +69,7 @@ const dict = {
     functionErrorTitle: "Error de la función",
     functionErrorDetail: "La función devolvió un error: {functionError}",
     invalidPayload: "El payload debe ser JSON válido.",
+    payloadTooLarge: "El payload supera el límite de 6 MB.",
   },
   updateCodeDialog: {
     title: "Actualizar código de la función",

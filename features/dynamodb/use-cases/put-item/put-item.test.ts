@@ -122,3 +122,61 @@ describe("putItemAction — JSON validation", () => {
     expect(result.status).toBe("error");
   });
 });
+
+describe("putItemAction — size validation (400 KB limit)", () => {
+  it("returns error when itemJson exceeds 400 KB", async () => {
+    const bigItem = '{"pk":"user#1","data":"' + "x".repeat(410 * 1024) + '"}';
+
+    const result = await putItemAction(
+      idle,
+      buildFormData({ tableName: "users", itemJson: bigItem, locale: "en" }),
+    );
+
+    expect(result.status).toBe("error");
+    if (result.status === "error") {
+      expect(result.message).toBeTruthy();
+    }
+  });
+
+  it("accepts a valid item within 400 KB", async () => {
+    const client = makeDocClient(async (cmd) => {
+      if (cmd instanceof PutCommand) return {};
+      throw new Error("unexpected command");
+    });
+    vi.mocked(getDynamoDBDocumentClient).mockResolvedValue(client);
+
+    const result = await putItemAction(
+      idle,
+      buildFormData({
+        tableName: "users",
+        itemJson: '{"pk":"user#1","name":"Alice"}',
+        locale: "en",
+      }),
+    );
+
+    expect(result.status).toBe("success");
+  });
+});
+
+describe("putItemAction — proto-pollution", () => {
+  it("sanitizes __proto__ and still inserts the item", async () => {
+    const client = makeDocClient(async (cmd) => {
+      if (cmd instanceof PutCommand) return {};
+      throw new Error("unexpected command");
+    });
+    vi.mocked(getDynamoDBDocumentClient).mockResolvedValue(client);
+
+    const result = await putItemAction(
+      idle,
+      buildFormData({
+        tableName: "users",
+        itemJson: '{"pk":"user#1","__proto__":{"polluted":true},"name":"Alice"}',
+        locale: "en",
+      }),
+    );
+
+    // Should succeed — proto is scrubbed, not rejected
+    expect(result.status).toBe("success");
+    expect((Object.prototype as Record<string, unknown>)["polluted"]).toBeUndefined();
+  });
+});

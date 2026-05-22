@@ -84,6 +84,7 @@ const dict = {
     successToast: "Ítem guardado.",
     invalidJson: "JSON inválido — debe ser un objeto plano",
     notObject: "El valor debe ser un objeto JSON, no un array ni un primitivo.",
+    tooLarge: "El payload supera el límite de 400 KB de DynamoDB.",
   },
   deleteItemDialog: {
     title: "Eliminar ítem",
@@ -117,6 +118,7 @@ const dict = {
     overwriteWarning: "Esto sobreescribirá todos los atributos no clave.",
     invalidJson: "JSON inválido — debe ser un objeto plano",
     notObject: "El valor debe ser un objeto JSON, no un array ni un primitivo.",
+    tooLarge: "El payload supera el límite de 400 KB de DynamoDB.",
   },
   query: {
     modeScan: "Escaneo",

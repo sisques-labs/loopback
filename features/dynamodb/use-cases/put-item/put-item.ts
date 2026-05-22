@@ -7,7 +7,10 @@ import { getDictionary } from "@/features/shared/i18n/get-dictionary";
 import { DEFAULT_LOCALE, isLocale, type Locale } from "@/features/shared/i18n/locale";
 import { getDynamoDBDocumentClient } from "@/features/dynamodb/lib/client";
 import { toFriendlyError } from "@/features/dynamodb/lib/errors";
+import { sanitizeJson } from "@/features/shared/utils/sanitize-json/sanitize-json";
 import type { ActionState } from "@/features/shared/types/action-state";
+
+const DYNAMODB_MAX_BYTES = 400 * 1024; // 400 KB — DynamoDB item size limit
 
 export async function putItemAction(
   _prev: ActionState,
@@ -24,15 +27,18 @@ export async function putItemAction(
     return { status: "error", message: dict.putItemDialog.invalidJson };
   }
 
-  // Parse and validate JSON
-  let parsed: unknown;
-  try {
-    parsed = JSON.parse(itemJson);
-  } catch {
-    return { status: "error", message: dict.putItemDialog.invalidJson };
+  // Parse, validate size, and scrub proto-pollution
+  const sanitizeResult = sanitizeJson(itemJson, { maxBytes: DYNAMODB_MAX_BYTES });
+  if (!sanitizeResult.ok) {
+    const msg =
+      sanitizeResult.error === "PAYLOAD_TOO_LARGE"
+        ? dict.putItemDialog.tooLarge
+        : dict.putItemDialog.invalidJson;
+    return { status: "error", message: msg };
   }
+  const parsed = sanitizeResult.value;
 
-  // Must be a plain object (not array, not null, not primitive)
+  // Must be a plain object (not array, not null, not primitive) — PRESERVED from original
   if (
     typeof parsed !== "object" ||
     parsed === null ||

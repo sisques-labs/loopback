@@ -7,10 +7,13 @@ import { toFriendlyError } from "@/features/lambda/lib/errors";
 import { DEFAULT_LOCALE, isLocale, type Locale } from "@/features/shared/i18n/locale";
 import enLambda from "@/features/lambda/i18n/en";
 import esLambda from "@/features/lambda/i18n/es";
+import { sanitizeJson } from "@/features/shared/utils/sanitize-json/sanitize-json";
 import type { ActionState } from "@/features/shared/types/action-state";
 import type { InvokeResult } from "@/features/lambda/types/lambda";
 
 const lambdaDicts = { en: enLambda, es: esLambda } as const;
+
+const LAMBDA_MAX_BYTES = 6 * 1024 * 1024; // 6 MB — AWS Lambda sync invoke payload limit
 
 export async function invokeFunctionAction(
   _prev: ActionState<InvokeResult>,
@@ -23,13 +26,16 @@ export async function invokeFunctionAction(
   const dict = lambdaDicts[locale];
 
   // Empty payload → undefined (do not pass to SDK)
-  // Non-empty → JSON.parse first; if invalid → return error, do NOT call SDK
+  // Non-empty → sanitize (validates JSON, enforces 6 MB limit, scrubs proto-pollution)
   let payload: Uint8Array | undefined = undefined;
   if (payloadString !== "") {
-    try {
-      JSON.parse(payloadString);
-    } catch {
-      return { status: "error", message: dict.invokeDialog.invalidPayload };
+    const result = sanitizeJson(payloadString, { maxBytes: LAMBDA_MAX_BYTES });
+    if (!result.ok) {
+      const msg =
+        result.error === "PAYLOAD_TOO_LARGE"
+          ? dict.invokeDialog.payloadTooLarge
+          : dict.invokeDialog.invalidPayload;
+      return { status: "error", message: msg };
     }
     payload = new TextEncoder().encode(payloadString);
   }

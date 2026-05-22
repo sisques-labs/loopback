@@ -93,7 +93,7 @@ describe("useInvokeHistoryStore", () => {
     expect(forFn[0].functionError).toBe("Runtime.ExitError");
   });
 
-  it("does not use persist middleware — store resets between setState calls", () => {
+  it("store resets between setState calls (state is not locked)", () => {
     useInvokeHistoryStore.getState().addEntry(makeEntry("fn-a"));
     useInvokeHistoryStore.setState({ entries: [] });
     expect(useInvokeHistoryStore.getState().entries).toHaveLength(0);

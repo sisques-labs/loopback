@@ -80,6 +80,8 @@ const dict = {
     submit: "Publicar",
     submitting: "Publicando…",
     successToast: "Mensaje publicado en {topic}.",
+    invalidJson: "El mensaje debe ser JSON válido.",
+    tooLarge: "El mensaje supera el límite de 256 KB.",
   },
   validation: {
     topicNameRequired: "El nombre del topic es obligatorio.",

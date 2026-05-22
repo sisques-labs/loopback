@@ -28,6 +28,8 @@ const dict = {
   submit: "Publish",
   submitting: "Publishing…",
   successToast: "Message published to {topic}.",
+  invalidJson: "Message must be valid JSON.",
+  tooLarge: "Message exceeds 256 KB limit.",
 };
 
 describe("PublishDialog", () => {
@@ -52,5 +54,71 @@ describe("PublishDialog", () => {
       "data-slot",
       "textarea",
     );
+  });
+
+  it("submit button is disabled when invalid JSON is typed in the message field", () => {
+    render(
+      <PublishDialog
+        topicArn="arn:aws:sns:us-east-1:000000000000:my-topic"
+        topicName="my-topic"
+        dict={dict}
+        locale="en"
+        closeLabel="Close"
+      />,
+    );
+
+    // Open the dialog
+    fireEvent.click(screen.getByRole("button", { name: /Publish/i }));
+
+    const textarea = screen.getByLabelText("Message");
+    // Type invalid JSON — starts with { so JsonTextarea will flag it
+    fireEvent.change(textarea, { target: { value: "{broken json" } });
+
+    const submitButton = screen.getByRole("button", { name: /^Publish$/i });
+    expect(submitButton).toBeDisabled();
+  });
+
+  it("submit button is enabled when valid JSON is typed in the message field", () => {
+    render(
+      <PublishDialog
+        topicArn="arn:aws:sns:us-east-1:000000000000:my-topic"
+        topicName="my-topic"
+        dict={dict}
+        locale="en"
+        closeLabel="Close"
+      />,
+    );
+
+    // Open the dialog
+    fireEvent.click(screen.getByRole("button", { name: /Publish/i }));
+
+    const textarea = screen.getByLabelText("Message");
+    // Type valid JSON
+    fireEvent.change(textarea, { target: { value: '{"event":"test"}' } });
+
+    const submitButton = screen.getByRole("button", { name: /^Publish$/i });
+    expect(submitButton).not.toBeDisabled();
+  });
+
+  it("submit button is enabled for plain string messages (not JSON)", () => {
+    render(
+      <PublishDialog
+        topicArn="arn:aws:sns:us-east-1:000000000000:my-topic"
+        topicName="my-topic"
+        dict={dict}
+        locale="en"
+        closeLabel="Close"
+      />,
+    );
+
+    // Open the dialog
+    fireEvent.click(screen.getByRole("button", { name: /Publish/i }));
+
+    const textarea = screen.getByLabelText("Message");
+    // Type a plain string message (not JSON)
+    fireEvent.change(textarea, { target: { value: "Hello, world!" } });
+
+    const submitButton = screen.getByRole("button", { name: /^Publish$/i });
+    expect(submitButton).not.toBeDisabled();
   });
 });

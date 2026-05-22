@@ -19,6 +19,7 @@ import {
   REGION_COOKIE_NAME,
   PROFILES_COOKIE_NAME,
   ACTIVE_PROFILE_COOKIE_NAME,
+  COOKIE_OPTIONS,
 } from "./config";
 
 type CookieStore = Awaited<ReturnType<typeof cookies>>;
@@ -325,5 +326,62 @@ describe("maskSecret", () => {
   it("returns full mask for secret with exactly 4 characters", () => {
     const result = maskSecret("ABCD");
     expect(result).toBe("••••••••");
+  });
+});
+
+describe("COOKIE_OPTIONS", () => {
+  it("is exported from config", () => {
+    expect(COOKIE_OPTIONS).toBeDefined();
+  });
+
+  it("includes httpOnly: true", () => {
+    expect(COOKIE_OPTIONS).toMatchObject({ httpOnly: true });
+  });
+
+  it("includes sameSite: 'lax'", () => {
+    expect(COOKIE_OPTIONS).toMatchObject({ sameSite: "lax" });
+  });
+
+  it("includes path: '/'", () => {
+    expect(COOKIE_OPTIONS).toMatchObject({ path: "/" });
+  });
+
+  it("includes maxAge of 1 year (31536000 seconds)", () => {
+    expect(COOKIE_OPTIONS).toMatchObject({ maxAge: 60 * 60 * 24 * 365 });
+  });
+
+  it("sets secure: true when NODE_ENV is 'production'", async () => {
+    const original = process.env.NODE_ENV;
+    vi.resetModules();
+    try {
+      // @ts-expect-error — overriding read-only env for test
+      process.env.NODE_ENV = "production";
+      const { COOKIE_OPTIONS: prodOptions } = await import("./config");
+      expect(prodOptions.secure).toBe(true);
+    } finally {
+      // @ts-expect-error — restoring env
+      process.env.NODE_ENV = original;
+      vi.resetModules();
+    }
+  });
+
+  it("sets secure: false when NODE_ENV is 'development'", async () => {
+    const original = process.env.NODE_ENV;
+    vi.resetModules();
+    try {
+      // @ts-expect-error — overriding read-only env for test
+      process.env.NODE_ENV = "development";
+      const { COOKIE_OPTIONS: devOptions } = await import("./config");
+      expect(devOptions.secure).toBe(false);
+    } finally {
+      // @ts-expect-error — restoring env
+      process.env.NODE_ENV = original;
+      vi.resetModules();
+    }
+  });
+
+  it("has secure: false in test environment (NODE_ENV=test)", () => {
+    // In vitest, NODE_ENV defaults to 'test', which is not 'production'
+    expect(COOKIE_OPTIONS.secure).toBe(false);
   });
 });

@@ -1,4 +1,6 @@
 import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
+import { getPersistStorage } from "@/features/shared/stores/no-op-storage";
 import type { TimelineEvent, TimelineTimeRange, TimelineStoreStatus } from "../../lib/types/types";
 import { getTimelineEventsAction } from "../../use-cases/get-timeline-events/get-timeline-events";
 
@@ -29,7 +31,9 @@ export interface TimelineStoreState {
 
 // ── Store ──────────────────────────────────────────────────────────────────
 
-export const useTimelineStore = create<TimelineStoreState>((set, get) => {
+export const useTimelineStore = create<TimelineStoreState>()(
+  persist(
+    (set, get) => {
   // ── Closure-scoped internals (per-store-instance, NOT module-scoped) ──────
   let intervalRef: ReturnType<typeof setInterval> | null = null;
   const seenIds = new Set<string>();
@@ -143,4 +147,13 @@ export const useTimelineStore = create<TimelineStoreState>((set, get) => {
       set({ events: [] });
     },
   };
-});
+    },
+    {
+      name: "aws-local-ui/timeline",
+      storage: createJSONStorage(() => getPersistStorage()),
+      partialize: (s) => ({ timeRange: s.timeRange }),
+      skipHydration: true,
+      version: 1,
+    },
+  ),
+);

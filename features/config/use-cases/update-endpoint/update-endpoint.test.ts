@@ -138,3 +138,21 @@ describe("updateEndpointAction — clear flow (empty string)", () => {
     expect(revalidatePath).toHaveBeenCalledWith("/", "layout");
   });
 });
+
+describe("updateEndpointAction — cookie secure flag", () => {
+  it("uses COOKIE_OPTIONS (includes secure flag) when setting the cookie", async () => {
+    const store = makeCookieStore();
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
+
+    await updateEndpointAction(idle, buildFormData({ endpoint: "http://localhost:4566" }));
+
+    // COOKIE_OPTIONS.secure is false in test env (NODE_ENV=test), true in production.
+    // This assertion verifies the action uses the centralized COOKIE_OPTIONS, not an
+    // inline literal. The secure flag's value itself is validated in lib/aws/config.test.ts.
+    expect(store.set).toHaveBeenCalledWith(
+      expect.any(String),
+      expect.any(String),
+      expect.objectContaining({ secure: process.env.NODE_ENV === "production" }),
+    );
+  });
+});

@@ -195,3 +195,20 @@ describe("importProfilesAction — cap boundary", () => {
     expect(data.skipped).toBe(1);
   });
 });
+
+describe("importProfilesAction — cookie secure flag", () => {
+  it("uses COOKIE_OPTIONS (includes secure flag) when setting the cookie", async () => {
+    mockCookiesGet.mockReturnValue(undefined);
+
+    const newProfiles: Profile[] = [
+      { id: "n1", name: "dev", endpoint: "http://dev:4566", region: "eu-west-1" },
+    ];
+    await importProfilesAction(JSON.stringify(newProfiles));
+
+    // COOKIE_OPTIONS.secure is false in test env (NODE_ENV=test), true in production.
+    // This assertion verifies the action uses the centralized COOKIE_OPTIONS, not an
+    // inline literal. The secure flag's value itself is validated in lib/aws/config.test.ts.
+    const cookieOptions = mockCookiesSet.mock.calls[0]?.[2];
+    expect(cookieOptions).toMatchObject({ secure: process.env.NODE_ENV === "production" });
+  });
+});
