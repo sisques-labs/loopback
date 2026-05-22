@@ -11,6 +11,29 @@ export const REGION_COOKIE_NAME = "aws-region-override";
 export const PROFILES_COOKIE_NAME = "aws-profiles";
 export const ACTIVE_PROFILE_COOKIE_NAME = "aws-active-profile";
 
+/**
+ * Cookie attributes for all aws-local-ui config cookies.
+ *
+ * - httpOnly: cookies are server-only; client JS can NEVER read them
+ *   (defense-in-depth, even though no credentials are stored — see below)
+ * - sameSite: "lax" — permits top-level GET navigation while blocking CSRF on POST
+ * - secure: true in production builds — requires HTTPS; localhost dev (HTTP) keeps working
+ * - maxAge: 1 year — config persists across sessions; cleared by deletion or expiry
+ *
+ * SECURITY MODEL:
+ * These cookies hold ONLY endpoint URLs, region strings, and profile metadata.
+ * AWS credentials are NEVER persisted in cookies. Credentials come from the
+ * Node provider chain (env, ~/.aws/credentials, IMDS) or the canonical
+ * "test/test" fallback for local AWS-emulator setups.
+ */
+export const COOKIE_OPTIONS = {
+  httpOnly: true,
+  sameSite: "lax" as const,
+  path: "/",
+  maxAge: 60 * 60 * 24 * 365,
+  secure: process.env.NODE_ENV === "production",
+} as const;
+
 export type AwsCredentials = {
   accessKeyId: string;
   secretAccessKey: string;

@@ -51,12 +51,16 @@ describe("updateRegionAction — valid region", () => {
 
     await updateRegionAction(idle, buildFormData({ region: "us-west-2" }));
 
-    expect(store.set).toHaveBeenCalledWith("aws-region-override", "us-west-2", {
-      httpOnly: true,
-      sameSite: "lax",
-      path: "/",
-      maxAge: 60 * 60 * 24 * 365,
-    });
+    expect(store.set).toHaveBeenCalledWith(
+      "aws-region-override",
+      "us-west-2",
+      expect.objectContaining({
+        httpOnly: true,
+        sameSite: "lax",
+        path: "/",
+        maxAge: 60 * 60 * 24 * 365,
+      }),
+    );
   });
 
   it("calls revalidatePath on success", async () => {
@@ -113,5 +117,23 @@ describe("updateRegionAction — validation errors", () => {
     await updateRegionAction(idle, buildFormData({ region: "" }));
 
     expect(revalidatePath).not.toHaveBeenCalled();
+  });
+});
+
+describe("updateRegionAction — cookie secure flag", () => {
+  it("uses COOKIE_OPTIONS (includes secure flag) when setting the cookie", async () => {
+    const store = makeCookieStore();
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
+
+    await updateRegionAction(idle, buildFormData({ region: "us-east-1" }));
+
+    // COOKIE_OPTIONS.secure is false in test env (NODE_ENV=test), true in production.
+    // This assertion verifies the action uses the centralized COOKIE_OPTIONS, not an
+    // inline literal. The secure flag's value itself is validated in lib/aws/config.test.ts.
+    expect(store.set).toHaveBeenCalledWith(
+      expect.any(String),
+      expect.any(String),
+      expect.objectContaining({ secure: process.env.NODE_ENV === "production" }),
+    );
   });
 });

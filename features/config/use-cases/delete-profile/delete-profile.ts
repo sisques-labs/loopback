@@ -3,16 +3,9 @@ import "server-only";
 
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
-import { PROFILES_COOKIE_NAME, ACTIVE_PROFILE_COOKIE_NAME } from "@/lib/aws/config";
+import { PROFILES_COOKIE_NAME, ACTIVE_PROFILE_COOKIE_NAME, COOKIE_OPTIONS } from "@/lib/aws/config";
 import { parseProfilesCookie, serializeProfiles } from "@/lib/aws/profiles";
 import type { ActionState } from "@/features/shared/types/action-state";
-
-const COOKIE_OPTIONS = {
-  httpOnly: true,
-  sameSite: "lax" as const,
-  path: "/",
-  maxAge: 60 * 60 * 24 * 365,
-};
 
 export async function deleteProfileAction(id: string): Promise<ActionState> {
   const store = await cookies();

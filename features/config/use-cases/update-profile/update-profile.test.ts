@@ -230,3 +230,26 @@ describe("updateProfileAction — validation errors", () => {
     expect(revalidatePath).not.toHaveBeenCalled();
   });
 });
+
+describe("updateProfileAction — cookie secure flag", () => {
+  it("uses COOKIE_OPTIONS (includes secure flag) when setting the cookie", async () => {
+    const store = makeCookieStore([profileDev]);
+    vi.mocked(cookies).mockResolvedValue(store as unknown as CookieStore);
+
+    await updateProfileAction(idle, {
+      id: "dev-id",
+      name: "dev-updated",
+      endpoint: "http://localhost:9000",
+      region: "us-west-2",
+    });
+
+    // COOKIE_OPTIONS.secure is false in test env (NODE_ENV=test), true in production.
+    // This assertion verifies the action uses the centralized COOKIE_OPTIONS, not an
+    // inline literal. The secure flag's value itself is validated in lib/aws/config.test.ts.
+    expect(store.set).toHaveBeenCalledWith(
+      expect.any(String),
+      expect.any(String),
+      expect.objectContaining({ secure: process.env.NODE_ENV === "production" }),
+    );
+  });
+});
