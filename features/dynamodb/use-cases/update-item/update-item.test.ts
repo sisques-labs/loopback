@@ -292,3 +292,87 @@ describe("updateItemAction — SDK error handling", () => {
     }
   });
 });
+
+// ---------------------------------------------------------------------------
+// Size validation (400 KB limit)
+// ---------------------------------------------------------------------------
+describe("updateItemAction — size validation (400 KB limit)", () => {
+  it("returns error when itemJson exceeds 400 KB", async () => {
+    const bigItem = '{"pk":"user#1","data":"' + "x".repeat(410 * 1024) + '"}';
+
+    const result = await updateItemAction(
+      idle,
+      buildFormData({
+        tableName: "users",
+        keyJson: '{"pk":"user#1"}',
+        itemJson: bigItem,
+        locale: "en",
+      }),
+    );
+
+    expect(result.status).toBe("error");
+    if (result.status === "error") {
+      expect(result.message).toBeTruthy();
+    }
+  });
+
+  it("returns error when keyJson exceeds 400 KB", async () => {
+    const bigKey = '{"pk":"' + "x".repeat(410 * 1024) + '"}';
+
+    const result = await updateItemAction(
+      idle,
+      buildFormData({
+        tableName: "users",
+        keyJson: bigKey,
+        itemJson: '{"pk":"user#1","name":"Alice"}',
+        locale: "en",
+      }),
+    );
+
+    expect(result.status).toBe("error");
+    if (result.status === "error") {
+      expect(result.message).toBeTruthy();
+    }
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Proto-pollution
+// ---------------------------------------------------------------------------
+describe("updateItemAction — proto-pollution scrubbing", () => {
+  it("sanitizes __proto__ in itemJson and still updates", async () => {
+    const sendFn = vi.fn().mockResolvedValue({});
+    vi.mocked(getDynamoDBDocumentClient).mockResolvedValue(makeDocClient(sendFn));
+
+    const result = await updateItemAction(
+      idle,
+      buildFormData({
+        tableName: "users",
+        keyJson: '{"pk":"user#1"}',
+        itemJson: '{"pk":"user#1","__proto__":{"polluted":true},"name":"Alice"}',
+        locale: "en",
+      }),
+    );
+
+    expect(result.status).toBe("success");
+    expect((Object.prototype as Record<string, unknown>)["polluted"]).toBeUndefined();
+  });
+
+  it("sanitizes __proto__ in keyJson and still updates", async () => {
+    const sendFn = vi.fn().mockResolvedValue({});
+    vi.mocked(getDynamoDBDocumentClient).mockResolvedValue(makeDocClient(sendFn));
+
+    const result = await updateItemAction(
+      idle,
+      buildFormData({
+        tableName: "users",
+        keyJson: '{"pk":"user#1","__proto__":{"polluted":true}}',
+        itemJson: '{"pk":"user#1","name":"Alice"}',
+        locale: "en",
+      }),
+    );
+
+    expect(result.status).toBe("success");
+    expect((Object.prototype as Record<string, unknown>)["polluted"]).toBeUndefined();
+  });
+});
