@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
+import { getPersistStorage } from "@/features/shared/stores/no-op-storage";
 import type { TimelineEvent, TimelineTimeRange, TimelineStoreStatus } from "../../lib/types/types";
 import { getTimelineEventsAction } from "../../use-cases/get-timeline-events/get-timeline-events";
 
@@ -149,15 +150,7 @@ export const useTimelineStore = create<TimelineStoreState>()(
     },
     {
       name: "aws-local-ui/timeline",
-      storage: createJSONStorage(() =>
-        typeof localStorage !== "undefined" && localStorage !== null
-          ? localStorage
-          : {
-              getItem: () => null,
-              setItem: () => {},
-              removeItem: () => {},
-            } as Storage,
-      ),
+      storage: createJSONStorage(() => getPersistStorage()),
       partialize: (s) => ({ timeRange: s.timeRange }),
       skipHydration: true,
       version: 1,

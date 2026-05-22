@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
+import { getPersistStorage } from "@/features/shared/stores/no-op-storage";
 import type { LogEntry, LogFilters } from "@/features/logs/lib/types/types";
 import { getLogEventsAction } from "@/features/logs/use-cases/get-log-events";
 
@@ -137,15 +138,7 @@ export const useLogsStore = create<LogStoreState>()(
     }),
     {
       name: "aws-local-ui/logs-filters",
-      storage: createJSONStorage(() =>
-        typeof localStorage !== "undefined" && localStorage !== null
-          ? localStorage
-          : {
-              getItem: () => null,
-              setItem: () => {},
-              removeItem: () => {},
-            } as Storage,
-      ),
+      storage: createJSONStorage(() => getPersistStorage()),
       partialize: (s) => ({ filters: s.filters }),
       skipHydration: true,
       version: 1,

@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import type { InvokeHistoryEntry } from "@/features/lambda/types/lambda";
+import { getPersistStorage } from "@/features/shared/stores/no-op-storage";
 
 // ── Constants ──────────────────────────────────────────────────────────────
 
@@ -57,15 +58,7 @@ export const useInvokeHistoryStore = create<InvokeHistoryState>()(
     }),
     {
       name: "aws-local-ui/invoke-history",
-      storage: createJSONStorage(() =>
-        typeof localStorage !== "undefined" && localStorage !== null
-          ? localStorage
-          : {
-              getItem: () => null,
-              setItem: () => {},
-              removeItem: () => {},
-            } as Storage,
-      ),
+      storage: createJSONStorage(() => getPersistStorage()),
       partialize: (s) => ({ entries: s.entries }),
       skipHydration: true,
       version: 1,
