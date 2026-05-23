@@ -1,11 +1,18 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+## [0.13.0-alpha.0] - 2026-05-23
+
+### Bug Fixes
+- **inspector:** Merge duplicate lucide-react imports in tools-registry (b6ae993)
 ## [0.12.0-alpha.0] - 2026-05-22
 
 ### Bug Fixes
 - **persistence:** Use StateStorage fallback and stabilize SQS receive test (df2239b)
 - **sns:** Wire onValidityChange and messageError state in publish-dialog to disable submit on invalid JSON (a13c72c)
+
+### Chore
+- Release v0.12.0-alpha.0 (61524e5)
 
 ### Features
 - **timeline:** Add persist middleware to useTimelineStore (29d22dd)
@@ -120,13 +127,37 @@ All notable changes to this project will be documented in this file.
 - **ui:** Change SkeletonProps from interface to type for consistency (d9fd0d2)
 ## [0.9.0-alpha.0] - 2026-05-20
 
+### Bug Fixes
+- **inspector:** Relax AnyClient.middlewareStack.add signature to satisfy strict TypeScript (7e701f4)
+- **inspector:** Use vi.hoisted for mock functions in inspector-client test (8f617f8)
+- **inspector:** Await rehydrate with async IIFE to handle void | Promise<void> (26f60ed)
+- **inspector:** Handle null from Select onValueChange in service filter (b0ba27e)
+- **inspector:** Narrow result to success before accessing data in poll() (6328cf8)
+
 ### Chore
 - Release v0.9.0-alpha.0 (c63d299)
 
 ### Features
+- **inspector:** Add RequestEntry, RequestFilters, RequestStatus types (fa42b88)
+- **inspector:** Add truncate utility for payload size-capping (a1c5071)
+- **inspector:** Add request ring buffer with FIFO eviction at cap 200 (d4e85d2)
+- **inspector:** Add deserialize-step middleware to capture SDK calls (4cf6cea)
+- **inspector:** Wire inspector middleware into all 6 AWS client factories (f485fe7)
+- **inspector:** Add Zustand store with persist, polling, and Page Visibility support (8791996)
+- **inspector:** Add RequestCard, RequestDetailDialog, RequestList, InspectorToolbar, and InspectorClient components (69c802b)
+- **inspector:** Add /inspector RSC page and register inspector in tools registry (10bb4c2)
+- **inspector:** Add i18n keys, server action, store tests, and no-op storage (4ae94e4)
+- **inspector:** Add i18n keys for view toggle, empty state, and retries (53fe334)
+- **inspector:** Add InspectorEmpty and InspectorSkeleton components (fcb95bd)
+- **inspector:** Add InspectorTimeline with descending sort and spine connector (b88c0c9)
+- **inspector:** Add retry badge with i18n to RequestCard (47101a5)
+- **inspector:** Add view toggle and conditional rendering to InspectorClient (af2f656)
 - **timeline:** Add data/state foundation for event timeline (680d4fc)
 - **timeline:** Add presentation layer components and page route (b4015cc)
 - **timeline:** Add i18n files, dictionary wiring, and tools-registry entry (PR-3) (86ae6e0)
+
+### Testing
+- **inspector:** Add durationMs, UUID id, and timestamp assertions to middleware test (7c924c3)
 ## [0.8.0-alpha.0] - 2026-05-20
 
 ### Bug Fixes
