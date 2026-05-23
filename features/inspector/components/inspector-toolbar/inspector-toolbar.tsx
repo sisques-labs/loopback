@@ -36,7 +36,7 @@ export function InspectorToolbar({ dict, services }: InspectorToolbarProps) {
         <Select
           value={filters.service || "all"}
           onValueChange={(value) =>
-            setFilter("service", value === "all" ? "" : value)
+            setFilter("service", value === "all" ? "" : (value ?? ""))
           }
         >
           <SelectTrigger size="sm" className="min-w-32">
