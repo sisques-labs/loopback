@@ -14,23 +14,33 @@ const {
   mockStartPolling,
   mockStopPolling,
   mockRehydrate,
-} = vi.hoisted(() => ({
-  mockSeedEntries: vi.fn(),
-  mockStartPolling: vi.fn(),
-  mockStopPolling: vi.fn(),
-  mockRehydrate: vi.fn().mockResolvedValue(undefined),
-}));
+  mockStoreState,
+} = vi.hoisted(() => {
+  const state = {
+    entries: [] as RequestEntry[],
+    isLoading: false,
+    view: "list" as "list" | "timeline",
+  };
+  return {
+    mockSeedEntries: vi.fn(),
+    mockStartPolling: vi.fn(),
+    mockStopPolling: vi.fn(),
+    mockRehydrate: vi.fn().mockResolvedValue(undefined),
+    mockStoreState: state,
+  };
+});
 
 vi.mock(
   "@/features/inspector/stores/use-inspector-store/use-inspector-store",
   () => {
     const mockStore = vi.fn(() => ({
-      entries: [],
+      entries: mockStoreState.entries,
       filters: { service: "", status: "all", text: "" },
-      status: "idle",
+      status: mockStoreState.isLoading ? "polling" : "idle",
+      isLoading: mockStoreState.isLoading,
       lastUpdatedAt: null,
-      isPolling: false,
-      view: "list",
+      isPolling: mockStoreState.isLoading,
+      view: mockStoreState.view,
       seedEntries: mockSeedEntries,
       startPolling: mockStartPolling,
       stopPolling: mockStopPolling,
@@ -53,6 +63,22 @@ vi.mock("@/features/inspector/components/request-list/request-list", () => ({
   ),
 }));
 
+vi.mock("@/features/inspector/components/inspector-timeline/inspector-timeline", () => ({
+  InspectorTimeline: ({ entries }: { entries: RequestEntry[] }) => (
+    <div data-testid="inspector-timeline" data-count={entries.length} />
+  ),
+}));
+
+vi.mock("@/features/inspector/components/inspector-empty/inspector-empty", () => ({
+  InspectorEmpty: () => <div data-testid="inspector-empty" />,
+}));
+
+vi.mock("@/features/inspector/components/inspector-skeleton/inspector-skeleton", () => ({
+  InspectorSkeleton: ({ withSpine }: { withSpine: boolean }) => (
+    <div data-testid="inspector-skeleton" data-with-spine={withSpine} />
+  ),
+}));
+
 import { InspectorClient } from "./inspector-client";
 
 // ── Fixtures ──────────────────────────────────────────────────────────────────
@@ -69,6 +95,7 @@ const dict: ClientDict = {
       status: { label: "Status", all: "All", success: "Success", error: "Error" },
       text: { placeholder: "Search…" },
     },
+    view: { label: "View", list: "List", timeline: "Timeline" },
     clearBuffer: "Clear",
     statusPolling: "Live",
     statusError: "Error",
@@ -76,7 +103,7 @@ const dict: ClientDict = {
     lastUpdated: "Updated {time} ago",
   },
   empty: { title: "No requests", body: "Make some AWS calls" },
-  card: { duration: "{ms}ms", attempts: "{n} attempts" },
+  card: { duration: "{ms}ms", attempts: "{n} attempts", retries: "{n} retries" },
   detail: {
     title: "Detail",
     input: "Input",
@@ -107,6 +134,9 @@ afterEach(() => {
   cleanup();
   vi.clearAllMocks();
   mockRehydrate.mockResolvedValue(undefined);
+  mockStoreState.entries = [];
+  mockStoreState.isLoading = false;
+  mockStoreState.view = "list";
 });
 
 // ── Tests ─────────────────────────────────────────────────────────────────────
@@ -119,7 +149,8 @@ describe("InspectorClient", () => {
     expect(screen.getByTestId("inspector-toolbar")).toBeInTheDocument();
   });
 
-  it("renders the request list", async () => {
+  it("renders the request list when entries exist", async () => {
+    mockStoreState.entries = [makeEntry("e1")];
     await act(async () => {
       render(<InspectorClient initialEntries={[]} dict={dict} />);
     });
@@ -146,5 +177,48 @@ describe("InspectorClient", () => {
       render(<InspectorClient initialEntries={[]} dict={dict} />);
     });
     expect(mockStartPolling).toHaveBeenCalledOnce();
+  });
+
+  // ── Task 3.12 / 3.13: view toggle ────────────────────────────────────────────
+
+  it("renders RequestList when view is 'list' and entries exist", async () => {
+    mockStoreState.entries = [makeEntry("e1")];
+    mockStoreState.view = "list";
+    await act(async () => {
+      render(<InspectorClient initialEntries={[]} dict={dict} />);
+    });
+    expect(screen.getByTestId("request-list")).toBeInTheDocument();
+    expect(screen.queryByTestId("inspector-timeline")).not.toBeInTheDocument();
+  });
+
+  it("renders InspectorTimeline when view is 'timeline' and entries exist", async () => {
+    mockStoreState.entries = [makeEntry("e1")];
+    mockStoreState.view = "timeline";
+    await act(async () => {
+      render(<InspectorClient initialEntries={[]} dict={dict} />);
+    });
+    expect(screen.getByTestId("inspector-timeline")).toBeInTheDocument();
+    expect(screen.queryByTestId("request-list")).not.toBeInTheDocument();
+  });
+
+  it("renders InspectorSkeleton when isLoading is true", async () => {
+    mockStoreState.isLoading = true;
+    await act(async () => {
+      render(<InspectorClient initialEntries={[]} dict={dict} />);
+    });
+    expect(screen.getByTestId("inspector-skeleton")).toBeInTheDocument();
+    expect(screen.queryByTestId("request-list")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("inspector-timeline")).not.toBeInTheDocument();
+  });
+
+  it("renders InspectorEmpty when no entries and not loading", async () => {
+    mockStoreState.entries = [];
+    mockStoreState.isLoading = false;
+    await act(async () => {
+      render(<InspectorClient initialEntries={[]} dict={dict} />);
+    });
+    expect(screen.getByTestId("inspector-empty")).toBeInTheDocument();
+    expect(screen.queryByTestId("request-list")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("inspector-timeline")).not.toBeInTheDocument();
   });
 });
