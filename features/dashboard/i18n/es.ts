@@ -36,7 +36,7 @@ const dict = {
       degraded: "Degradado",
       unreachable: "No disponible",
     },
-    hint: "Verificá que LocalStack esté corriendo",
+    hint: "Verifica que LocalStack esté corriendo",
     columns: {
       service: "Servicio",
       status: "Estado",

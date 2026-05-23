@@ -5,7 +5,7 @@ type InspectorDictTranslated = WidenStringLiterals<InspectorDict>;
 
 const dict = {
   title: "Inspector de Solicitudes AWS",
-  description: "Inspeccioná cada llamada al SDK de AWS realizada por Server Actions — filtrá, buscá y repetí.",
+  description: "Inspecciona cada llamada al SDK de AWS realizada por Server Actions — filtra, busca y repite.",
   toolbar: {
     filters: {
       service: {

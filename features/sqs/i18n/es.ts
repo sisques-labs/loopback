@@ -33,7 +33,7 @@ const dict = {
   createQueueValidation: {
     required: "El nombre de la cola es obligatorio.",
     standardCannotEndFifo:
-      "Las colas estándar no pueden terminar en .fifo. Desmarcá FIFO o usá una cola FIFO.",
+      "Las colas estándar no pueden terminar en .fifo. Desmarca FIFO o usa una cola FIFO.",
     nameTooLong:
       "El nombre debe tener como máximo 80 caracteres (incluido .fifo en colas FIFO).",
     fifoMustEndFifo: "Los nombres de cola FIFO deben terminar en .fifo.",
@@ -47,7 +47,7 @@ const dict = {
     delete: "Eliminar",
     deleteTitle: "Eliminar cola",
     deleteConfirm:
-      "¿Seguro que querés eliminar {queue}? Los mensajes de la cola se perderán. Esta acción no se puede deshacer.",
+      "¿Seguro que quieres eliminar {queue}? Los mensajes de la cola se perderán. Esta acción no se puede deshacer.",
     viewDetail: "Ver detalle",
   },
   queueDetail: {
@@ -108,15 +108,15 @@ const dict = {
     notFound: "La cola especificada no existe.",
     limitExceeded: "Se alcanzó el límite de colas para esta cuenta.",
     notAuthorized: "Sin autorización para realizar esta acción en SQS.",
-    endpointUnreachable: "No se puede conectar a LocalStack en {endpoint}. Asegurate de que esté en ejecución.",
+    endpointUnreachable: "No se puede conectar a LocalStack en {endpoint}. Asegúrate de que esté en ejecución.",
     unknown: "Ocurrió un error inesperado.",
     receiptHandleInvalid:
-      "La ventana de visibilidad de este mensaje expiró — recibí un nuevo lote para reintentar.",
+      "La ventana de visibilidad de este mensaje expiró — recibe un nuevo lote para reintentar.",
   },
   errors: {
     connectFailed: "No se pudo conectar a SQS",
     connectFailedDetail:
-      "No se pudo alcanzar {endpoint}. Asegurate de que LocalStack esté en ejecución y de que AWS_ENDPOINT_URL esté configurado correctamente.",
+      "No se pudo alcanzar {endpoint}. Asegúrate de que LocalStack esté en ejecución y de que AWS_ENDPOINT_URL esté configurado correctamente.",
     connectFailedDetailGeneric:
       "No se pudo alcanzar LocalStack desde el servidor de la app. Comprueba que esté en marcha, que AWS_ENDPOINT_URL sea correcto y define NEXT_PUBLIC_AWS_ENDPOINT_URL con la misma URL (necesario para mensajes en el cliente si usas una IP de red local).",
     queueNotFound: "Cola no encontrada",

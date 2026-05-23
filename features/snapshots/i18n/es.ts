@@ -6,7 +6,7 @@ type SnapshotsDictTranslated = WidenStringLiterals<SnapshotsDict>;
 const dict = {
   page: {
     title: "Snapshots",
-    description: "Capturá, exportá, importá y restaurá tu entorno de LocalStack.",
+    description: "Captura, exporta, importa y restaura tu entorno de LocalStack.",
   },
   create: {
     sectionTitle: "Crear Snapshot",
@@ -34,7 +34,7 @@ const dict = {
     restoring: "Restaurando…",
     successTitle: "Restauración completa",
     errorTitle: "Error al restaurar",
-    noSnapshot: "No hay snapshot para restaurar. Creá o importá uno primero.",
+    noSnapshot: "No hay snapshot para restaurar. Crea o importa uno primero.",
     snapshotInfo:
       "Snapshot del {{date}} — {{tables}} tablas, {{queues}} colas, {{buckets}} buckets",
   },

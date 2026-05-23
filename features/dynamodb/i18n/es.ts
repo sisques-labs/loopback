@@ -23,7 +23,7 @@ const dict = {
   createTableDialog: {
     trigger: "Crear tabla",
     title: "Crear tabla DynamoDB",
-    description: "Creá una nueva tabla DynamoDB en LocalStack.",
+    description: "Crea una nueva tabla DynamoDB en LocalStack.",
     nameLabel: "Nombre de la tabla",
     namePlaceholder: "mi-tabla",
     nameHint: "3–255 caracteres, letras, números, guiones, guiones bajos, puntos",
@@ -44,7 +44,7 @@ const dict = {
     nameInvalid:
       "El nombre de la tabla debe tener entre 3 y 255 caracteres y contener solo letras, números, guiones, guiones bajos y puntos.",
     pkNameRequired: "El nombre de la clave de partición es obligatorio.",
-    pkTypeInvalid: "Seleccioná un tipo de clave de partición válido.",
+    pkTypeInvalid: "Selecciona un tipo de clave de partición válido.",
     skIncomplete:
       "El tipo de clave de ordenamiento es obligatorio cuando se indica un nombre de clave de ordenamiento.",
   },
@@ -74,9 +74,9 @@ const dict = {
     trigger: "Insertar ítem",
     title: "Insertar ítem",
     description:
-      'Insertá o reemplazá un ítem usando JSON nativo. Ejemplo: {"pk": "valor", "count": 1}',
+      'Inserta o reemplaza un ítem usando JSON nativo. Ejemplo: {"pk": "valor", "count": 1}',
     jsonLabel: "JSON del ítem",
-    jsonHint: "Escribí JSON nativo — no el formato AttributeValue de DynamoDB.",
+    jsonHint: "Escribe JSON nativo — no el formato AttributeValue de DynamoDB.",
     jsonPlaceholder: '{"pk": "valor", "sk": "valor-ordenamiento"}',
     cancel: "Cancelar",
     submit: "Insertar ítem",
@@ -99,18 +99,18 @@ const dict = {
     resourceNotFound: "La tabla especificada no existe.",
     validation: "Parámetros de solicitud inválidos.",
     conditionalCheckFailed: "No se pudo evaluar una condición especificada en la operación.",
-    limitExceeded: "Demasiadas solicitudes. Intentá de nuevo.",
+    limitExceeded: "Demasiadas solicitudes. Inténtalo de nuevo.",
     endpointUnreachable:
-      "No se puede conectar a LocalStack en {endpoint}. Asegurate de que esté en ejecución.",
+      "No se puede conectar a LocalStack en {endpoint}. Asegúrate de que esté en ejecución.",
     unknown: "Ocurrió un error inesperado.",
   },
   editItemDialog: {
     trigger: "Editar",
     title: "Editar ítem",
-    description: "Editá los atributos no clave de este ítem. Los campos clave están bloqueados.",
+    description: "Edita los atributos no clave de este ítem. Los campos clave están bloqueados.",
     keyFieldsLabel: "Campos clave (bloqueados)",
     jsonLabel: "JSON del ítem",
-    jsonHint: "Editá los atributos no clave usando JSON nativo.",
+    jsonHint: "Edita los atributos no clave usando JSON nativo.",
     cancel: "Cancelar",
     submit: "Guardar cambios",
     saving: "Guardando…",
@@ -125,7 +125,7 @@ const dict = {
     modeQuery: "Consulta",
     pkLabel: "Valor de clave de partición",
     pkPlaceholder: "ej. usuario-1",
-    pkHint: "Ingresá un valor de clave de partición para consultar ítems. La PK es obligatoria.",
+    pkHint: "Introduce un valor de clave de partición para consultar ítems. La PK es obligatoria.",
     skLabel: "Valor de clave de ordenamiento (opcional)",
     skPlaceholder: "ej. pedido-5",
     search: "Buscar",
@@ -146,7 +146,7 @@ const dict = {
   errors: {
     connectFailed: "No se pudo conectar a DynamoDB",
     connectFailedDetail:
-      "No se pudo alcanzar {endpoint}. Asegurate de que LocalStack esté en ejecución y de que AWS_ENDPOINT_URL esté configurado correctamente.",
+      "No se pudo alcanzar {endpoint}. Asegúrate de que LocalStack esté en ejecución y de que AWS_ENDPOINT_URL esté configurado correctamente.",
     tableNotFound: "Tabla no encontrada",
     tableNotFoundDetail:
       "LocalStack no tiene una tabla para esta URL. Puede haberse borrado, reiniciado LocalStack o el enlace estar desactualizado.",
@@ -156,7 +156,7 @@ const dict = {
   seedDialog: {
     trigger: "Importar datos",
     title: "Importar datos",
-    description: "Importá ítems desde un archivo JSON o CSV a esta tabla.",
+    description: "Importa ítems desde un archivo JSON o CSV a esta tabla.",
     fileLabel: "Archivo de datos",
     fileHint:
       "Acepta .json (array de objetos) o .csv (fila de encabezados + filas de datos). Nota: CSV no soporta campos entre comillas con comas.",
@@ -164,13 +164,13 @@ const dict = {
     overwriteHint:
       "Desactivar no tiene efecto en la versión actual — los ítems siempre se sobreescriben por clave. Esta opción está reservada para un futuro modo de omisión si ya existe.",
     fileSizeWarning:
-      "El archivo supera 500 KB. Subir payloads grandes puede ser lento o fallar. Considerá dividir el archivo.",
-    errorInvalidFile: "Tipo de archivo inválido. Seleccioná un archivo .json o .csv.",
-    errorEmptyArray: "El archivo contiene un array vacío. Agregá al menos un ítem.",
+      "El archivo supera 500 KB. Subir payloads grandes puede ser lento o fallar. Considera dividir el archivo.",
+    errorInvalidFile: "Tipo de archivo inválido. Selecciona un archivo .json o .csv.",
+    errorEmptyArray: "El archivo contiene un array vacío. Agrega al menos un ítem.",
     errorParseJson:
-      "No se pudo analizar el archivo como JSON. Asegurate de que sea un array JSON válido.",
+      "No se pudo analizar el archivo como JSON. Asegúrate de que sea un array JSON válido.",
     errorParseCsv:
-      "El archivo CSV no tiene filas de datos. Agregá al menos una fila después del encabezado.",
+      "El archivo CSV no tiene filas de datos. Agrega al menos una fila después del encabezado.",
     successToast: "Se importaron {count} ítems exitosamente.",
     errorPartialFail: "{failed} de {total} ítems no se pudieron importar.",
     importing: "Importando…",
