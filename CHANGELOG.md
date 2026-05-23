@@ -1,10 +1,30 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+## [1.0.0] - 2026-05-23
+
+### Bug Fixes
+- **i18n:** Migrate es translations from voseo to castellano in shared and dashboard (f4faa52)
+- **i18n:** Migrate es translations from voseo to castellano in dynamodb (c43703f)
+- **i18n:** Migrate es translations from voseo to castellano in lambda (32724e8)
+- **i18n:** Migrate es translations from voseo to castellano in sqs and sns (642b391)
+- **i18n:** Migrate es translations from voseo to castellano in logs, seed, timeline, snapshots, inspector (d73a662)
+- **i18n:** Migrate es translations from voseo to castellano in shared and dashboard (0389523)
+- **i18n:** Migrate es translations from voseo to castellano in dynamodb (576702d)
+- **i18n:** Migrate es translations from voseo to castellano in lambda (243ee47)
+- **i18n:** Migrate es translations from voseo to castellano in sqs and sns (3ccb585)
+- **i18n:** Migrate es translations from voseo to castellano in logs, seed, timeline, snapshots, inspector (3ba8c22)
+
+### Documentation
+- Add getting started, LocalStack/Floci setup, architecture, and contributing guides (d10defc)
+- **readme:** Replace Next.js boilerplate with project description (ea545d5)
 ## [0.13.0-alpha.0] - 2026-05-23
 
 ### Bug Fixes
 - **inspector:** Merge duplicate lucide-react imports in tools-registry (b6ae993)
+
+### Chore
+- Release v0.13.0-alpha.0 (b0a8055)
 ## [0.12.0-alpha.0] - 2026-05-22
 
 ### Bug Fixes
