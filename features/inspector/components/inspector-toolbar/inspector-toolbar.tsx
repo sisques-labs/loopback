@@ -25,7 +25,7 @@ const STATUS_OPTIONS = ["all", "success", "error"] as const;
 // ── Component ─────────────────────────────────────────────────────────────────
 
 export function InspectorToolbar({ dict, services }: InspectorToolbarProps) {
-  const { filters, setFilter, clearBuffer } = useInspectorStore();
+  const { filters, setFilter, clearBuffer, view, setView } = useInspectorStore();
   const t = dict.toolbar;
 
   return (
@@ -36,7 +36,7 @@ export function InspectorToolbar({ dict, services }: InspectorToolbarProps) {
         <Select
           value={filters.service || "all"}
           onValueChange={(value) =>
-            setFilter("service", value === "all" ? "" : value)
+            setFilter("service", value === "all" ? "" : (value ?? ""))
           }
         >
           <SelectTrigger size="sm" className="min-w-32">
@@ -77,6 +77,28 @@ export function InspectorToolbar({ dict, services }: InspectorToolbarProps) {
             ))}
           </SelectContent>
         </Select>
+      </div>
+
+      {/* View toggle — segmented control */}
+      <div role="tablist" className="flex rounded-md border border-border overflow-hidden">
+        <button
+          type="button"
+          role="tab"
+          aria-pressed={view === "list"}
+          onClick={() => setView("list")}
+          className="min-h-11 min-w-11 md:min-h-9 px-3 text-sm transition-colors aria-pressed:bg-muted"
+        >
+          {t.view.list}
+        </button>
+        <button
+          type="button"
+          role="tab"
+          aria-pressed={view === "timeline"}
+          onClick={() => setView("timeline")}
+          className="min-h-11 min-w-11 md:min-h-9 px-3 text-sm transition-colors aria-pressed:bg-muted border-l border-border"
+        >
+          {t.view.timeline}
+        </button>
       </div>
 
       {/* Clear buffer */}

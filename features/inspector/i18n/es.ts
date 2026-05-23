@@ -22,6 +22,11 @@ const dict = {
         placeholder: "Buscar operación o payload…",
       },
     },
+    view: {
+      label: "Vista",
+      list: "Lista",
+      timeline: "Línea de tiempo",
+    },
     clearBuffer: "Limpiar",
     statusPolling: "En vivo",
     statusError: "Error",
@@ -35,6 +40,7 @@ const dict = {
   card: {
     duration: "{ms}ms",
     attempts: "{n} intentos",
+    retries: "{n} reintentos",
   },
   detail: {
     title: "Detalle de solicitud",

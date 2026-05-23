@@ -78,8 +78,8 @@ export const useInspectorStore = create<InspectorStoreState>()(
 
       async function poll(): Promise<void> {
         const result = await getInspectorEntriesAction({});
-        if (result.status === "error") {
-          set({ status: "error" });
+        if (result.status !== "success") {
+          set({ status: result.status === "error" ? "error" : "polling" });
           return;
         }
         const incoming = result.data.entries;

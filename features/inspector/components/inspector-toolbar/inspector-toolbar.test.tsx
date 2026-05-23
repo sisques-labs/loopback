@@ -7,6 +7,10 @@ import type { WidenStringLiterals } from "@/features/shared/i18n/widen-literals"
 
 const mockSetFilter = vi.fn();
 const mockClearBuffer = vi.fn().mockResolvedValue(undefined);
+const mockSetView = vi.fn();
+
+// mockView holds the current view for the mock store
+const mockState = { view: "list" as "list" | "timeline" };
 
 vi.mock(
   "@/features/inspector/stores/use-inspector-store/use-inspector-store",
@@ -15,8 +19,10 @@ vi.mock(
       filters: { service: "", status: "all", text: "" },
       status: "idle",
       lastUpdatedAt: null,
+      view: mockState.view,
       setFilter: mockSetFilter,
       clearBuffer: mockClearBuffer,
+      setView: mockSetView,
     })),
   }),
 );
@@ -55,6 +61,11 @@ const dict: ToolbarDict = {
         placeholder: "Search…",
       },
     },
+    view: {
+      label: "View",
+      list: "List",
+      timeline: "Timeline",
+    },
     clearBuffer: "Clear",
     statusPolling: "Live",
     statusError: "Error",
@@ -66,6 +77,7 @@ const dict: ToolbarDict = {
 afterEach(() => {
   cleanup();
   vi.clearAllMocks();
+  mockState.view = "list";
 });
 
 // ── Tests ─────────────────────────────────────────────────────────────────────
@@ -109,5 +121,55 @@ describe("InspectorToolbar", () => {
     render(<InspectorToolbar dict={dict} services={[]} />);
     // "All" appears in both trigger and dropdown item
     expect(screen.getAllByText("All").length).toBeGreaterThanOrEqual(1);
+  });
+
+  describe("view toggle", () => {
+    it("renders List and Timeline toggle buttons", () => {
+      mockState.view = "list";
+      render(<InspectorToolbar dict={dict} services={[]} />);
+      expect(screen.getByRole("tab", { name: /^list$/i })).toBeInTheDocument();
+      expect(screen.getByRole("tab", { name: /^timeline$/i })).toBeInTheDocument();
+    });
+
+    it("List button has aria-pressed=true when view is list", () => {
+      mockState.view = "list";
+      render(<InspectorToolbar dict={dict} services={[]} />);
+      expect(screen.getByRole("tab", { name: /^list$/i })).toHaveAttribute(
+        "aria-pressed",
+        "true",
+      );
+    });
+
+    it("Timeline button has aria-pressed=false when view is list", () => {
+      mockState.view = "list";
+      render(<InspectorToolbar dict={dict} services={[]} />);
+      expect(screen.getByRole("tab", { name: /^timeline$/i })).toHaveAttribute(
+        "aria-pressed",
+        "false",
+      );
+    });
+
+    it("Timeline button has aria-pressed=true when view is timeline", () => {
+      mockState.view = "timeline";
+      render(<InspectorToolbar dict={dict} services={[]} />);
+      expect(screen.getByRole("tab", { name: /^timeline$/i })).toHaveAttribute(
+        "aria-pressed",
+        "true",
+      );
+    });
+
+    it("clicking List button calls setView('list')", () => {
+      mockState.view = "timeline";
+      render(<InspectorToolbar dict={dict} services={[]} />);
+      fireEvent.click(screen.getByRole("tab", { name: /^list$/i }));
+      expect(mockSetView).toHaveBeenCalledWith("list");
+    });
+
+    it("clicking Timeline button calls setView('timeline')", () => {
+      mockState.view = "list";
+      render(<InspectorToolbar dict={dict} services={[]} />);
+      fireEvent.click(screen.getByRole("tab", { name: /^timeline$/i }));
+      expect(mockSetView).toHaveBeenCalledWith("timeline");
+    });
   });
 });
