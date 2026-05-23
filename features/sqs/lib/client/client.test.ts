@@ -8,6 +8,13 @@ vi.mock("@/lib/aws/config", () => ({
 import { createAwsConfig } from "@/lib/aws/config";
 import { getSQSClient } from "./index";
 
+// Helper: check that InspectorMiddleware is registered on a client
+function hasInspectorMiddleware(client: { middlewareStack: { identify: () => string[] } }) {
+  return client.middlewareStack.identify().some((entry) =>
+    entry.startsWith("InspectorMiddleware"),
+  );
+}
+
 const fakeConfig = {
   endpoint: "http://localhost:4566",
   region: "us-east-1",
@@ -36,5 +43,10 @@ describe("getSQSClient", () => {
     const first = await getSQSClient();
     const second = await getSQSClient();
     expect(first).not.toBe(second);
+  });
+
+  it("has InspectorMiddleware registered (INSPECTOR tag, deserialize step)", async () => {
+    const client = await getSQSClient();
+    expect(hasInspectorMiddleware(client)).toBe(true);
   });
 });

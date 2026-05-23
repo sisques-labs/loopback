@@ -8,6 +8,12 @@ vi.mock("@/lib/aws/config", () => ({
 import { createAwsConfig } from "@/lib/aws/config";
 import { getCloudWatchLogsClient } from "./client";
 
+function hasInspectorMiddleware(client: { middlewareStack: { identify: () => string[] } }) {
+  return client.middlewareStack.identify().some((entry) =>
+    entry.startsWith("InspectorMiddleware"),
+  );
+}
+
 const fakeConfig = {
   endpoint: "http://localhost:4566",
   region: "us-east-1",
@@ -36,5 +42,10 @@ describe("getCloudWatchLogsClient", () => {
     const first = await getCloudWatchLogsClient();
     const second = await getCloudWatchLogsClient();
     expect(first).not.toBe(second);
+  });
+
+  it("has InspectorMiddleware registered (INSPECTOR tag, deserialize step)", async () => {
+    const client = await getCloudWatchLogsClient();
+    expect(hasInspectorMiddleware(client)).toBe(true);
   });
 });

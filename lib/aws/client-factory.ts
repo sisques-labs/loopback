@@ -1,6 +1,7 @@
 import "server-only";
 import { S3Client } from "@aws-sdk/client-s3";
 import { createAwsConfig } from "@/lib/aws/config";
+import { withInspectorMiddleware } from "@/lib/aws/inspector-middleware";
 
 /**
  * Creates a fresh S3Client on every call.
@@ -15,5 +16,5 @@ import { createAwsConfig } from "@/lib/aws/config";
  */
 export async function getS3Client(): Promise<S3Client> {
   const config = await createAwsConfig();
-  return new S3Client({ ...config, forcePathStyle: true });
+  return withInspectorMiddleware(new S3Client({ ...config, forcePathStyle: true }), "S3");
 }
