@@ -16,9 +16,8 @@ import { truncate } from "./inspector-truncate";
 const MAX_FIELD_BYTES = 4 * 1024; // 4 KB per payload field
 
 type AnyClient = {
-  middlewareStack: {
-    add: (mw: unknown, opts: unknown) => void;
-  };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  middlewareStack: { add: (...args: any[]) => void };
 };
 
 /**
