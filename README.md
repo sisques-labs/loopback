@@ -5,13 +5,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 First, run the development server:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
 pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
@@ -117,4 +111,11 @@ never overwrite the rolling pre-release tags.
 Releases are cut from the `Release` workflow (Actions → **Release** → _Run workflow_). Pick a
 SemVer bump (`patch | minor | major`) and a channel (`stable | alpha | beta | rc`); the workflow
 bumps `package.json`, tags the commit, builds multi-arch, and publishes to both registries.
+
+## Documentation
+
+- [Getting Started](./docs/getting-started.md) — prerequisites, install, run, and test locally
+- [LocalStack / Floci Setup](./docs/localstack-setup.md) — local AWS emulation with Docker
+- [Architecture](./docs/architecture.md) — feature-sliced layout, RSC, i18n routing
+- [Contributing](./docs/contributing.md) — workflow, commit conventions, PR guidelines
 
