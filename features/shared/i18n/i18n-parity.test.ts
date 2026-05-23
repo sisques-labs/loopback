@@ -90,6 +90,58 @@ describe("i18n parity — seed", () => {
   });
 });
 
+// ── dashboard parity ─────────────────────────────────────────────────────────
+
+describe("i18n parity — dashboard", () => {
+  it("every key in en.ts exists in es.ts", async () => {
+    const { default: en } = await import("@/features/dashboard/i18n/en");
+    const { default: es } = await import("@/features/dashboard/i18n/es");
+
+    const enKeys = flatKeys(en);
+    const esKeys = flatKeys(es);
+
+    const missingInEs = enKeys.filter((k) => !esKeys.includes(k));
+    expect(missingInEs).toEqual([]);
+  });
+
+  it("every key in es.ts exists in en.ts", async () => {
+    const { default: en } = await import("@/features/dashboard/i18n/en");
+    const { default: es } = await import("@/features/dashboard/i18n/es");
+
+    const enKeys = flatKeys(en);
+    const esKeys = flatKeys(es);
+
+    const missingInEn = esKeys.filter((k) => !enKeys.includes(k));
+    expect(missingInEn).toEqual([]);
+  });
+});
+
+// ── snapshots parity ──────────────────────────────────────────────────────────
+
+describe("i18n parity — snapshots", () => {
+  it("every key in en.ts exists in es.ts", async () => {
+    const { default: en } = await import("@/features/snapshots/i18n/en");
+    const { default: es } = await import("@/features/snapshots/i18n/es");
+
+    const enKeys = flatKeys(en);
+    const esKeys = flatKeys(es);
+
+    const missingInEs = enKeys.filter((k) => !esKeys.includes(k));
+    expect(missingInEs).toEqual([]);
+  });
+
+  it("every key in es.ts exists in en.ts", async () => {
+    const { default: en } = await import("@/features/snapshots/i18n/en");
+    const { default: es } = await import("@/features/snapshots/i18n/es");
+
+    const enKeys = flatKeys(en);
+    const esKeys = flatKeys(es);
+
+    const missingInEn = esKeys.filter((k) => !enKeys.includes(k));
+    expect(missingInEn).toEqual([]);
+  });
+});
+
 // ── shared parity ─────────────────────────────────────────────────────────────
 
 describe("i18n parity — shared", () => {

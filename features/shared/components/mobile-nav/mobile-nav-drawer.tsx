@@ -3,6 +3,7 @@
 import { Dialog as DialogPrimitive } from "@base-ui/react/dialog";
 import { XIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { NavLinks } from "./nav-links";
 import { Logo } from "@/features/shared/components/logo/logo";
 import { useMobileNavStore } from "@/features/shared/stores/mobile-nav-store";
@@ -26,7 +27,7 @@ export function MobileNavDrawer({ sidebarDict, headerDict, localePrefix }: Props
           id="mobile-nav-drawer"
           className="fixed inset-y-0 left-0 z-50 flex w-64 flex-col bg-sidebar px-4 py-6 shadow-sm duration-200 data-open:animate-in data-open:slide-in-from-left data-closed:animate-out data-closed:slide-out-to-left outline-none"
         >
-          <div className="mb-4 flex items-center justify-between">
+          <div className="mb-4 flex shrink-0 items-center justify-between">
             <Logo />
             <DialogPrimitive.Close
               render={
@@ -41,15 +42,17 @@ export function MobileNavDrawer({ sidebarDict, headerDict, localePrefix }: Props
               <XIcon className="size-4" />
             </DialogPrimitive.Close>
           </div>
-          <NavLinks
-            localePrefix={localePrefix}
-            dashboardLinkLabel={sidebarDict.dashboard}
-            servicesLabel={sidebarDict.services}
-            settingsSectionLabel={sidebarDict.settingsSection}
-            settingsLinkLabel={sidebarDict.settings}
-            toolsSectionLabel={sidebarDict.tools}
-            onNavigate={() => setOpen(false)}
-          />
+          <ScrollArea className="min-h-0 flex-1">
+            <NavLinks
+              localePrefix={localePrefix}
+              dashboardLinkLabel={sidebarDict.dashboard}
+              servicesLabel={sidebarDict.services}
+              settingsSectionLabel={sidebarDict.settingsSection}
+              settingsLinkLabel={sidebarDict.settings}
+              toolsSectionLabel={sidebarDict.tools}
+              onNavigate={() => setOpen(false)}
+            />
+          </ScrollArea>
         </DialogPrimitive.Popup>
       </DialogPrimitive.Portal>
     </DialogPrimitive.Root>

@@ -1,5 +1,14 @@
 import { act, cleanup, render, screen } from "@testing-library/react";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import {
+  afterEach,
+  beforeAll,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  vi,
+} from "vitest";
+import type { ReceiveMessagesSection as ReceiveMessagesSectionType } from "./receive-messages-section";
 
 vi.mock("sonner", () => ({
   toast: { success: vi.fn() },
@@ -96,6 +105,23 @@ const receiveDict = {
 
 const queueUrl = "https://localhost/000000000000/test-queue";
 
+const copyButtonDict = {
+  copy: "Copy",
+  copied: "Copied",
+  copyArn: "Copy ARN",
+  copyArnCopied: "ARN copied",
+  copyUrl: "Copy URL",
+  copyUrlCopied: "URL copied",
+  copyJson: "Copy JSON",
+  copyJsonCopied: "JSON copied",
+};
+
+let ReceiveMessagesSection: typeof ReceiveMessagesSectionType;
+
+beforeAll(async () => {
+  ({ ReceiveMessagesSection } = await import("./receive-messages-section"));
+});
+
 beforeEach(() => {
   requeueCallCount = 0;
   requeueStubs = [];
@@ -109,9 +135,15 @@ afterEach(() => {
 
 async function renderSection() {
   requeueCallCount = 0;
-  const { ReceiveMessagesSection } = await import("./receive-messages-section");
   await act(async () => {
-    render(<ReceiveMessagesSection queueUrl={queueUrl} dict={receiveDict} locale="en" />);
+    render(
+      <ReceiveMessagesSection
+        queueUrl={queueUrl}
+        dict={receiveDict}
+        copyButtonDict={copyButtonDict}
+        locale="en"
+      />,
+    );
   });
 }
 

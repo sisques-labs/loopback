@@ -69,6 +69,7 @@ const dict = {
     functionErrorTitle: "Error de la función",
     functionErrorDetail: "La función devolvió un error: {functionError}",
     invalidPayload: "El payload debe ser JSON válido.",
+    payloadTooLarge: "El payload supera el límite de 6 MB.",
   },
   updateCodeDialog: {
     title: "Actualizar código de la función",
@@ -94,6 +95,25 @@ const dict = {
     memorySizeLabel: "Memoria (MB)",
     lastModifiedLabel: "Última modificación",
     stateLabel: "Estado",
+  },
+  invokeHistory: {
+    title: "Historial de invocaciones",
+    clearHistory: "Limpiar historial",
+    empty: "Todavía no hay invocaciones registradas.",
+    statusLabel: "Estado",
+    durationLabel: "Duración",
+    timestampLabel: "Hora",
+    payloadHashLabel: "Payload",
+    errorLabel: "Error de la función",
+  },
+  invokeLogTail: {
+    title: "Registros de ejecución",
+    autoScroll: "Desplazamiento automático",
+    noLogs: "Sin registros aún.",
+    polling: "Consultando registros...",
+    done: "Listo.",
+    collapse: "Contraer",
+    expand: "Expandir",
   },
   sdkErrors: {
     notFound: "La función especificada no existe.",

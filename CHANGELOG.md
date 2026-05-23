@@ -1,6 +1,132 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+## [0.12.0-alpha.0] - 2026-05-22
+
+### Bug Fixes
+- **persistence:** Use StateStorage fallback and stabilize SQS receive test (df2239b)
+- **sns:** Wire onValidityChange and messageError state in publish-dialog to disable submit on invalid JSON (a13c72c)
+
+### Features
+- **timeline:** Add persist middleware to useTimelineStore (29d22dd)
+- **lambda:** Add persist middleware and total LRU cap to useInvokeHistoryStore (830196a)
+- **logs:** Add persist middleware to useLogsStore (322d207)
+- **shared:** Create useHydration hook with memoized hydrationPromise (0af0a2e)
+- **config:** Centralize COOKIE_OPTIONS in lib/aws/config.ts (fd7949a)
+- **shared:** Implement sanitizeJson utility with discriminated result and proto scrubbing (648fe80)
+- **lambda/sns/dynamodb:** Add i18n keys for JSON payload size and validation errors (c59eccf)
+- **sns:** Wire sanitizeJson (256 KB) in publishMessageAction (4b50077)
+- **lambda:** Replace JSON.parse with sanitizeJson (6 MB) in invokeFunctionAction (337495d)
+- **dynamodb:** Replace JSON.parse with sanitizeJson (400 KB) in putItemAction (d247379)
+- **dynamodb:** Replace both JSON.parse calls with sanitizeJson (400 KB) in updateItemAction (c896bb1)
+
+### Refactor
+- **config:** Replace inline cookie options with centralized COOKIE_OPTIONS (aeca56a)
+
+### Testing
+- **timeline:** Add persist round-trip tests for useTimelineStore (202cff8)
+- **lambda:** Add persist round-trip and LRU tests for useInvokeHistoryStore (05934c9)
+- **logs:** Add persist round-trip tests for useLogsStore (523e745)
+- **shared:** Add render-hook tests for useHydration false→true flip (dba9084)
+- **persistence:** Add skipHydration option assertions and afterEach cleanup (6614824)
+- **config:** Add failing tests for COOKIE_OPTIONS secure flag (f53d333)
+- **config:** Add failing secure-flag assertions for all 7 cookie server actions (2027af0)
+- **config:** Use vi.resetModules and dynamic import to assert secure:true in production (2182eb3)
+- **shared:** Add failing tests for sanitizeJson utility (8e618d8)
+- **sns:** Add failing tests for publishMessageAction JSON validation and size limit (55df946)
+- **lambda:** Add failing tests for invokeFunctionAction JSON validation and 6 MB size limit (164b707)
+- **dynamodb:** Add failing tests for putItemAction size limit and proto-pollution (38a6aaa)
+- **dynamodb:** Add failing tests for updateItemAction size limit and proto-pollution on both JSON paths (92b24bf)
+- **sns:** Add failing test for publish-dialog submit disabled on invalid JSON (af83a92)
+## [0.11.0-alpha.0] - 2026-05-21
+
+### Bug Fixes
+- **lambda:** Use ISO-8601 string for InvokeHistoryEntry timestamp (bcd0fdc)
+- **lambda:** Use useState initialized at mount for submitTimestamp, remove setState-in-effect (4381e71)
+- **lambda:** Resolve merge conflicts in invoke-dialog, toolbar and i18n parity test (afdd379)
+
+### Chore
+- Release v0.11.0-alpha.0 (127799f)
+
+### Features
+- **lambda:** Add InvokeHistoryEntry type and i18n keys (06b892e)
+- **lambda:** Implement use-invoke-history-store (16f014d)
+- **lambda:** Implement InvokeHistoryPanel (7128596)
+- **lambda:** Wire invoke history to invoke-dialog and function page (424a837)
+- **dashboard:** Add ServiceStatus type and i18n keys for health panel (6f74e37)
+- **dashboard:** Extend getEndpointHealth to return per-service status (7ba0412)
+- **dashboard:** Implement ServiceHealthPanel component (e43d41d)
+- **dashboard:** Wire ServiceHealthPanel to dashboard page (7818390)
+- **lambda:** Add invokeLogTail i18n keys (b61eb3e)
+- **lambda:** Implement InvokeLogTail component (163af0f)
+- **lambda:** Render InvokeLogTail in invoke-dialog after successful invoke (75eca9d)
+
+### Refactor
+- **dashboard:** Move ServiceStatus to types/, export CORE_SERVICES, add dashboard i18n parity test (b56efec)
+
+### Testing
+- **lambda:** Add failing tests for use-invoke-history-store (688cae7)
+- **lambda:** Add failing tests for InvokeHistoryPanel (735c96e)
+- **dashboard:** Add failing tests for getEndpointHealth services map (2dea7f3)
+- **dashboard:** Add failing tests for ServiceHealthPanel component (7dfadd8)
+- **lambda:** Add failing tests for InvokeLogTail component (264b140)
+- **lambda:** Extend invoke-dialog tests for InvokeLogTail wiring (1440962)
+## [0.10.1-alpha.0] - 2026-05-21
+
+### Bug Fixes
+- **shared:** Add scroll to sidebar and mobile nav drawer (f3aa17d)
+
+### Chore
+- Release v0.10.1-alpha.0 (caa7559)
+## [0.10.0-alpha.0] - 2026-05-21
+
+### Bug Fixes
+- **shared:** Make TableSkeleton columns optional with default 4 (ebc427d)
+- **shared:** Resolve copy-button spec deviations (size prop, warn logging, test coverage) (bf94a98)
+- **shared:** Auto-format JSON on mount in JsonTextarea (c758493)
+- **shared:** Make JsonViewer copy labels optional with defaults (92d403e)
+- **snapshots:** Capture QueueArn and add SnapshotServiceResult + SnapshotCreateReport types (fab4be9)
+- **snapshots:** Use useEffect for store sync in SnapshotPanel (2684305)
+- **snapshots:** Accept widened dict types in snapshot panels (73b067f)
+
+### Chore
+- **test:** Exclude stale worktrees from vitest glob (99313ac)
+- **test:** Exclude stale worktrees from vitest glob (f3d4c86)
+- Release v0.10.0-alpha.0 (d2baa4b)
+
+### Features
+- **ui:** Add Skeleton primitive component (910881a)
+- **shared:** Add TableSkeleton, CardGridSkeleton, DetailSkeleton components (9355878)
+- **app:** Add loading.tsx skeletons for all list and detail routes (94dad97)
+- **shared:** Add CopyButton component (6fc45f0)
+- **sns:** Add copy-to-clipboard for topic ARN (75f7ffb)
+- **lambda:** Add copy-to-clipboard for ARN and function URL (8187ee6)
+- **sqs:** Add copy-to-clipboard for queue URL and message body (03848ee)
+- **dynamodb:** Add copy-to-clipboard for item JSON (d9d7cd2)
+- **shared:** Add JsonViewer component (1ee1551)
+- **lambda:** Use JsonViewer for invoke response body and JsonTextarea for payload (d7fec04)
+- **sns:** Use JsonTextarea for publish message body and migrate pre to JsonViewer (dcb45c4)
+- **snapshots:** Add snapshot types and Zod schema (3e3f1b4)
+- **snapshots:** Add useSnapshotStore Zustand store (eac3263)
+- **snapshots:** Wire tools-registry and i18n (ba8c931)
+- **snapshots:** Add capture-dynamodb, capture-sqs, capture-s3 services (202ce8e)
+- **snapshots:** Add create-snapshot server action (1c75113)
+- **snapshots:** Add restore-dynamodb, restore-sqs, restore-s3 services (600284b)
+- **snapshots:** Add restore-snapshot and import-snapshot server actions (47502bd)
+- **snapshots:** Add export route handler (5366d0b)
+- **snapshots:** Add snapshots page and UI components (408ba54)
+
+### Refactor
+- **ui:** Change SkeletonProps from interface to type for consistency (d9fd0d2)
+## [0.9.0-alpha.0] - 2026-05-20
+
+### Chore
+- Release v0.9.0-alpha.0 (c63d299)
+
+### Features
+- **timeline:** Add data/state foundation for event timeline (680d4fc)
+- **timeline:** Add presentation layer components and page route (b4015cc)
+- **timeline:** Add i18n files, dictionary wiring, and tools-registry entry (PR-3) (86ae6e0)
 ## [0.8.0-alpha.0] - 2026-05-20
 
 ### Bug Fixes
@@ -9,6 +135,9 @@ All notable changes to this project will be documented in this file.
 - **seed:** Wire warningText i18n key in ResetPanel (7a39843)
 - **seed:** Add explicit types to fix tsc pre-push errors (526063e)
 - **seed:** Add missing command palette dict keys in shell test (f2ffb36)
+
+### Chore
+- Release v0.8.0-alpha.0 (dad3f06)
 
 ### Features
 - **seed:** Add foundation, preset definitions, i18n and lambda delete-function (ae35c74)

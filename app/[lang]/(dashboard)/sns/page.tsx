@@ -25,6 +25,7 @@ export default async function SNSPage({ params }: Props) {
     topicRowActions: sns.topicRowActions,
     confirmDialog: shared.confirmDialog,
     publishDialog: sns.publishDialog,
+    copyButton: shared.copyButton,
     page: sns.page,
     dialog: shared.dialog,
   };

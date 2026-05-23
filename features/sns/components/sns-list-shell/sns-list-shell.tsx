@@ -18,6 +18,7 @@ type SNSListShellDict = {
   topicRowActions: AppDict["sns"]["topicRowActions"];
   confirmDialog: AppDict["shared"]["confirmDialog"];
   publishDialog: AppDict["sns"]["publishDialog"];
+  copyButton: AppDict["shared"]["copyButton"];
   page: { title: string; empty: string };
   dialog: { close: string };
 };
@@ -50,6 +51,7 @@ export function SNSListShell({ initialItems, dict, localePrefix, locale }: Props
       rowActionsDict={dict.topicRowActions}
       confirmDict={dict.confirmDialog}
       publishDict={dict.publishDialog}
+      copyButtonDict={dict.copyButton}
       localePrefix={localePrefix}
       locale={locale}
       closeLabel={dict.dialog.close}
