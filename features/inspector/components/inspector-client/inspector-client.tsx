@@ -35,10 +35,11 @@ export function InspectorClient({ initialEntries, dict }: InspectorClientProps) 
 
   // Mount: rehydrate → seed RSC entries → start polling
   useEffect(() => {
-    void useInspectorStore.persist.rehydrate().then(() => {
+    void (async () => {
+      await useInspectorStore.persist.rehydrate();
       seedEntries(initialEntries);
       startPolling();
-    });
+    })();
 
     return () => {
       stopPolling();
