@@ -5,16 +5,21 @@ import { getServiceColorClasses } from "@/features/inspector/lib/service-color/s
 import type { RequestEntry } from "@/features/inspector/lib/types/types";
 import { RequestDetailDialog } from "@/features/inspector/components/request-detail-dialog/request-detail-dialog";
 import { cn } from "@/lib/utils";
+import type { InspectorDict } from "@/features/inspector/i18n/en";
+import type { WidenStringLiterals } from "@/features/shared/i18n/widen-literals";
 
 // ── Types ──────────────────────────────────────────────────────────────────────
 
+type CardDict = Pick<WidenStringLiterals<InspectorDict>, "card">;
+
 type RequestCardProps = {
   entry: RequestEntry;
+  dict: CardDict;
 };
 
 // ── Component ─────────────────────────────────────────────────────────────────
 
-export function RequestCard({ entry }: RequestCardProps) {
+export function RequestCard({ entry, dict }: RequestCardProps) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const colorClasses = getServiceColorClasses(entry.service);
 
@@ -45,6 +50,16 @@ export function RequestCard({ entry }: RequestCardProps) {
           <span className="text-xs rounded bg-muted px-1.5 py-0.5">
             {entry.durationMs}ms
           </span>
+
+          {/* Retry badge — only when attempts > 1 */}
+          {entry.attempts > 1 && (
+            <span
+              data-testid="retry-badge"
+              className="inline-flex items-center rounded border border-yellow-500/20 bg-yellow-500/10 px-1.5 py-0.5 text-[10px] font-semibold text-yellow-700"
+            >
+              {dict.card.retries.replace("{n}", String(entry.attempts - 1))}
+            </span>
+          )}
 
           {/* Status indicator */}
           <span
