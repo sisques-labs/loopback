@@ -29,7 +29,7 @@ const dict = {
   },
   empty: {
     title: "No se encontraron eventos",
-    body: "No se encontraron eventos para el rango de tiempo seleccionado. Asegurate de que LocalStack esté corriendo y los servicios estén siendo invocados.",
+    body: "No se encontraron eventos para el rango de tiempo seleccionado. Asegúrate de que LocalStack esté corriendo y los servicios estén siendo invocados.",
   },
 } as const satisfies TimelineDictTranslated;
 

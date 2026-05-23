@@ -5,7 +5,7 @@ type LogsDictTranslated = WidenStringLiterals<LogsDict>;
 
 const dict = {
   title: "CloudWatch Logs",
-  description: "Transmití, filtrá y buscá entradas de log desde el endpoint de AWS configurado.",
+  description: "Transmite, filtra y busca entradas de log desde el endpoint de AWS configurado.",
   filters: {
     service: "Servicio",
     level: "Nivel",

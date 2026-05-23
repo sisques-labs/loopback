@@ -34,7 +34,7 @@ const dict = {
     delete: "Eliminar",
     deleteTitle: "Eliminar topic",
     deleteConfirm:
-      "¿Seguro que querés eliminar {topic}? Esta acción no se puede deshacer.",
+      "¿Seguro que quieres eliminar {topic}? Esta acción no se puede deshacer.",
     viewDetail: "Ver detalle",
     publish: "Publicar mensaje",
   },
@@ -99,13 +99,13 @@ const dict = {
     limitExceeded: "Se alcanzó el límite de topics para esta cuenta.",
     kmsError: "La clave KMS asociada a este topic no está accesible.",
     notAuthorized: "Sin autorización para realizar esta acción en SNS.",
-    endpointUnreachable: "No se puede conectar a LocalStack en {endpoint}. Asegurate de que esté en ejecución.",
+    endpointUnreachable: "No se puede conectar a LocalStack en {endpoint}. Asegúrate de que esté en ejecución.",
     unknown: "Ocurrió un error inesperado.",
   },
   errors: {
     connectFailed: "No se pudo conectar a SNS",
     connectFailedDetail:
-      "No se pudo alcanzar {endpoint}. Asegurate de que LocalStack esté en ejecución y de que AWS_ENDPOINT_URL esté configurado correctamente.",
+      "No se pudo alcanzar {endpoint}. Asegúrate de que LocalStack esté en ejecución y de que AWS_ENDPOINT_URL esté configurado correctamente.",
     connectFailedDetailGeneric:
       "No se pudo alcanzar LocalStack desde el servidor de la app. Comprueba que esté en marcha, que AWS_ENDPOINT_URL sea correcto y define NEXT_PUBLIC_AWS_ENDPOINT_URL con la misma URL (necesario para mensajes en el cliente si usas una IP de red local).",
     topicNotFound: "Topic no encontrado",

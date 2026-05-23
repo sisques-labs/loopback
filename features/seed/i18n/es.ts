@@ -6,10 +6,10 @@ type SeedDictTranslated = WidenStringLiterals<SeedDict>;
 const dict = {
   page: {
     title: "Datos de demo",
-    description: "Cargá recursos predefinidos en tu entorno de LocalStack o reiniciá todo.",
+    description: "Carga recursos predefinidos en tu entorno de LocalStack o reinicia todo.",
   },
   presets: {
-    sectionTitle: "Elegí un preset",
+    sectionTitle: "Elige un preset",
     ecommerce: {
       name: "E-commerce",
       description: "Buckets S3, colas SQS, tablas DynamoDB, funciones Lambda y topics SNS para una plataforma de e-commerce.",
@@ -26,7 +26,7 @@ const dict = {
   load: {
     button: "Cargar preset",
     loading: "Cargando…",
-    noPresetSelected: "Seleccioná un preset para continuar",
+    noPresetSelected: "Selecciona un preset para continuar",
     successTitle: "Preset cargado",
     errorTitle: "Error al cargar",
   },
